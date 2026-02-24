@@ -97,11 +97,11 @@ src/
 
 ### 컴포넌트 계층 원칙
 
-| 폴더 | 기준 | 예시 |
-|---|---|---|
-| `atoms/` | 더 이상 쪼갤 수 없는 기본 단위, 비즈니스 로직 없음 | Button, Input, Badge, Avatar |
-| `shared/components/` | 여러 feature에서 재사용, atoms보다 복합적 | Modal, Banner, Pagination, Header |
-| `features/*/components/` | 특정 도메인에 종속된 컴포넌트 | StudyCard, LoginForm, CommentList |
+| 폴더                     | 기준                                               | 예시                              |
+| ------------------------ | -------------------------------------------------- | --------------------------------- |
+| `atoms/`                 | 더 이상 쪼갤 수 없는 기본 단위, 비즈니스 로직 없음 | Button, Input, Badge, Avatar      |
+| `shared/components/`     | 여러 feature에서 재사용, atoms보다 복합적          | Modal, Banner, Pagination, Header |
+| `features/*/components/` | 특정 도메인에 종속된 컴포넌트                      | StudyCard, LoginForm, CommentList |
 
 **의존 방향:** `atoms` ← `shared` ← `features` ← `pages` (단방향)
 
@@ -123,9 +123,9 @@ npm run lint
 
 ## 회원 등급
 
-| 등급 | 조건 | 가능한 기능 |
-|---|---|---|
-| 준회원 | 회원가입 직후 | 스터디 조회만 가능 |
+| 등급   | 조건             | 가능한 기능                       |
+| ------ | ---------------- | --------------------------------- |
+| 준회원 | 회원가입 직후    | 스터디 조회만 가능                |
 | 정회원 | 프로필 설정 완료 | 스터디 생성, 참가, 댓글 작성 가능 |
 
 ## 인증 방식
