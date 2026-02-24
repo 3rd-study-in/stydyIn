@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ================================
+     Colors - 색상
+  ================================ */
+
+  /* Primary */
+  --color-primary:       ;
+  --color-primary-light: ;
+  --color-primary-dark:  ;
+
+  /* Secondary */
+  --color-secondary:       ;
+  --color-secondary-light: ;
+  --color-secondary-dark:  ;
+
+  /* Accent */
+  --color-accent:       ;
+  --color-accent-light: ;
+  --color-accent-dark:  ;
+
+  /* Background */
+  --color-bg:          ;
+  --color-bg-surface:  ;
+  --color-bg-muted:    ;
+
+  /* Text */
+  --color-text:          ;
+  --color-text-muted:    ;
+  --color-text-disabled: ;
+
+  /* Status */
+  --color-success: ;
+  --color-warning: ;
+  --color-error:   ;
+  --color-info:    ;
+
+  /* Border */
+  --color-border:       ;
+  --color-border-focus: ;
+
+  /* ================================
+     Typography - 폰트
+  ================================ */
+
+  /* Font Family */
+  --font-sans:  ;
+  --font-serif: ;
+  --font-mono:  ;
+
+  /* Font Size */
+  --font-size-xs:   ;
+  --font-size-sm:   ;
+  --font-size-base: ;
+  --font-size-lg:   ;
+  --font-size-xl:   ;
+  --font-size-2xl:  ;
+  --font-size-3xl:  ;
+  --font-size-4xl:  ;
+
+  /* Font Weight */
+  --font-weight-light:    ;
+  --font-weight-regular:  ;
+  --font-weight-medium:   ;
+  --font-weight-semibold: ;
+  --font-weight-bold:     ;
+
+  /* Line Height */
+  --line-height-tight:  ;
+  --line-height-normal: ;
+  --line-height-loose:  ;
+
+  /* Letter Spacing */
+  --letter-spacing-tight:  ;
+  --letter-spacing-normal: ;
+  --letter-spacing-wide:   ;
+
+  /* ================================
+     Spacing - 간격
+  ================================ */
+
+  --spacing-xs:  ;
+  --spacing-sm:  ;
+  --spacing-md:  ;
+  --spacing-lg:  ;
+  --spacing-xl:  ;
+  --spacing-2xl: ;
+
+  /* ================================
+     Border Radius - 모서리
+  ================================ */
+
+  --radius-sm:   ;
+  --radius-md:   ;
+  --radius-lg:   ;
+  --radius-full: ;
+
+  /* ================================
+     Shadow - 그림자
+  ================================ */
+
+  --shadow-sm: ;
+  --shadow-md: ;
+  --shadow-lg: ;
+
+  /* ================================
+     Breakpoints - 반응형
+  ================================ */
+
+  --breakpoint-sm:  ;
+  --breakpoint-md:  ;
+  --breakpoint-lg:  ;
+  --breakpoint-xl:  ;
+  --breakpoint-2xl: ;
+}
