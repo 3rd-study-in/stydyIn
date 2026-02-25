@@ -1,0 +1,58 @@
+import { FilterIcon, TriangleDownIcon, TriangleUpIcon, OptionList, useDropdown } from './_shared'
+
+// filter-dropdown-OFF.png / filter-dropdown-ON.png 기반
+// 렌더: [🔽 FilterIcon] [label] [▼ / ▲]
+// width 기본값: 170px (Figma 스펙)
+
+/**
+ * @param {{ value: string, label: string }[]} options  옵션 목록
+ * @param {string | null} value                         현재 선택값
+ * @param {(value: string) => void} onChange
+ * @param {string} label                                칩 레이블 텍스트
+ * @param {string} width                                컨테이너 너비 (예: '170px')
+ * @param {string} className                            추가 Tailwind 클래스
+ * @param {boolean} disabled
+ */
+function FilterDropdown({
+  options = [],
+  value = null,
+  onChange,
+  label = '검색 필터',
+  width = '170px',
+  className = '',
+  disabled = false,
+}) {
+  const { isOpen, toggle, handleSelect, containerRef, triggerBorderClass } = useDropdown({
+    onChange,
+    disabled,
+  })
+
+  return (
+    <div
+      ref={containerRef}
+      className={`relative inline-block font-['Spoqa_Han_Sans_Neo'] ${className}`}
+      style={{ width }}
+    >
+      <button
+        type="button"
+        onClick={toggle}
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className={`flex items-center gap-2 h-10 px-3 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
+      >
+        <FilterIcon />
+        <span className="flex-1 text-left text-base font-medium text-[#47494D]">
+          {label}
+        </span>
+        {isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />}
+      </button>
+
+      {isOpen && (
+        <OptionList options={options} value={value} onSelect={handleSelect} />
+      )}
+    </div>
+  )
+}
+
+export default FilterDropdown
