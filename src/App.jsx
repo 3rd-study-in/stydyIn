@@ -1,14 +1,5 @@
-import { Dropdown, FilterDropdown, Select } from "./atoms/DropdownSelect"
-
 function App() {
-
-  return (
-    <>
-      <Dropdown />
-      <FilterDropdown />
-      <Select />
-    </>
-  )
+  return <></>;
 }
 
-export default App
+export default App;
