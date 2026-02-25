@@ -1,0 +1,162 @@
+/* side-nav-button-blue */
+
+position: relative;
+width: 170px;
+height: 30px;
+left: 1120px;
+top: 1094px;
+
+
+
+/* Rectangle 119 */
+
+position: absolute;
+width: 170px;
+height: 30px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+border-radius: 8px;
+
+
+/* 내 프로필 */
+
+position: absolute;
+width: 55px;
+height: 20px;
+left: 32px;
+top: 5px;
+
+/* 14p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* icon-person */
+
+position: absolute;
+width: 16px;
+height: 16px;
+left: 10px;
+top: 7px;
+
+
+
+/* Group 52 */
+
+position: absolute;
+width: 13.2px;
+height: 14px;
+left: 1.4px;
+top: 1px;
+
+
+
+/* Ellipse 38 (Stroke) */
+
+position: absolute;
+left: 26.25%;
+right: 26.25%;
+top: 6.25%;
+bottom: 46.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* Vector 16 (Stroke) */
+
+position: absolute;
+left: 8.75%;
+right: 8.75%;
+top: 46.25%;
+bottom: 6.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+/* button-SNS-Login */
+
+position: relative;
+width: 322px;
+height: 50px;
+left: 1120px;
+top: 1164px;
+
+
+
+/* Rectangle 3 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-LowError */
+border: 1px solid #FFC533;
+border-radius: 8px;
+
+
+/* Kakao 계정으로 로그인 */
+
+position: absolute;
+left: 30.12%;
+right: 26.71%;
+top: 30%;
+bottom: 30%;
+
+/* 14p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: flex-end;
+text-align: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* Logo-kakao-message */
+
+position: absolute;
+left: 4.35%;
+right: 88.2%;
+top: 26%;
+bottom: 26%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 12.5%;
+bottom: 12.5%;
+
+/* White-Mode/W-LowError */
+background: #FFC533;
