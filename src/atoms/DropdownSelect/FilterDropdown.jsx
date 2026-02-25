@@ -1,4 +1,6 @@
-import { FilterIcon, TriangleDownIcon, TriangleUpIcon, OptionList, useDropdown } from './_shared'
+import { FilterIcon, TriangleDownIcon, TriangleUpIcon } from '../Icon'
+import { OptionList } from './OptionList'
+import { useDisclosure } from '../../shared/hooks/useDisclosure'
 
 // filter-dropdown-OFF.png / filter-dropdown-ON.png 기반
 // 렌더: [🔽 FilterIcon] [label] [▼ / ▲]
@@ -22,10 +24,12 @@ function FilterDropdown({
   className = '',
   disabled = false,
 }) {
-  const { isOpen, toggle, handleSelect, containerRef, triggerBorderClass } = useDropdown({
-    onChange,
-    disabled,
-  })
+  const { isOpen, toggle, close, containerRef, triggerBorderClass } = useDisclosure({ disabled })
+
+  const handleSelect = (option) => {
+    onChange?.(option.value)
+    close()
+  }
 
   return (
     <div
@@ -48,9 +52,7 @@ function FilterDropdown({
         {isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />}
       </button>
 
-      {isOpen && (
-        <OptionList options={options} value={value} onSelect={handleSelect} />
-      )}
+      {isOpen && <OptionList options={options} value={value} onSelect={handleSelect} />}
     </div>
   )
 }

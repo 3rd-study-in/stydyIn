@@ -1,4 +1,6 @@
-import { TriangleDownIcon, TriangleUpIcon, OptionList, useDropdown } from './_shared'
+import { TriangleDownIcon, TriangleUpIcon } from '../Icon'
+import { OptionList } from './OptionList'
+import { useDisclosure } from '../../shared/hooks/useDisclosure'
 
 // Dropdown.png / Dropdown-ON.png 기반
 // 렌더: [placeholder or 선택값] [▼ / ▲]
@@ -22,12 +24,14 @@ function Dropdown({
   className = '',
   disabled = false,
 }) {
-  const { isOpen, toggle, handleSelect, containerRef, triggerBorderClass } = useDropdown({
-    onChange,
-    disabled,
-  })
+  const { isOpen, toggle, close, containerRef, triggerBorderClass } = useDisclosure({ disabled })
 
   const selectedOption = options.find((o) => o.value === value)
+
+  const handleSelect = (option) => {
+    onChange?.(option.value)
+    close()
+  }
 
   return (
     <div
@@ -41,23 +45,20 @@ function Dropdown({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className={`flex items-center h-10 px-[14px] w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
+        className={`flex items-center h-10 px-3.5 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
       >
         <span
-          className={`flex-1 text-sm text-left ${
-            selectedOption ? 'text-[#121314]' : 'text-[#8D9299]'
-          }`}
+          className={`flex-1 text-sm text-left ${selectedOption ? 'text-[#121314]' : 'text-[#8D9299]'
+            }`}
         >
           {selectedOption?.label ?? placeholder}
         </span>
-        <span className="ml-2 flex-shrink-0">
+        <span className="ml-2 shrink-0">
           {isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />}
         </span>
       </button>
 
-      {isOpen && (
-        <OptionList options={options} value={value} onSelect={handleSelect} />
-      )}
+      {isOpen && <OptionList options={options} value={value} onSelect={handleSelect} />}
     </div>
   )
 }

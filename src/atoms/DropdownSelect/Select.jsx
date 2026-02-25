@@ -1,8 +1,9 @@
-import { OptionList, useDropdown } from './_shared'
+import { OptionList } from './OptionList'
+import { useDisclosure } from '../../shared/hooks/useDisclosure'
 
 // Select-box-icon.png 기반
 // 렌더: [placeholder or 선택값] [icon (고정 — open/close 상태 무관)]
-// Dropdown과의 차이: 우측 아이콘이 상태에 따라 바뀌지 않음 (달력 등 SVG 파일 교체 슬롯)
+// Dropdown과의 차이: 우측 아이콘이 상태에 따라 바뀌지 않음 (달력 등 SVG 교체 슬롯)
 // width 기본값: 250px (Figma 스펙)
 
 /**
@@ -25,12 +26,14 @@ function Select({
   className = '',
   disabled = false,
 }) {
-  const { isOpen, toggle, handleSelect, containerRef, triggerBorderClass } = useDropdown({
-    onChange,
-    disabled,
-  })
+  const { isOpen, toggle, close, containerRef, triggerBorderClass } = useDisclosure({ disabled })
 
   const selectedOption = options.find((o) => o.value === value)
+
+  const handleSelect = (option) => {
+    onChange?.(option.value)
+    close()
+  }
 
   return (
     <div
@@ -44,23 +47,18 @@ function Select({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        className={`flex items-center h-10 px-[14px] w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
+        className={`flex items-center h-10 px-3.5 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
       >
         <span
-          className={`flex-1 text-sm text-left ${
-            selectedOption ? 'text-[#121314]' : 'text-[#8D9299]'
-          }`}
+          className={`flex-1 text-sm text-left ${selectedOption ? 'text-[#121314]' : 'text-[#8D9299]'
+            }`}
         >
           {selectedOption?.label ?? placeholder}
         </span>
-        {icon && (
-          <span className="ml-2 flex-shrink-0">{icon}</span>
-        )}
+        {icon && <span className="ml-2 shrink-0">{icon}</span>}
       </button>
 
-      {isOpen && (
-        <OptionList options={options} value={value} onSelect={handleSelect} />
-      )}
+      {isOpen && <OptionList options={options} value={value} onSelect={handleSelect} />}
     </div>
   )
 }
