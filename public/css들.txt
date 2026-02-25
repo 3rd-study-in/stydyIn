@@ -1,101 +1,32 @@
- 
-/* Dropdown */
-
-position: relative;
-width: 280px;
-height: 40px;
-left: 2250px;
-top: 764px;
-
-
-
-/* Rectangle 4 */
-
-position: absolute;
-visibility: hidden;
-width: 200px;
-height: 40px;
-left: 0px;
-top: 0px;
-
-background: #FFFFFF;
-/* 5C8EF2 */
-border: 2px solid #5C8EF2;
-border-radius: 8px;
-
-
-/* Rectangle 5 */
+/* alert */
 
 box-sizing: border-box;
 
-position: absolute;
-height: 40px;
-left: 0px;
-right: 0px;
-top: 0px;
+position: relative;
+width: 400px;
+height: 160px;
+left: 2147px;
+top: 1884px;
 
+/* White-Mode/W-Background */
 background: #FFFFFF;
 /* White-Mode/W-Gray-Lv2 */
 border: 1px solid #D9DBE0;
-border-radius: 8px;
+box-shadow: 0px 5px 15px rgba(71, 73, 77, 0.1);
+border-radius: 10px;
 
 
-/* 스터디 유형 선택 */
-
-position: absolute;
-width: 97px;
-height: 20px;
-left: 14px;
-top: 10px;
-
-/* 14p_R */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-/* identical to box height, or 143% */
-display: flex;
-align-items: center;
-
-/* White-Mode/W-Gray-Lv3 */
-color: #8D9299;
-
-
-
-/* icon-Triangle-Down */
+/* alert-button-L-white */
 
 position: absolute;
-width: 18px;
-height: 18px;
-right: 10px;
-top: 11px;
+height: 50px;
+left: 0%;
+right: 50%;
+bottom: 0px;
 
 
 
-/* Polygon 5 */
-
-position: absolute;
-left: 23.53%;
-right: 23.53%;
-top: 37.5%;
-bottom: 34.57%;
-
-/* White-Mode/W-Gray-Lv3 */
-background: #8D9299;
-border-radius: 2px;
-
-/* filter-dropdown-ON */
-
-position: relative;
-width: 170px;
-height: 40px;
-left: 2440px;
-bottom: 2795px;
-
-
-
-/* Rectangle 79 */
+/* Rectangle 140 */
 
 position: absolute;
 left: 0%;
@@ -105,58 +36,17 @@ bottom: 0%;
 
 /* White-Mode/W-Background */
 background: #FFFFFF;
-/* etc/5C8EF2 */
-border: 2px solid #5C8EF2;
-border-radius: 8px;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
 
 
-/* Rectangle 78 */
-
-box-sizing: border-box;
+/* 등록 */
 
 position: absolute;
-left: 0%;
-right: 0%;
-top: 0%;
-bottom: 0%;
-
-/* White-Mode/W-Background */
-background: #FFFFFF;
-/* White-Mode/W-Primary
-
-메인 컬러(로고, 버튼 등)
-*/
-border: 1px solid #2E6FF2;
-border-radius: 8px;
-
-
-/* Group 71 */
-
-position: absolute;
-width: 90px;
+width: 59px;
 height: 24px;
-left: 13px;
-top: 8px;
-
-
-
-/* Group 92 */
-
-position: absolute;
-width: 90px;
-height: 24px;
-left: 13px;
-top: 8px;
-
-
-
-/* 검색 필터 */
-
-position: absolute;
-width: 63px;
-height: 24px;
-left: 40px;
-top: 8px;
+left: calc(50% - 59px/2 + 0.5px);
+top: calc(50% - 24px/2);
 
 /* 16p_M */
 font-family: 'Spoqa Han Sans Neo';
@@ -167,75 +57,909 @@ line-height: 24px;
 /* identical to box height, or 150% */
 display: flex;
 align-items: center;
+text-align: center;
 
 /* White-Mode/W-Gray-Lv4 */
 color: #47494D;
 
 
 
-/* icon-filter */
+/* alert-button-L-white */
 
 position: absolute;
-width: 20px;
-height: 20px;
-left: 13px;
-top: 10px;
+height: 50px;
+left: 50%;
+right: 0%;
+bottom: 0px;
 
 
 
-/* Vector (Stroke) */
+/* Rectangle 140 */
 
 position: absolute;
-left: 6.25%;
-right: 6.25%;
-top: 11.25%;
-bottom: 11.25%;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* 등록 */
+
+position: absolute;
+width: 30px;
+height: 24px;
+left: calc(50% - 30px/2);
+top: calc(50% - 24px/2);
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
 
 /* White-Mode/W-Gray-Lv4 */
-background: #47494D;
-
-
-/* icon-Triangle-Up */
-
-position: absolute;
-width: 18px;
-height: 18px;
-right: 10px;
-top: 11px;
+color: #47494D;
 
 
 
-/* Polygon 5 */
+/* 스터디를 생성하시겠습니까? */
 
 position: absolute;
-left: 23.53%;
-right: 23.53%;
-top: 39.57%;
-bottom: 32.5%;
+width: 188px;
+height: 24px;
+left: calc(50% - 188px/2);
+top: calc(50% - 24px/2 - 20px);
+
+/* 16p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+/* Frame 1263 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+isolation: isolate;
+
+position: absolute;
+width: 390px;
+height: 694px;
+left: calc(50% - 390px/2);
+top: calc(50% - 694px/2);
+
+
+
+/* User-Info */
+
+width: 390px;
+height: 694px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+border-radius: 10px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+z-index: 0;
+
+
+/* tag-S */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 13px;
+gap: 10px;
+
+position: absolute;
+width: 60px;
+height: 26px;
+left: 30px;
+top: 30px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+border-radius: 26px;
+
+
+/* 노형동 */
+
+width: 34px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1084 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 0px;
+gap: 40px;
+
+position: absolute;
+visibility: hidden;
+width: 330px;
+height: 604px;
+left: calc(50% - 330px/2);
+top: 60px;
+
+
+
+/* 신고하기 */
+
+position: absolute;
+width: 45px;
+height: 16px;
+left: 315px;
+top: 34px;
+
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: center;
+text-decoration-line: underline;
 
 /* White-Mode/W-Gray-Lv3 */
-background: #8D9299;
-border-radius: 2px;
-
-/*  Select-box-icon */
-
-position: relative;
-width: 250px;
-height: 40px;
-left: 2250px;
-top: 924px;
+color: #8D9299;
 
 
 
-/* Rectangle 146 */
+/* button-(X) */
+
+position: absolute;
+width: 36px;
+height: 36px;
+left: 364px;
+top: -10px;
+
+filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+z-index: 1;
+
+
+/* Ellipse 56 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+
+
+/* icon-X */
+
+position: absolute;
+left: 19.44%;
+right: 19.44%;
+top: 19.44%;
+bottom: 19.44%;
+
+
+
+/* Union */
+
+position: absolute;
+left: 21.25%;
+right: 21.75%;
+top: 21.25%;
+bottom: 21.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+/* 경고창-4 */
 
 box-sizing: border-box;
 
 position: absolute;
+width: 390px;
+height: 430px;
+left: calc(50% - 390px/2);
+top: calc(50% - 430px/2);
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 10px;
+
+
+/* 신고하기 */
+
+position: absolute;
+width: 89px;
+height: 34px;
+left: calc(50% - 89px/2 - 0.5px);
+top: calc(50% - 34px/2 - 168px);
+
+/* 24p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 24px;
+line-height: 34px;
+/* identical to box height, or 142% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* alert-button-L-white */
+
+position: absolute;
+height: 50px;
+left: 0%;
+right: 49.75%;
+bottom: 0px;
+
+
+
+/* Rectangle 140 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* 등록 */
+
+position: absolute;
+width: 59px;
+height: 24px;
+left: calc(50% - 59px/2 + 0.51px);
+top: calc(50% - 24px/2);
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* alert-button-L-lightgray */
+
+position: absolute;
+height: 50px;
+left: 50%;
+right: 0%;
+bottom: 0px;
+
+
+
+/* Rectangle 140 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* 등록 */
+
+position: absolute;
+width: 30px;
+height: 24px;
+left: calc(50% - 30px/2 + 0.5px);
+top: calc(50% - 24px/2);
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 84px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: -98.68%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-OFF */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Ellipse 53 */
+
+position: absolute;
+visibility: hidden;
+left: 22.22%;
+right: 22.22%;
+top: 22.22%;
+bottom: 22.22%;
+
+/* 5C8EF2 */
+background: #5C8EF2;
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 118px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: -205.26%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-OFF */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Ellipse 53 */
+
+position: absolute;
+visibility: hidden;
+left: 22.22%;
+right: 22.22%;
+top: 22.22%;
+bottom: 22.22%;
+
+/* 5C8EF2 */
+background: #5C8EF2;
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 152px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: -198.68%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-OFF */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Ellipse 53 */
+
+position: absolute;
+visibility: hidden;
+left: 22.22%;
+right: 22.22%;
+top: 22.22%;
+bottom: 22.22%;
+
+/* 5C8EF2 */
+background: #5C8EF2;
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 186px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: -217.11%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-OFF */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Ellipse 53 */
+
+position: absolute;
+visibility: hidden;
+left: 22.22%;
+right: 22.22%;
+top: 22.22%;
+bottom: 22.22%;
+
+/* 5C8EF2 */
+background: #5C8EF2;
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 220px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: -43.42%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-OFF */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Ellipse 53 */
+
+position: absolute;
+visibility: hidden;
+left: 22.22%;
+right: 22.22%;
+top: 22.22%;
+bottom: 22.22%;
+
+/* 5C8EF2 */
+background: #5C8EF2;
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 254px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: -5.26%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-OFF */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Ellipse 53 */
+
+position: absolute;
+visibility: hidden;
+left: 22.22%;
+right: 22.22%;
+top: 22.22%;
+bottom: 22.22%;
+
+/* 5C8EF2 */
+background: #5C8EF2;
+
+
+/* radio */
+
+position: absolute;
+width: 76px;
+height: 24px;
+left: 30px;
+top: 288px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+left: 36.84%;
+right: 28.95%;
+top: 8.33%;
+bottom: 8.33%;
+
+/* 14p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+
+/* radio-btn-ON */
+
+position: absolute;
+left: 0%;
+right: 76.32%;
+top: 12.5%;
+bottom: 12.5%;
+
+
+
+/* Ellipse 52 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* etc/5C8EF2 */
+border: 6px solid #5C8EF2;
+
+
+/* input-box-OFF */
+
+position: absolute;
+width: 330px;
 height: 40px;
-left: 0px;
-right: 0px;
-top: 0px;
+left: 30px;
+top: 320px;
+
+
+
+/* input-box */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
 
 /* White-Mode/W-Background */
 background: #FFFFFF;
@@ -244,31 +968,10 @@ border: 1px solid #D9DBE0;
 border-radius: 8px;
 
 
-/* icon-Calendar */
+/* 짜증나게 함 */
 
 position: absolute;
-width: 20px;
-height: 20px;
-right: 10px;
-top: 10px;
-
-
-
-/* Vector */
-
-position: absolute;
-left: 6.25%;
-right: 6.25%;
-top: 6.25%;
-bottom: 6.25%;
-
-/* White-Mode/W-Gray-Lv3 */
-background: #8D9299;
-
- 
-
-position: absolute;
-width: 79px;
+width: 68px;
 height: 20px;
 left: 14px;
 top: 10px;
@@ -280,251 +983,6 @@ font-weight: 400;
 font-size: 14px;
 line-height: 20px;
 /* identical to box height, or 143% */
-display: flex;
-align-items: center;
-
-/* White-Mode/W-Surface */
-color: #121314;
-
-/* select-options */
-
-position: relative;
-width: 200px;
-height: 40px;
-left: 2851px;
-top: 925px;
-
-
-
-/* Rectangle 6 */
-
-position: absolute;
-width: 200px;
-height: 40px;
-left: 0px;
-top: 0px;
-
-background: #FFFFFF;
-
-
-/* Rectangle 7 */
-
-position: absolute;
-height: 30px;
-left: 8px;
-right: 8px;
-top: 5px;
-
-/* White-Mode/W-Gray-Lv1 */
-background: #F3F5FA;
-border-radius: 8px;
-
-
-/* 채팅방 알림 끄기 */
-
-position: absolute;
-width: 97px;
-height: 20px;
-left: 18px;
-top: 10px;
-
-/* 14p_R */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-/* identical to box height, or 143% */
-display: flex;
-align-items: center;
-
-/* White-Mode/W-Surface */
-color: #121314;
-
-/* select-option-box */
-
-box-sizing: border-box;
-
-position: relative;
-width: 200px;
-height: 128px;
-left: 2851px;
-top: 764px;
-
-background: #FFFFFF;
-/* White-Mode/W-Gray-Lv2 */
-border: 1px solid #D9DBE0;
-box-shadow: 0px 5px 15px rgba(71, 73, 77, 0.1);
-border-radius: 10px;
-
-
-/* select-options */
-
-position: absolute;
-height: 40px;
-left: 0px;
-right: 0px;
-top: 4px;
-
-
-
-/* Rectangle 6 */
-
-position: absolute;
-width: 200px;
-height: 40px;
-left: 0px;
-top: 0px;
-
-background: #FFFFFF;
-
-
-/* Rectangle 7 */
-
-position: absolute;
-height: 30px;
-left: 8px;
-right: 8px;
-top: 5px;
-
-/* White-Mode/W-Gray-Lv1 */
-background: #F3F5FA;
-border-radius: 8px;
-
-
-/* 채팅방 알림 끄기 */
-
-position: absolute;
-width: 97px;
-height: 20px;
-left: 18px;
-top: 10px;
-
-/* 14p_R */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-/* identical to box height, or 143% */
-display: flex;
-align-items: center;
-
-/* White-Mode/W-Surface */
-color: #121314;
-
-
-
-/* select-options */
-
-position: absolute;
-height: 40px;
-left: 0px;
-right: 0px;
-top: 44px;
-
-
-
-/* Rectangle 6 */
-
-position: absolute;
-width: 200px;
-height: 40px;
-left: 0px;
-top: 0px;
-
-background: #FFFFFF;
-
-
-/* Rectangle 7 */
-
-position: absolute;
-visibility: hidden;
-height: 30px;
-left: 8px;
-right: 8px;
-top: 5px;
-
-/* White-Mode/W-Gray-Lv1 */
-background: #F3F5FA;
-border-radius: 8px;
-
-
-/* 채팅방 알림 끄기 */
-
-position: absolute;
-width: 81px;
-height: 20px;
-left: 18px;
-top: 10px;
-
-/* 14p_R */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-/* identical to box height, or 143% */
-display: flex;
-align-items: center;
-
-/* White-Mode/W-Surface */
-color: #121314;
-
-
-
-/* select-options */
-
-position: absolute;
-height: 40px;
-left: 0px;
-right: 0px;
-top: 84px;
-
-
-
-/* Rectangle 6 */
-
-position: absolute;
-width: 200px;
-height: 40px;
-left: 0px;
-top: 0px;
-
-background: #FFFFFF;
-
-
-/* Rectangle 7 */
-
-position: absolute;
-visibility: hidden;
-height: 30px;
-left: 8px;
-right: 8px;
-top: 5px;
-
-/* White-Mode/W-Gray-Lv1 */
-background: #F3F5FA;
-border-radius: 8px;
-
-
-/* 채팅방 알림 끄기 */
-
-position: absolute;
-width: 81px;
-height: 20px;
-left: 18px;
-top: 10px;
-
-/* 14p_R */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-/* identical to box height, or 143% */
-display: flex;
-align-items: center;
 
 /* White-Mode/W-Surface */
 color: #121314;

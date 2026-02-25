@@ -1,116 +1,136 @@
+@import url('//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css');
 @import 'tailwindcss';
 
 @theme {
-  /* ================================
-     Colors - 색상
+   /* ================================
+      Colors - 색상
+   ================================ */
+
+      /* Primary 주요 색상 */
+      --color-primary: #2E6FF2; /* W-Primary */
+      --color-primary-light: #DEE8FF; /* W-Activation (연한 강조색) */
+      --color-primary-dark:  #5C8EF2;    /* ETC 옅은 파란색 (포인트용) */
+
+      /* Secondary */ 
+      --color-secondary: #8D9299; /* W-Gray-Lv3 */
+      --color-secondary-light: #D9DBE0; /* W-Gray-Lv2 */
+      --color-secondary-dark: #47494D;  /* W-Gray-Lv4 */
+
+      /* Accent (강조 색상) */
+      --color-accent: #FFC533;          /* W-LowError (노란색 계열 강조) */
+      --color-accent-light: #FFE187;    /* D-LowError */
+      --color-accent-dark: #FF3440;     /* W-Error (강한 강조) */
+   
+      /* Background (배경) */
+      --color-bg: #FFFFFF;              /* W-Background */
+      --color-bg-surface: #121314;      /* W-Surface (어두운 배경/카드) */
+      --color-bg-muted: #F3F5FA;        /* W-Gray-Lv1 (연한 회색 배경) */
+   
+      /* Text (글자) */
+      --color-text: #121314;            /* W-Surface (가장 진한 색) */
+      --color-text-muted: #47494D;      /* W-Gray-Lv4 (설명글) */
+      --color-text-disabled: #8D9299;   /* W-Gray-Lv3 (비활성/힌트) */
+   
+      /* Status (상태) */
+      --color-success: #2E6FF2;         /* 성공 (보통 브랜드 컬러와 공유) */
+      --color-warning: #FFC533;         /* W-LowError */
+      --color-error: #FF3440;           /* W-Error */
+      --color-info: #5C8EF2;            /* ETC 옅은 파란색 */
+   
+      /* Border (테두리) */
+      --color-border: #D9DBE0;          /* W-Gray-Lv2 (기본 테두리) */
+      --color-border-focus: #2E6FF2;    /* 포커스 시 브랜드 컬러 사용 W-Primary */
+   
+
+   /* ================================
+   Typography - 폰트
+   ================================ */
+
+   /* Font Family - 스포카 한 산스를 기본으로 설정 */
+   --font-sans:  'Spoqa Han Sans Neo', 'sans-serif';
+   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+   --font-mono:  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+   /* Font Size - (1rem = 16px 기준) */
+   --font-size-xs:   0.625rem; /* 10px */
+   --font-size-sm:   0.75rem;  /* 12px */
+   --font-size-base: 0.875rem; /* 14px */
+   --font-size-lg:   1rem;     /* 16px */
+   --font-size-xl:   1.125rem; /* 18px */
+   --font-size-2xl:  1.5rem;   /* 24px */
+   --font-size-3xl:  1.875rem; /* 30px */
+   --font-size-4xl:  2.25rem;  /* 36px */
+
+   /* Font Weight - 스포카 한 산스에서 지원하는 굵기 */
+   --font-weight-light:    300;
+   --font-weight-regular:  400;
+   --font-weight-medium:   500;
+   --font-weight-semibold: 600;
+   --font-weight-bold:     700;
+
+   /* Line Height - 가독성을 위해 본문은 1.5 이상 추천 */
+   --line-height-tight:  1.25; 
+   --line-height-normal: 1.5;  /* 기본 본문용 */
+   --line-height-loose:  1.75; /* 긴 글 본문용 */
+
+   /* Letter Spacing - 한글 가독성을 위해 살짝 좁히는 경우가 많음 */
+   --letter-spacing-tight:  -0.02em; /* 한글은 살짝 붙여야 예쁩니다! */
+   --letter-spacing-normal: 0em;
+   --letter-spacing-wide:   0.025em;
+
+
+/* ================================
+   Spacing - 간격 (8px 시스템 기준)
+================================ */
+
+   --spacing-xs:  0.25rem; /* 4px */
+   --spacing-sm:  0.5rem;  /* 8px */
+   --spacing-md:  1rem;    /* 16px */
+   --spacing-lg:  1.5rem;  /* 24px */
+   --spacing-xl:  2rem;    /* 32px */
+   --spacing-2xl: 3rem;    /* 48px */
+
+/* ================================
+   Border Radius - 모서리 (둥글기)
+================================ */
+   --radius-sm:   0.25rem; /* 4px */
+   --radius-md:   0.5rem;  /* 8px */
+   --radius-lg:   0.75rem; /* 12px (피그마 12) -> rounded-lg */
+   --radius-xl:   2.25rem; /* 36px (피그마 36) -> rounded-xl */
+   --radius-full: 9999px;  /* 완전 동그란 모양 -> rounded-full */
+
+
+
+/* ================================
+Shadow - 그림자
+================================ */
+
+   /* 피그마: x:2, y:2, blur:8 */
+   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+   --shadow-md: 2px 2px 8px 0 rgba(0, 0, 0, 0.1); /* 프로필 사진 소개에 사용되는 값 */
+   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+
+
+
+/* ================================
+Breakpoints - 반응형 
   ================================ */
 
-  /* Primary */
-  --color-primary:       ;
-  --color-primary-light: ;
-  --color-primary-dark:  ;
+  /* 모바일: 320px (iPhone) */
+   --breakpoint-sm: 320px;
 
-  /* Secondary */
-  --color-secondary:       ;
-  --color-secondary-light: ;
-  --color-secondary-dark:  ;
+   /* 태블릿: 834px (iPad) -> 열 6개 디자인 기준점 */
+   --breakpoint-md: 834px;
 
-  /* Accent */
-  --color-accent:       ;
-  --color-accent-light: ;
-  --color-accent-dark:  ;
+  /* 데스크탑: 1190px (Web Grid) -> 열 12개 디자인 기준점 */
+   --breakpoint-lg: 1190px;
 
-  /* Background */
-  --color-bg:          ;
-  --color-bg-surface:  ;
-  --color-bg-muted:    ;
+/* ================================
+Container - 너비 설정
+================================ */
 
-  /* Text */
-  --color-text:          ;
-  --color-text-muted:    ;
-  --color-text-disabled: ;
+/* 최대 너비 */
+--container-max-width-lg: 1190px;
 
-  /* Status */
-  --color-success: ;
-  --color-warning: ;
-  --color-error:   ;
-  --color-info:    ;
-
-  /* Border */
-  --color-border:       ;
-  --color-border-focus: ;
-
-  /* ================================
-     Typography - 폰트
-  ================================ */
-
-  /* Font Family */
-  --font-sans:  ;
-  --font-serif: ;
-  --font-mono:  ;
-
-  /* Font Size */
-  --font-size-xs:   ;
-  --font-size-sm:   ;
-  --font-size-base: ;
-  --font-size-lg:   ;
-  --font-size-xl:   ;
-  --font-size-2xl:  ;
-  --font-size-3xl:  ;
-  --font-size-4xl:  ;
-
-  /* Font Weight */
-  --font-weight-light:    ;
-  --font-weight-regular:  ;
-  --font-weight-medium:   ;
-  --font-weight-semibold: ;
-  --font-weight-bold:     ;
-
-  /* Line Height */
-  --line-height-tight:  ;
-  --line-height-normal: ;
-  --line-height-loose:  ;
-
-  /* Letter Spacing */
-  --letter-spacing-tight:  ;
-  --letter-spacing-normal: ;
-  --letter-spacing-wide:   ;
-
-  /* ================================
-     Spacing - 간격
-  ================================ */
-
-  --spacing-xs:  ;
-  --spacing-sm:  ;
-  --spacing-md:  ;
-  --spacing-lg:  ;
-  --spacing-xl:  ;
-  --spacing-2xl: ;
-
-  /* ================================
-     Border Radius - 모서리
-  ================================ */
-
-  --radius-sm:   ;
-  --radius-md:   ;
-  --radius-lg:   ;
-  --radius-full: ;
-
-  /* ================================
-     Shadow - 그림자
-  ================================ */
-
-  --shadow-sm: ;
-  --shadow-md: ;
-  --shadow-lg: ;
-
-  /* ================================
-     Breakpoints - 반응형
-  ================================ */
-
-  --breakpoint-sm:  ;
-  --breakpoint-md:  ;
-  --breakpoint-lg:  ;
-  --breakpoint-xl:  ;
-  --breakpoint-2xl: ;
 }
