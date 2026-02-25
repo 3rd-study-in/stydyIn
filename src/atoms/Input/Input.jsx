@@ -20,8 +20,8 @@ function Input({
   const inputHeight = label ? 'h-10' : 'h-[50px]'
 
   const borderStyle = isFocused && !disabled
-    ? 'border-2 border-[#5C8EF2]'
-    : 'border border-[#D9DBE0]'
+    ? 'border-2 border-info'
+    : 'border border-border'
 
   return (
     <div className={`font-['Spoqa_Han_Sans_Neo'] ${className}`} style={{ width: inputWidth }}>
@@ -29,9 +29,9 @@ function Input({
         
         {/* 라벨 */}
         {label && (
-          <label className="text-sm text-[#121314]">
+          <label className="text-sm text-text">
             {label}
-            {required && <span className="text-[#FF4D4D]">*</span>}
+            {required && <span className="text-error">*</span>}
           </label>
         )}
 
@@ -48,15 +48,15 @@ function Input({
             maxLength={maxLength}
             className={`
               w-full ${inputHeight} px-[13px] rounded-[8px] outline-none
-              text-base text-[#121314] placeholder:text-[#8D9299]
+              text-base text-text placeholder:text-text-disabled
               ${borderStyle}
-              ${disabled ? 'bg-[#F7F8FA] cursor-not-allowed' : 'bg-white'}
+              ${disabled ? 'bg-bg-muted cursor-not-allowed' : 'bg-white'}
             `}
           />
           
           {/* 글자수 카운터 */}
           {maxLength && !label && (
-            <p className="text-right text-sm font-medium text-[#121314] mt-1">
+            <p className="text-right text-sm font-medium text-text mt-1">
               {value.length}/{maxLength}
             </p>
           )}

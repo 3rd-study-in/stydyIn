@@ -17,16 +17,16 @@ function Tag({
   }
 
   const variantStyle = {
-    lightgray: 'bg-[#F7F8FA] hover:bg-[#E9EBED]',
-    gray: 'bg-white border border-[#D9DBE0] hover:bg-[#E9EBED]',
-    blue: 'bg-[#5C8EF2] text-white',
+    lightgray: 'bg-bg-muted hover:bg-secondary-light',
+    gray: 'bg-white border border-border hover:bg-secondary-light',
+    blue: 'bg-info text-white',
   }
 
     const textColor = variant === 'blue' 
     ? '' 
     : size === 'L' 
-      ? 'text-[#47494D]' 
-      : 'text-[#121314]'
+      ? 'text-text-muted' 
+      : 'text-text'
 
   return (
     <span className={`inline-flex items-center font-['Spoqa_Han_Sans_Neo'] ${sizeStyle[size]} ${variantStyle[variant]} ${textColor} ${className}`}>
