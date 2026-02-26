@@ -17,7 +17,7 @@ const Button = ({
 }) => {
   // 기본 공통 스타일
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-[8px] focus:outline-none disabled:cursor-not-allowed';
+    'inline-flex items-center font-light transition-all duration-200 rounded-[8px] focus:outline-none disabled:cursor-not-allowed';
 
   // 피그마 디자인 기반 크기 스타일
   const sizeStyles = {
@@ -40,6 +40,7 @@ const Button = ({
     ${baseStyles} 
     ${disabled ? variantStyles.disabled : variantStyles[variant]} 
     ${sizeStyles[size] || ''} 
+    ${isKakao ? 'justify-start' : 'justify-center'}
     ${className}
   `.trim();
 
@@ -53,7 +54,7 @@ const Button = ({
       disabled={disabled}
       {...props}
     >
-      {isKakao && <KakaoLogo className="mr-2" />}
+      {isKakao && <KakaoLogo className="mr-2 pl-[14px]" />}
       {children}
     </button>
   );
