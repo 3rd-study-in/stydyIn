@@ -69,3 +69,23 @@ export { default as Challenge } from '../../../asset/icons/category/subject_챌�
 export { default as Job } from '../../../asset/icons/category/subject_취업코테.svg?react';
 export { default as Special } from '../../../asset/icons/category/subject_특강.svg?react';
 export { default as Project } from '../../../asset/icons/category/subject_프로젝트.svg?react';
+
+
+/* ================================
+Third-party Logos
+================================ */
+
+export { default as Facebook } from '../../../asset/third-party/Logo-facebook.svg?react';
+export { default as Github } from '../../../asset/third-party/Logo-github.svg?react';
+export { default as Google } from '../../../asset/third-party/Logo-google.svg?react';
+export { default as Kakao } from '../../../asset/third-party/Logo-kakao-message.svg?react';
+
+
+
+/* ================================
+StudyIn Logos
+================================ */
+
+export { default as Symbol } from '../../../asset/logos/Logo-2022_Symbol.svg?react';
+export { default as SymbolLogo } from '../../../asset/logos/Logo-2022.svg?react';
+export { default as AppLogo } from '../../../asset/logos/Logo.svg?react';
