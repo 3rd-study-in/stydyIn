@@ -7,54 +7,62 @@ import KakaoLogo from '../../asset/third-party/Logo-kakao-message.svg?react';
  */
 const Button = ({
   children,
-  type = 'button',
   variant = 'blue',
   size = 'L',
-  onClick,
   disabled = false,
-  className = '',
   ...props
 }) => {
-  // 기본 공통 스타일
+  const isKakao = variant === 'kakao';
+
+  // 1. 공통 스타일: 폰트(font-sans), 자간(tracking-tight), 기본 둥글기(rounded-md) 적용
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-[8px] focus:outline-none disabled:cursor-not-allowed';
+    'relative inline-flex items-center justify-center font-sans tracking-tight transition-all duration-200 rounded-md focus:outline-none disabled:cursor-not-allowed overflow-hidden';
 
-  // 피그마 디자인 기반 크기 스타일
-  const sizeStyles = {
-    L: 'w-[250px] h-[50px] text-[16px]',
-    M: 'w-[160px] h-[40px] text-[14px]',
-    S: 'w-[145px] h-[30px] text-[12px]',
-  };
+  // 2. 테마 변수 기반 색상 스타일
+  // ... 상단 로직 동일
 
-  // 색상 및 상태(Hover, Active, Disabled) 스타일
   const variantStyles = {
-    blue: 'bg-[#2E6FF2] text-white hover:bg-[#1e5adb] active:bg-[#1649b8]',
-    white: 'bg-white text-[#333] border border-gray-300 hover:bg-gray-50',
-    lightgray: 'bg-[#F3F4F6] text-[#666] hover:bg-[#E5E7EB]',
-    disabled: 'bg-[#D1D5DB] text-[#9CA3AF]', // button-L-Disabled 스타일
+    // text-white와 함께 font-medium이 잘 보이도록 설정
+    blue: 'bg-primary text-white hover:bg-primary-dark active:bg-primary-dark antialiased',
+    white: 'bg-bg text-text border border-border hover:bg-bg-muted',
+    lightgray: 'bg-bg-muted text-text-muted hover:bg-secondary-light',
     kakao:
-      'bg-[#FFFFFF] text-[#47494D] w-[322px] h-[50px] text-[14px] font-medium border border-[#FFC533] hover:bg-[#fff9e0]',
+      'bg-bg text-text-muted w-[322px] h-[50px] text-base font-medium border border-accent hover:bg-accent-light/20',
+    disabled: 'bg-secondary-light text-text-disabled',
   };
+
+  const sizeStyles = {
+    // L 사이즈: 피그마의 font-weight: 500 반영
+    // 만약 여전히 얇아 보인다면 font-semibold(600)로 올리는 것도 방법입니다.
+    L: 'w-[250px] h-[50px] text-lg font-medium leading-[24px]',
+    M: 'w-[160px] h-[40px] text-base font-medium leading-normal',
+    S: 'w-[145px] h-[30px] text-sm font-regular leading-normal',
+  };
+
+  // ... 하단 return문 동일
 
   const combinedClassName = `
     ${baseStyles} 
-    ${disabled ? variantStyles.disabled : variantStyles[variant]} 
-    ${sizeStyles[size] || ''} 
-    ${className}
+    ${isKakao ? variantStyles.kakao : disabled ? variantStyles.disabled : variantStyles[variant]}
+    ${!isKakao ? sizeStyles[size] : ''}
+    ${props.className || ''}
   `.trim();
-
-  const isKakao = variant === 'kakao';
 
   return (
     <button
-      type={type}
       className={combinedClassName}
-      onClick={!disabled ? onClick : undefined}
       disabled={disabled}
       {...props}
+      style={isKakao ? { position: 'relative' } : {}}
     >
-      {isKakao && <KakaoLogo className="mr-2" />}
-      {children}
+      {isKakao && (
+        <span className="absolute left-[14px] top-1/2 -translate-y-1/2 flex items-center">
+          {/* 카카오 로고 크기는 디자인 가이드에 맞춰 고정 */}
+          <KakaoLogo width={18} height={18} />
+        </span>
+      )}
+
+      <span className="flex-1 text-center">{children}</span>
     </button>
   );
 };
