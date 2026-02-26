@@ -1,0 +1,68 @@
+/*  search-bar */
+
+position: relative;
+width: 400px;
+height: 44px;
+left: 100px;
+top: 620px;
+
+
+
+/* Rectangle 74 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 2px solid #D9DBE0;
+border-radius: 44px;
+
+
+/* 어떤 스터디를 찾고 계신가요? */
+
+position: absolute;
+width: 171px;
+height: 20px;
+left: 20px;
+top: 12px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+
+/* icon-Search */
+
+position: absolute;
+width: 28px;
+height: 28px;
+right: 14px;
+top: 8px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 6.25%;
+right: 6.25%;
+top: 6.25%;
+bottom: 6.25%;
+
+/* White-Mode/W-Gray-Lv4 */
+background: #47494D;
