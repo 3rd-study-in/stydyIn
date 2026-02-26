@@ -1,12 +1,10 @@
 // tag-L / tag-M / tag-S / tag-SS 기반
 // tag-L-lightgray / tag-L-gray / tag-L-blue 기반
-// tag-M-2 (X 버튼 있는 버전) 기반
 
-function Tag({
+function TagSize({
   children,
   size = 'M',
   variant = 'lightgray',
-  onRemove,
   className = '',
 }) {
   const sizeStyle = {
@@ -22,7 +20,7 @@ function Tag({
     blue: 'bg-info text-white',
   }
 
-    const textColor = variant === 'blue' 
+  const textColor = variant === 'blue' 
     ? '' 
     : size === 'L' 
       ? 'text-text-muted' 
@@ -31,17 +29,8 @@ function Tag({
   return (
     <span className={`inline-flex items-center font-['Spoqa_Han_Sans_Neo'] ${sizeStyle[size]} ${variantStyle[variant]} ${textColor} ${className}`}>
       {children}
-      
-      {onRemove && (
-        <button onClick={onRemove} className="ml-2">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <circle cx="9" cy="9" r="9" fill="#8D9299" />
-            <path d="M6 6L12 12M12 6L6 12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </button>
-      )}
     </span>
   )
 }
 
-export default Tag
+export default TagSize
