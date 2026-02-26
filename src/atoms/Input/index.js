@@ -1,1 +1,2 @@
-export { default as Input } from './Input'
+export { default as InputBox } from './InputBox'
+export { default as EditProfileInputBox } from './EditProfileInputBox'
