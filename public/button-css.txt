@@ -160,3 +160,54 @@ bottom: 12.5%;
 
 /* White-Mode/W-LowError */
 background: #FFC533;
+
+
+
+/* alert-button-L-white */
+
+position: relative;
+width: 150px;
+height: 50px;
+left: 1120px;
+top: 1004px;
+
+
+
+/* Rectangle 140 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* 등록 */
+
+position: absolute;
+width: 30px;
+height: 24px;
+left: calc(50% - 30px/2);
+top: calc(50% - 24px/2);
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
