@@ -27,25 +27,25 @@ function Alert({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} hasOverlay={hasOverlay}>
-      <div className="w-100 h-[160px] bg-white border border-[#D9DBE0] rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] overflow-hidden flex flex-col font-['Spoqa_Han_Sans_Neo']">
+      <div className="w-100 h-[160px] bg-white border border-border rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] overflow-hidden flex flex-col font-sans">
         {/* 메시지 영역 */}
-        <div className="flex-1 flex items-center justify-center px-6 text-base text-[#000000]">
+        <div className="flex-1 flex items-center justify-center px-6 text-base text-black">
           {children}
         </div>
 
         {/* 하단 버튼 바 */}
-        <div className="h-[50px] flex border-t border-[#D9DBE0] shrink-0">
+        <div className="h-[50px] flex border-t border-border shrink-0">
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 border-r border-[#D9DBE0] bg-white text-[#47494D] text-base font-medium hover:bg-[#F3F5FA] transition-colors"
+            className="flex-1 border-r border-border bg-white text-text-muted text-base font-medium hover:bg-bg-muted transition-colors"
           >
             {confirmText}
           </button>
           <button
             type="button"
             onClick={handleCancel}
-            className="flex-1 bg-[#F3F5FA] text-[#47494D] text-base font-medium hover:bg-[#E5E7EB] transition-colors"
+            className="flex-1 bg-bg-muted text-text-muted text-base font-medium hover:bg-[#E5E7EB] transition-colors"
           >
             {cancelText}
           </button>

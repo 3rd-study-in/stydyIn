@@ -22,12 +22,12 @@ function UserInfoModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} hasOverlay={hasOverlay}>
       {/* overflow-visible: X 버튼이 모달 테두리 밖으로 10px 삐져나옴 */}
-      <div className="relative w-[390px] h-[694px] font-['Spoqa_Han_Sans_Neo']">
+      <div className="relative w-[390px] h-[694px] font-sans">
         {/* 모달 카드 본체 */}
-        <div className="w-full h-full bg-white border border-[#D9DBE0] rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] overflow-hidden relative">
+        <div className="w-full h-full bg-white border border-border rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] overflow-hidden relative">
           {/* 좌상단 지역 태그 */}
           {location && (
-            <span className="absolute left-[30px] top-[30px] flex items-center px-[13px] py-[5px] bg-[#F3F5FA] rounded-[26px] text-xs text-[#121314]">
+            <span className="absolute left-[30px] top-[30px] flex items-center px-[13px] py-[5px] bg-bg-muted rounded-[26px] text-xs text-text">
               {location}
             </span>
           )}
@@ -37,7 +37,7 @@ function UserInfoModal({
             <button
               type="button"
               onClick={onReport}
-              className="absolute right-[75px] top-[34px] text-xs underline text-[#8D9299] hover:text-[#47494D] transition-colors"
+              className="absolute right-[75px] top-[34px] text-xs underline text-text-disabled hover:text-text-muted transition-colors"
             >
               신고하기
             </button>
@@ -52,7 +52,7 @@ function UserInfoModal({
           type="button"
           onClick={onClose}
           aria-label="모달 닫기"
-          className="absolute -right-[10px] -top-[10px] w-9 h-9 bg-[#2E6FF2] rounded-full flex items-center justify-center [filter:drop-shadow(2px_2px_6px_rgba(0,0,0,0.1))] hover:bg-[#1649b8] transition-colors z-10"
+          className="absolute -right-[10px] -top-[10px] w-9 h-9 bg-primary rounded-full flex items-center justify-center [filter:drop-shadow(2px_2px_6px_rgba(0,0,0,0.1))] hover:bg-[#1649b8] transition-colors z-10"
         >
           {/* 흰색 X 아이콘 */}
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
