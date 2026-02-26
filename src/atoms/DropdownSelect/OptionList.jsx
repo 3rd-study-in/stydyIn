@@ -10,21 +10,21 @@
 export function OptionList({ options = [], value, onSelect }) {
   return (
     <ul
-      className="absolute top-full left-0 z-50 mt-1 min-w-full bg-white border border-[#D9DBE0] rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] py-1"
+      className="absolute top-full left-0 z-50 mt-1 min-w-full bg-white border border-border rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] py-1"
       role="listbox"
     >
       {options.length === 0 ? (
-        <li className="h-10 flex items-center px-4 text-sm text-[#8D9299]">항목 없음</li>
+        <li className="h-10 flex items-center px-4 text-sm text-text-disabled">항목 없음</li>
       ) : (
         options.map((option) => (
           <li key={option.value} role="option" aria-selected={value === option.value}>
             <button
               type="button"
               onClick={() => onSelect(option)}
-              className="w-full h-10 px-2 text-left flex items-center font-['Spoqa_Han_Sans_Neo']"
+              className="w-full h-10 px-2 text-left flex items-center font-sans"
             >
               <span
-                className={`flex-1 h-[30px] flex items-center px-2 text-sm text-[#121314] rounded-lg transition-colors ${value === option.value ? 'bg-[#F3F5FA]' : 'hover:bg-[#F3F5FA]'
+                className={`flex-1 h-[30px] flex items-center px-2 text-sm text-text rounded-lg transition-colors ${value === option.value ? 'bg-bg-muted' : 'hover:bg-bg-muted'
                   }`}
               >
                 {option.label}

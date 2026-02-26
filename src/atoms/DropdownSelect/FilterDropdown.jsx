@@ -34,7 +34,7 @@ function FilterDropdown({
   return (
     <div
       ref={containerRef}
-      className={`relative inline-block font-['Spoqa_Han_Sans_Neo'] ${className}`}
+      className={`relative inline-block font-sans ${className}`}
       style={{ width }}
     >
       <button
@@ -46,7 +46,7 @@ function FilterDropdown({
         className={`flex items-center gap-2 h-10 px-3 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
       >
         <FilterIcon />
-        <span className="flex-1 text-left text-base font-medium text-[#47494D]">
+        <span className="flex-1 text-left text-base font-medium text-text-muted">
           {label}
         </span>
         {isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />}

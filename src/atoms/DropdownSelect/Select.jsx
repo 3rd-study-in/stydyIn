@@ -38,7 +38,7 @@ function Select({
   return (
     <div
       ref={containerRef}
-      className={`relative font-['Spoqa_Han_Sans_Neo'] ${className}`}
+      className={`relative font-sans ${className}`}
       style={{ width }}
     >
       <button
@@ -50,7 +50,7 @@ function Select({
         className={`flex items-center h-10 px-3.5 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
       >
         <span
-          className={`flex-1 text-sm text-left ${selectedOption ? 'text-[#121314]' : 'text-[#8D9299]'
+          className={`flex-1 text-sm text-left ${selectedOption ? 'text-text' : 'text-text-disabled'
             }`}
         >
           {selectedOption?.label ?? placeholder}
