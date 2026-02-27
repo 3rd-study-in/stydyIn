@@ -1,5 +1,6 @@
     import React, { useState, useEffect } from 'react';
     import Image from '../../../atoms/Images/Common/Image';
+    import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 
     const AuthSystem = () => {
     // UI 상태 관리
@@ -32,7 +33,7 @@
             setStep(2);
         }
         } catch (err) {
-        setErrorMsg("서버 통신 오류가 발생했습니다.");
+        // setErrorMsg("서버 통신 오류가 발생했습니다.");
         }
     };
 
@@ -63,58 +64,63 @@
             
             {/* 헤더 텍스트 */}
             <div className="text-left">
-            <h1 className="text-2xl font-bold leading-tight">
+            <h1 className="text-2xl font-bold leading-snug whitespace-pre-wrap ">
                 {view === 'login' ? "SNS계정으로 간편하게\n회원가입/로그인 하세요! :)" : 
                 view === 'signup' ? "새로운 계정을\n만들어보세요! :)" : "비밀번호를\n재설정합니다."}
             </h1>
             </div>
 
             {/* 메인 이미지 영역 */}
-            <div className="relative w-full rounded-xl overflow-hidden shadow-md">
+            <div className="relative w-full pt-lg overflow-hidden ">
             <Image
-            name="LoginImg" width={322} className="w-full h-auto"
+            name="LoginImg" width={322} className="rounded-lg w-full h-auto"
             />
             </div>
 
             {/* 폼 영역 */}
-            <div className="flex flex-col gap-spacing-md">
+            <div className="flex flex-col gap-spacing-md pt-3xl">
             {view === 'login' ? (
                 /* 로그인 폼 */
-                <form onSubmit={handleLogin} className="flex flex-col gap-spacing-md">
+                
+                <form onSubmit={handleLogin} className="flex flex-col gap-md">
                 <input
                     type="email"
                     placeholder="이메일"
-                    className="w-full py-spacing-sm border-b border-border focus:border-primary outline-none text-base"
+                    className="w-full h-[40px] border-b  border-border border-b-2 focus:border-primary outline-none text-base"
                     onChange={(e) => setEmail(e.target.value)}
                 />
+
                 <input
                     type="password"
                     placeholder="비밀번호"
-                    className="w-full py-spacing-sm border-b border-border focus:border-primary outline-none text-base"
+                    className="w-full h-[40px] border-b border-border border-b-2 focus:border-primary outline-none text-base"
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button className="w-full py-spacing-md bg-primary text-white rounded-lg font-semibold text-lg mt-spacing-sm">
+                <FlexibleButton variant="blue" size="L" width="100%" type="submit" >
                     로그인
-                </button>
+                </FlexibleButton>
+
                 </form>
             ) : (
                 /* 회원가입/비번재설정 폼 (인증 포함) */
-                <form onSubmit={step === 1 ? handleEmailSubmit : verifyCode} className="flex flex-col gap-spacing-md">
+                <form onSubmit={step === 1 ? handleEmailSubmit : verifyCode} className="flex flex-col gap-md">
                 <input
                     type="email"
                     placeholder="이메일"
                     disabled={step === 2}
-                    className="w-full py-spacing-sm border-b border-border focus:border-primary outline-none text-base disabled:text-text-disabled"
+                    className="w-full h-[40px] border-b border-border focus:border-primary outline-none text-base disabled:text-text-disabled"
                     onChange={(e) => setEmail(e.target.value)}
                 />
+
                 {step === 2 && (
                     <input
                     type="text"
                     placeholder="인증번호 6자리 (123456)"
-                    className="w-full py-spacing-sm border-b border-border focus:border-primary outline-none text-base"
+                    className="w-full h-[40px] border-b border-border focus:border-primary outline-none text-base"
                     onChange={(e) => setVerificationCode(e.target.value)}
                     />
                 )}
+
                 <button className="w-full py-spacing-md bg-primary text-white rounded-lg font-semibold text-lg mt-spacing-sm">
                     {step === 1 ? "인증번호 발송" : "인증하기"}
                 </button>
@@ -122,21 +128,24 @@
             )}
             </div>
 
+
             {/* 에러 메시지 표시 */}
             {errorMsg && <p className="text-center text-error text-sm -mt-2">{errorMsg}</p>}
 
             {/* 하단 네비게이션 */}
-            <div className="flex justify-center gap-spacing-md text-sm text-secondary font-medium">
+            <div className="flex justify-center mt-xl gap-spacing-md text-sm text-secondary font-medium">
             {view === 'login' ? (
                 <>
                 <button onClick={() => {setView('signup'); setStep(1);}} className="hover:text-text">회원가입</button>
                 <span className="text-border">|</span>
                 <button onClick={() => {setView('reset'); setStep(1);}} className="hover:text-text">비밀번호 찾기</button>
                 </>
+
             ) : (
                 <button onClick={() => {setView('login'); setStep(1);}} className="hover:text-text">로그인으로 돌아가기</button>
             )}
             </div>
+
         </div>
         </div>
     );
