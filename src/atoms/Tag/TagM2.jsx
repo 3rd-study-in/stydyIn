@@ -6,7 +6,7 @@ function TagM2({
   className = '',
 }) {
   return (
-    <span className={`inline-flex items-center font-['Spoqa_Han_Sans_Neo'] h-8 px-[14px] rounded-[36px] bg-bg-muted text-text ${className}`}>
+    <span className={`inline-flex items-center font-['Spoqa_Han_Sans_Neo'] cursor-pointer h-8 px-[14px] rounded-[36px] bg-bg-muted text-text ${className}`}>
       {children}
       
       <button onClick={onRemove} className="ml-2">
