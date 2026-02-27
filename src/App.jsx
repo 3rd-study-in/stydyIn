@@ -1,7 +1,11 @@
+import { UserProfileDefault } from './shared/components/UserProfile'
 
 function App() {
-
-  return <></>;
+  return (
+    <div className="p-10">
+      <UserProfileDefault />
+    </div>
+  )
 }
 
-export default App;
+export default App
