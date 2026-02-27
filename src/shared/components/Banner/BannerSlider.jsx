@@ -1,5 +1,6 @@
     import { useState, useEffect, useCallback } from 'react';
     import Icon from '../../../atoms/Icon/Common/Icon';
+    import Image from '../../../atoms/Images/Common/Image';
 
     const BANNER_DATA = [
     {
@@ -7,7 +8,7 @@
         tag: "스터디 모집",
         title: "집혼자 공부하기 지치셨나요?\n함께하면 더 오래 갑니다",
         desc: "내 지역, 내 관심사에 딱 맞는 스터디를 찾아보세요",
-        img: "/src/asset/images/banner-smile.png", // 임시 이미지
+        img: "BannerSmile",
         bgColor: "bg-[#FFDEE3]",
         tagStyle: "bg-black text-white",
         titleColor: "text-text",
@@ -18,7 +19,7 @@
         tag: "인기 스터디",
         title: "이번 주 가장 핫한\n스터디를 확인해 보세요 🔥",
         desc: "지금 가장 많은 사람들이 참여하고 있는 스터디",
-        img: "/src/asset/images/banner-happy.png",
+        img: "BannerHappy",
         bgColor: "bg-[#607FFF]",
         tagStyle: "bg-white text-text",
         titleColor: "text-white",
@@ -29,7 +30,7 @@
         tag: "서비스 소개",
         title: "스터디인에서 같이 코딩할\n스터디원을 구해보세요!",
         desc: "장소 제약 없이, 전국 어디서든 함께 공부해요",
-        img: "/src/asset/images/banner-study.png",
+        img: "BannerStudy",
         bgColor: "bg-[#2B3444]",
         tagStyle: "bg-white text-text",
         titleColor: "text-white",
@@ -86,7 +87,8 @@
             </div>
 
                 <div className="relative h-full flex items-center pr-lg">
-                <img src={banner.img} alt="banner" className="h-[220px] w-auto object-contain" />
+                <Image 
+                name={banner} alt="banner" className="h-[220px] w-auto object-contain" />
                 </div>
             </div>
             ))}
