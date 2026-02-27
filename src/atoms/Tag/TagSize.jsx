@@ -27,7 +27,7 @@ function TagSize({
       : 'text-text'
 
   return (
-    <span className={`inline-flex items-center font-['Spoqa_Han_Sans_Neo'] ${sizeStyle[size]} ${variantStyle[variant]} ${textColor} ${className}`}>
+    <span className={`inline-flex items-center font-['Spoqa_Han_Sans_Neo'] cursor-pointer ${sizeStyle[size]} ${variantStyle[variant]} ${textColor} ${className}`}>
       {children}
     </span>
   )
