@@ -60,7 +60,7 @@
     }, [nextSlide]);
 
     return (
-        <div className="relative w-[880px] h-[300px] overflow-hidden rounded-2xl group mx-auto">
+        <div className="relative w-[880px] h-[300px] overflow-hidden rounded-lg group mx-auto">
 
         {/* 슬라이드 트랙 */}
         <div 
@@ -70,11 +70,11 @@
             {BANNER_DATA.map((banner) => (
             <div 
                 key={banner.id}
-                className={`flex-shrink-0 w-full h-full flex items-center justify-between px-16 ${banner.bgColor} ${banner.dark ? 'text-white' : 'text-text'}`}
+                className={`flex-shrink-0 w-full h-full flex items-start justify-between px-16 ${banner.bgColor} ${banner.dark ? 'text-white' : 'text-text'}`}
             >
                 {/* 텍스트 영역 */}
-            <div className="z-10 text-left pl-lg">
-                <span className={`inline-block px-sm py-xs text-xs font-bold mb-md rounded-full ${banner.tagStyle}`}>
+            <div className="z-10 text-left pl-3 pt-13.5">
+                <span className={`inline-block px-sm py-xxs text-xs font-bold mb-md rounded-full ${banner.tagStyle}`}>
                 {banner.tag}
                 </span>
                 <h2 className={`text-3xl font-medium leading-tight whitespace-pre-line mb-lg ${banner.titleColor}`}>
@@ -85,8 +85,8 @@
                 </p>
             </div>
 
-                <div className="relative h-full flex items-end pr-lg">
-                <img src={banner.img} alt="banner" className="h-[250px] w-auto object-contain" />
+                <div className="relative h-full flex items-center pr-lg">
+                <img src={banner.img} alt="banner" className="h-[220px] w-auto object-contain" />
                 </div>
             </div>
             ))}
@@ -95,19 +95,21 @@
         {/* 컨트롤 버튼 */}
         <button 
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover: transition-all"
+            className="absolute left-1 top-1/2 -translate-y-1/2 cursor-pointer drop-shadow-md hover: transition-all"
         >
-            <Icon name="LeftArrow" size={36} className={BANNER_DATA[current].dark ? "text-white" : "text-slate-800"} />
+            <Icon
+            name="LeftArrow" size={36} className={`${BANNER_DATA[current].dark ? "text-white" : "text-text"} drop-shadow-md`}
+            />
         </button>
         <button 
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-2  hover: transition-all"
+            className="absolute right-1 top-1/2 -translate-y-1/2 cursor-pointer drop-shadow-md hover: transition-all"
         >
-            <Icon name="RightArrow" size={36} className={BANNER_DATA[current].dark ? "text-white" : "text-slate-800"} />
+            <Icon name="RightArrow" size={36} className={`${BANNER_DATA[current].dark ? "text-white" : "text-text"} drop-shadow-md`} />
         </button>
 
         {/* 인디케이터 */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 drop-shadow-md flex gap-1.5">
             {BANNER_DATA.map((_, idx) => (
             <button
                 key={idx}
@@ -133,10 +135,10 @@
 //   return (
 //     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-10">
 //       <h1 className="text-2xl font-bold mb-8 text-text">메인 배너 컴포넌트 테스트</h1>
-      
+
 //       {/*배너 슬라이더 */}
 //       <BannerSlider />
-      
+
 //       <div className="mt-10 text-text-disabled text-sm">
 //         5초마다 자동으로 다음 슬라이드로 넘어갑니다.
 //       </div>
