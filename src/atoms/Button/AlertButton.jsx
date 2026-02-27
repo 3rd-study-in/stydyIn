@@ -23,7 +23,7 @@ const AlertButton = ({
 
     // 아웃라인 강조 버튼 (W-Gray-Lv2 기준)
     outline:
-      'bg-bg text-text border border-primary-dark hover:border-secondary-dark active:bg-bg-muted',
+      'bg-bg text-text border border-secondary hover:border-secondary-dark active:bg-bg-muted',
 
     // 비활성화 상태 (W-Gray-Lv3 텍스트)
     disabled: 'bg-bg-muted text-text-disabled border border-border opacity-50',
