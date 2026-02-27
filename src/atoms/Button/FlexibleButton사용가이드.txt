@@ -1,0 +1,3 @@
+<FlexibleButton variant="lightgray" size="L" width="400px">
+          시작하기
+        </FlexibleButton>
