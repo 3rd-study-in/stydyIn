@@ -1,12 +1,12 @@
-    import { useState, useEffect, useCallback } from 'react';
-    import Icon from '../../../atoms/Icon/Common/Icon';
-    import Image from '../../../atoms/Images/Common/Image';
+import { useState, useEffect, useCallback } from 'react';
+import Icon from '../../../atoms/Icon/Common/Icon';
+import Image from '../../../atoms/Images/Common/Image';
 
-    const BANNER_DATA = [
+const BANNER_DATA = [
     {
         id: 1,
         tag: "스터디 모집",
-        title: "집혼자 공부하기 지치셨나요?\n함께하면 더 오래 갑니다",
+        title: "혼자 공부하기 지치셨나요?\n함께하면 더 오래 갑니다",
         desc: "내 지역, 내 관심사에 딱 맞는 스터디를 찾아보세요",
         img: "BannerSmile",
         bgColor: "bg-[#FFDEE3]",
@@ -36,12 +36,11 @@
         titleColor: "text-white",
         dark: true,
     }
-    ];
+];
 
-    export default function BannerSlider() {
+export default function BannerSlider() {
     const [current, setCurrent] = useState(0);
 
-    // 다음 슬라이드 이동
     const nextSlide = useCallback(() => {
         setCurrent((prev) => (prev === BANNER_DATA.length - 1 ? 0 : prev + 1));
     }, []);
@@ -50,100 +49,102 @@
         setCurrent((prev) => (prev === 0 ? BANNER_DATA.length - 1 : prev - 1));
     };
 
-
-
     useEffect(() => {
         const timer = setInterval(() => {
-        nextSlide();
-        }, 5000); // 5초 마다 전환
-
+            nextSlide();
+        }, 5000);
         return () => clearInterval(timer);
     }, [nextSlide]);
 
     return (
-        <div className="relative w-[880px] h-[300px] overflow-hidden rounded-lg group mx-auto">
+        <div className="relative w-[880px] h-[300px] overflow-hidden rounded-lg font-sans tracking-tight">
 
-        {/* 슬라이드 트랙 */}
-        <div 
-            className="flex transition-transform duration-700 ease-in-out h-full"
-            style={{ transform: `translateX(-${current * 100}%)` }}
-        >
-            {BANNER_DATA.map((banner) => (
+            {/* 슬라이드 트랙 */}
             <div 
-                key={banner.id}
-                className={`flex-shrink-0 w-full h-full flex items-start justify-between px-16 ${banner.bgColor} ${banner.dark ? 'text-white' : 'text-text'}`}
+                className="flex transition-transform duration-700 ease-in-out h-full"
+                style={{ transform: `translateX(-${current * 100}%)` }}
             >
-                {/* 텍스트 영역 */}
-            <div className="z-10 text-left pl-3 pt-13.5">
-                <span className={`inline-block px-sm py-xxs text-xs font-bold mb-md rounded-full ${banner.tagStyle}`}>
-                {banner.tag}
-                </span>
-                <h2 className={`text-3xl font-medium leading-tight whitespace-pre-line mb-lg ${banner.titleColor}`}>
-                {banner.title}
-                </h2>
-                <p className={`text-sm ${banner.dark ? 'text-white' : 'text-text-muted'}`}>
-                {banner.desc}
-                </p>
+                {BANNER_DATA.map((banner) => (
+                    <div 
+                        key={banner.id}
+                        className={`flex-shrink-0 w-full h-full flex items-start justify-between px-16 pt-[54px] ${banner.bgColor}`}
+                    >
+                        {/* 텍스트 영역 */}
+                        <div className="z-10 text-left pl-3">
+                            <span className={`inline-block px-sm py-xxs text-xs font-bold mb-md rounded-full ${banner.tagStyle}`}>
+                                {banner.tag}
+                            </span>
+                            <h2 className={`text-3xl font-medium leading-tight whitespace-pre-line mb-lg ${banner.titleColor}`}>
+                                {banner.title}
+                            </h2>
+                            <p className={`text-sm ${banner.dark ? 'text-white' : 'text-text-muted'}`}>
+                                {banner.desc}
+                            </p>
+                        </div>
+
+                        {/* 캐릭터 이미지 영역: 작성하신 Image 컴포넌트 사용 */}
+                        <div className="relative h-full flex items-end pr-lg">
+                            <Image 
+                                name={banner.img} 
+                                alt="banner-char" 
+                                width={220} 
+                                className="h-auto object-contain mb-10" 
+                            />
+                        </div>
+                    </div>
+                ))}
             </div>
 
-                <div className="relative h-full flex items-center pr-lg">
-                <Image 
-                name={banner} alt="banner" className="h-[220px] w-auto object-contain" />
-                </div>
+            {/* 컨트롤 버튼: drop-shadow를 아이콘에 직접 적용 */}
+            <button 
+                onClick={prevSlide}
+                className="absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer transition-all active:scale-95 z-20"
+            >
+                <Icon 
+                    name="LeftArrow" 
+                    size={36} 
+                    className={`${BANNER_DATA[current].dark ? "text-white" : "text-text"} drop-shadow-[2px_2px_4px_rgba(0,0,0,0.2)]`} 
+                />
+            </button>
+            <button 
+                onClick={nextSlide}
+                className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer transition-all active:scale-95 z-20"
+            >
+                <Icon 
+                    name="RightArrow" 
+                    size={36} 
+                    className={`${BANNER_DATA[current].dark ? "text-white" : "text-text"} drop-shadow-[2px_2px_4px_rgba(0,0,0,0.2)]`} 
+                />
+            </button>
+
+            {/* 인디케이터 */}
+            <div className="absolute bottom-5 drop-shadow-sx left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                {BANNER_DATA.map((_, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setCurrent(idx)}
+                        className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                            current === idx 
+                            ? 'bg-white w-5' 
+                            : 'bg-white/40 w-1.5'
+                        }`}
+                    />
+                ))}
             </div>
-            ))}
-        </div>
-
-        {/* 컨트롤 버튼 */}
-        <button 
-            onClick={prevSlide}
-            className="absolute left-1 top-1/2 -translate-y-1/2 cursor-pointer drop-shadow-md hover: transition-all"
-        >
-            <Icon
-            name="LeftArrow" size={36} className={`${BANNER_DATA[current].dark ? "text-white" : "text-text"} drop-shadow-md`}
-            />
-        </button>
-        <button 
-            onClick={nextSlide}
-            className="absolute right-1 top-1/2 -translate-y-1/2 cursor-pointer drop-shadow-md hover: transition-all"
-        >
-            <Icon name="RightArrow" size={36} className={`${BANNER_DATA[current].dark ? "text-white" : "text-text"} drop-shadow-md`} />
-        </button>
-
-        {/* 인디케이터 */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 drop-shadow-md flex gap-1.5">
-            {BANNER_DATA.map((_, idx) => (
-            <button
-                key={idx}
-                onClick={() => setCurrent(idx)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                    current === idx 
-                    ? (BANNER_DATA[current].dark ? 'bg-white w-5': 'bg-white     w-5') 
-                    : 'bg-white/40 w-1.5'
-                }`}
-            />
-            ))}
-        </div>
         </div>
     );
-    }
+}
 
 
 
-    // App.jsx에서 테스트
-//     import BannerSlider from './shared/components/Banner/BannerSlider';
+
+// import BannerSlider from './shared/components/Banner/BannerSlider';
 
 // function App() {
 //   return (
-//     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-10">
-//       <h1 className="text-2xl font-bold mb-8 text-text">메인 배너 컴포넌트 테스트</h1>
-
+//     <div className=" bg-gray-100 ">
 //       {/*배너 슬라이더 */}
 //       <BannerSlider />
-
-//       <div className="mt-10 text-text-disabled text-sm">
-//         5초마다 자동으로 다음 슬라이드로 넘어갑니다.
-//       </div>
 //     </div>
 //   );
 // }
