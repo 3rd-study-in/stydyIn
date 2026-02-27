@@ -1,138 +1,207 @@
-/* main-profile-box-noUserInfo */
+/* study-list */
 
 box-sizing: border-box;
 
-position: absolute;
-width: 290px;
-height: 300px;
-left: 1265px;
-top: 180px;
+position: relative;
+width: 280px;
+height: 480px;
+left: 100px;
+top: 764px;
 
-/* White-Mode/W-Gray-Lv1 */
-background: #F3F5FA;
+background: #FFFFFF;
 /* White-Mode/W-Gray-Lv2 */
 border: 1px solid #D9DBE0;
 border-radius: 12px;
 
 
-/* button-L-blue */
+/* thumbnail */
+
+box-sizing: border-box;
 
 position: absolute;
-width: 250px;
-height: 50px;
-left: 20px;
-top: 230px;
+height: 280px;
+left: 0px;
+right: 0px;
+top: 52px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
 
 
+/* thumbnail */
 
-/* Rectangle 78 */
+box-sizing: border-box;
 
 position: absolute;
-left: 0%;
-right: 0%;
-top: 0%;
-bottom: 0%;
+height: 280px;
+left: 0px;
+right: 0px;
+top: 52px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+
+
+/* Frame 1050 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 104px;
+
+position: absolute;
+width: 248px;
+height: 26px;
+left: 16px;
+top: 14px;
+
+
+
+/* Group 55 */
+
+width: 84px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 모집 중! */
+
+position: absolute;
+width: 54px;
+height: 24px;
+left: 30px;
+top: 1px;
+
+/* 16p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Primary */
+color: #2E6FF2;
+
+
+
+/* icon-speaker */
+
+position: absolute;
+width: 24px;
+height: 24px;
+left: 0px;
+top: 1px;
+
+
+
+/* Vector (Stroke) */
+
+position: absolute;
+left: 11.25%;
+right: 11.25%;
+top: 12.32%;
+bottom: 9.98%;
 
 /* White-Mode/W-Primary
 
 메인 컬러(로고, 버튼 등)
 */
 background: #2E6FF2;
-border-radius: 8px;
 
 
-/* 스터디 만들기 */
+/* tag-S */
 
-position: absolute;
-left: 38.4%;
-right: 38%;
-top: 28%;
-bottom: 24%;
-
-/* 16p_M */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
+/* Auto layout */
 display: flex;
+flex-direction: row;
+justify-content: center;
 align-items: center;
-text-align: center;
+padding: 5px 13px;
+gap: 10px;
 
-color: #FFFFFF;
-
-
-
-/* 스터디를 만들어 사람들과 함께 공부할 수 있어요! */
-
-position: absolute;
-width: 185px;
-height: 40px;
-left: 54px;
-top: 168px;
-
-/* 14p_R */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-/* or 143% */
-display: flex;
-align-items: center;
-text-align: center;
-
-/* White-Mode/W-Gray-Lv4 */
-color: #47494D;
-
-
-
-/* profile-img */
-
-position: absolute;
-width: 112px;
-height: 106px;
-left: 89px;
-top: 30px;
-
-
-
-/* Ellipse 46 */
-
-box-sizing: border-box;
-
-position: absolute;
-width: 100px;
-height: 100px;
-left: 95px;
-top: 36px;
-
-background: url(기본프로필사진.png), #D9DBE0;
-/* White-Mode/W-Gray-Lv2 */
-border: 1px solid #D9DBE0;
-
-
-/* Ellipse 49 */
-
-position: absolute;
-width: 112px;
-height: 76px;
-left: 89px;
-top: 30px;
-
-/* main-profile-box */
-
-box-sizing: border-box;
-
-width: 290px;
-height: 300px;
+width: 60px;
+height: 26px;
 
 /* White-Mode/W-Gray-Lv1 */
 background: #F3F5FA;
-/* White-Mode/W-Gray-Lv2 */
-border: 1px solid #D9DBE0;
-border-radius: 12px;
+border-radius: 26px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 노형동 */
+
+width: 34px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1049 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 10px;
+
+position: absolute;
+width: 248px;
+height: 120px;
+left: 16px;
+top: 346px;
+
+
+
+/* Frame 1048 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 12px;
+
+width: 248px;
+height: 90px;
+
 
 /* Inside auto layout */
 flex: none;
@@ -141,17 +210,269 @@ align-self: stretch;
 flex-grow: 0;
 
 
-/* button-L-blue */
+/* Frame 54 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 6px;
+
+width: 126px;
+height: 26px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* tag-S */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 13px;
+gap: 10px;
+
+width: 71px;
+height: 26px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 26px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 노형동 */
+
+width: 45px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* tag-S */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 13px;
+gap: 10px;
+
+width: 49px;
+height: 26px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 26px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 노형동 */
+
+width: 23px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 크롬 확장 프로그램 함께 구현 해보실 분 찾습니다. */
+
+width: 248px;
+height: 52px;
+
+/* 18p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 26px;
+/* or 144% */
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Group 54 */
+
+width: 158px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 현재 8명이 신청했어요. */
 
 position: absolute;
-width: 250px;
-height: 50px;
-left: 20px;
-top: 230px;
+width: 134px;
+height: 20px;
+left: 24px;
+bottom: 0px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #8D9299;
 
 
 
-/* Rectangle 78 */
+/* icon-people */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: 0px;
+bottom: 1px;
+
+
+
+/* Group 53 */
+
+position: absolute;
+width: 15.75px;
+height: 15.75px;
+left: 1.12px;
+top: 1.12px;
+
+
+
+/* Ellipse 38 (Stroke) */
+
+position: absolute;
+left: 18.75%;
+right: 46.25%;
+top: 31.25%;
+bottom: 33.75%;
+
+/* White-Mode/W-Gray-Lv3 */
+background: #8D9299;
+
+
+/* Ellipse 39 (Stroke) */
+
+position: absolute;
+left: 46.25%;
+right: 18.75%;
+top: 6.25%;
+bottom: 58.75%;
+
+/* White-Mode/W-Gray-Lv3 */
+background: #8D9299;
+
+
+/* Vector 16 (Stroke) */
+
+position: absolute;
+left: 6.25%;
+right: 33.75%;
+top: 58.75%;
+bottom: 6.25%;
+
+/* White-Mode/W-Gray-Lv3 */
+background: #8D9299;
+
+
+/* Vector 17 (Stroke) */
+
+position: absolute;
+left: 60%;
+right: 6.25%;
+top: 33.75%;
+bottom: 32.5%;
+
+/* White-Mode/W-Gray-Lv3 */
+background: #8D9299;
+
+
+/* like-btn */
+
+position: absolute;
+width: 32px;
+height: 32px;
+right: 16px;
+top: 286px;
+
+filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+
+
+/* Ellipse 45 */
 
 position: absolute;
 left: 0%;
@@ -159,32 +480,159 @@ right: 0%;
 top: 0%;
 bottom: 0%;
 
-/* White-Mode/W-Primary
-
-메인 컬러(로고, 버튼 등)
-*/
-background: #2E6FF2;
-border-radius: 8px;
+/* White-Mode/W-Background */
+background: #FFFFFF;
 
 
-/* 스터디 만들기 */
+/* icon-heart */
 
 position: absolute;
-left: 31.6%;
-right: 31.6%;
-top: 28%;
-bottom: 24%;
+left: 15.62%;
+right: 15.62%;
+top: 15.62%;
+bottom: 15.62%;
 
-/* 16p_M */
-font-family: 'Spoqa Han Sans Neo';
-font-style: normal;
-font-weight: 500;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
-display: flex;
-align-items: center;
-text-align: center;
 
-color: #FFFFFF;
 
+/* Vector (Stroke) */
+
+position: absolute;
+left: 6.25%;
+right: 6.25%;
+top: 16.25%;
+bottom: 11.25%;
+
+/* White-Mode/W-Error */
+background: #FF3440;
+
+
+/* Logo */
+
+position: absolute;
+visibility: hidden;
+width: 118px;
+height: 16px;
+left: 81px;
+top: 184px;
+
+
+
+/* Frame */
+
+position: absolute;
+width: 40px;
+height: 35px;
+left: 120px;
+top: 175px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 72.2%;
+top: 0%;
+bottom: 68.15%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 72.2%;
+right: 0%;
+top: 0%;
+bottom: 68.15%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 2.44%;
+right: 2.44%;
+top: 36.11%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Frame */
+
+position: absolute;
+visibility: hidden;
+width: 48px;
+height: 33px;
+left: 116px;
+top: 176px;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 59.71%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 72.2%;
+top: 0%;
+bottom: 59.71%;
+
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 72.2%;
+right: 0%;
+top: 0%;
+bottom: 59.71%;
+
+background: #D9DBE0;
+
+
+/* Group */
+
+position: absolute;
+left: 17.82%;
+right: 17.8%;
+top: 74.24%;
+bottom: -0.03%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 17.82%;
+right: 45.62%;
+top: 74.26%;
+bottom: -0.03%;
+
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 45.64%;
+right: 17.8%;
+top: 74.24%;
+bottom: 0%;
+
+background: #D9DBE0;

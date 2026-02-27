@@ -58,7 +58,7 @@ const Button = ({
       {isKakao && (
         <span className="absolute left-[14px] top-1/2 -translate-y-1/2 flex items-center">
           {/* 카카오 로고 크기는 디자인 가이드에 맞춰 고정 */}
-          <KakaoLogo width={18} height={18} />
+          <KakaoLogo width={24} height={24} />
         </span>
       )}
 
