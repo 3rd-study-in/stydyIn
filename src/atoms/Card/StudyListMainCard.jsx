@@ -5,9 +5,12 @@
  * @param {'recruiting'|'in_progress'|'completed'|'closed'} status  스터디 상태
  * @param {number} [dDay]          D-day (양수=D+, 음수=D-)
  * @param {string} title           스터디 제목
+ * @param {string} [thumbnailSrc]  썸네일 이미지 URL (없으면 회색 placeholder)
  * @param {React.ReactNode} [children]  하단 나머지 영역 슬롯
  * @param {string} [className]     추가 Tailwind 클래스
  */
+
+import Icon from "../Icon/Common/Icon"
 
 const STATUS_MAP = {
   recruiting: { label: '모집 중!', color: 'text-primary' },
@@ -27,6 +30,7 @@ function StudyListMainCard({
   status = 'recruiting',
   dDay,
   title,
+  thumbnailSrc,
   children,
   className = '',
 }) {
@@ -34,19 +38,23 @@ function StudyListMainCard({
 
   return (
     <div
-      className={`w-[290px] bg-white border border-border rounded-lg overflow-hidden font-sans ${className}`}
+      className={`w-[290px]   font-sans ${className}`}
     >
       {/* 상단 헤더 — 썸네일 + 상태 + 제목 */}
       <div className="flex items-start gap-[10px] px-3 pt-3 pb-3">
         {/* 썸네일 */}
-        <div className="w-[66px] h-[66px] bg-bg-muted border-[0.5px] border-border rounded-lg shrink-0" />
+        <div className="w-[66px] h-[66px] bg-bg-muted border-[0.5px] border-border rounded-lg shrink-0">
+          {thumbnailSrc && (
+            <img src={thumbnailSrc} alt="썸네일" className="w-full h-full object-cover" />
+          )}
+        </div>
 
         {/* 정보 컬럼 */}
         <div className="flex flex-col gap-[6px] flex-1 min-w-0">
           {/* 상태 행 */}
           <div className={`flex items-center gap-1 text-xs font-bold ${color}`}>
             {/* 스피커 아이콘 */}
-
+            <Icon name="Speaker" />
             <span>{label}{formatDDay(dDay)}</span>
           </div>
 

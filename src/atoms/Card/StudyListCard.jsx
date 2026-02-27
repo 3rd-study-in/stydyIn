@@ -13,6 +13,8 @@
  * @param {string} [className]     추가 Tailwind 클래스
  */
 
+import Icon from "../Icon/Common/Icon"
+
 // 상태 → 텍스트/색상 매핑
 const STATUS_MAP = {
   recruiting: { label: '모집 중!', color: 'text-primary' },
@@ -37,14 +39,14 @@ function StudyListCard({
   return (
     <div
       onClick={onClick}
-      className={`relative w-[280px] h-[480px] bg-white border border-border rounded-lg overflow-hidden font-sans ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className}`}
+      className={`relative w-[280px] h-[480px] bg-white  overflow-hidden font-sans ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className}`}
     >
       {/* 헤더 — 상태 뱃지 + 위치 뱃지 */}
       <div className="absolute top-0 left-0 w-full h-[52px] px-4 flex items-center justify-between">
         {/* 상태 */}
         <div className={`flex items-center gap-1.5 text-base font-bold ${color}`}>
           {/* 스피커 아이콘 */}
-
+          <Icon name="Speaker" />
           <span>{label}</span>
         </div>
         {/* 위치 뱃지 */}
