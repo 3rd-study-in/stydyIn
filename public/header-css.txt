@@ -1,0 +1,988 @@
+/* GNB */
+
+position: relative;
+width: 1920px;
+height: 80px;
+left: 100px;
+top: 230px;
+
+
+
+/* bgc */
+
+position: absolute;
+width: 1920px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* Rectangle 73 */
+
+position: absolute;
+width: 1920px;
+height: 1px;
+left: 0px;
+top: 79px;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* 내 지역 */
+
+position: absolute;
+width: 48px;
+height: 24px;
+left: 531px;
+top: 28px;
+
+/* 16p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* 온라인 */
+
+position: absolute;
+width: 45px;
+height: 24px;
+left: 609px;
+top: 28px;
+
+/* 16p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* Frame 1025 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 32px;
+
+position: absolute;
+width: 588px;
+height: 44px;
+left: 967px;
+top: 18px;
+
+
+
+/*  search-bar */
+
+width: 400px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Rectangle 74 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+border: 2px solid #D9DBE0;
+border-radius: 44px;
+
+
+/* 어떤 스터디를 찾고 계신가요? */
+
+position: absolute;
+width: 171px;
+height: 20px;
+left: 20px;
+top: 12px;
+
+/* 14p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+
+/* icon-Search */
+
+position: absolute;
+width: 28px;
+height: 28px;
+right: 14px;
+top: 8px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 6.25%;
+right: 6.25%;
+top: 6.25%;
+bottom: 6.25%;
+
+/* White-Mode/W-Gray-Lv4 */
+background: #47494D;
+
+
+/* Frame 1024 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 20px;
+
+width: 80px;
+height: 30px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Group 142 */
+
+width: 30px;
+height: 30px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* icon-chatting */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 0px;
+top: 0px;
+
+
+
+/* Group 42 */
+
+position: absolute;
+width: 26.25px;
+height: 26.25px;
+left: 1.88px;
+top: 1.88px;
+
+
+
+/* Union (Stroke) */
+
+position: absolute;
+left: 6.25%;
+right: 6.25%;
+top: 6.25%;
+bottom: 6.25%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Group 32 */
+
+position: absolute;
+width: 12px;
+height: 3px;
+left: 9px;
+top: 13.5px;
+
+
+
+/* Ellipse 40 */
+
+position: absolute;
+left: 30%;
+right: 60%;
+top: 45%;
+bottom: 45%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Ellipse 42 */
+
+position: absolute;
+left: 60%;
+right: 30%;
+top: 45%;
+bottom: 45%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Ellipse 41 */
+
+position: absolute;
+left: 45%;
+right: 45%;
+top: 45%;
+bottom: 45%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* notice-circle */
+
+position: absolute;
+width: 10px;
+height: 10px;
+left: 20px;
+top: 20px;
+
+/* White-Mode/W-Error */
+background: #FF3440;
+
+
+/* Group 141 */
+
+width: 30px;
+height: 30px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* icon-Notification */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 50px;
+top: 0px;
+
+
+
+/* Group 44 */
+
+position: absolute;
+width: 23.96px;
+height: 25.88px;
+left: 3.02px;
+top: 2.25px;
+
+
+
+/* Union (Stroke) */
+
+position: absolute;
+left: 10.07%;
+right: 10.07%;
+top: 16.25%;
+bottom: 16.25%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector 18 (Stroke) */
+
+position: absolute;
+left: 33.75%;
+right: 33.75%;
+top: 86.25%;
+bottom: 6.25%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Ellipse 44 */
+
+position: absolute;
+left: 45%;
+right: 45%;
+top: 10%;
+bottom: 80%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Ellipse 44 (Stroke) */
+
+position: absolute;
+left: 42.5%;
+right: 42.5%;
+top: 7.5%;
+bottom: 77.5%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* notice-circle */
+
+position: absolute;
+width: 10px;
+height: 10px;
+left: 70px;
+top: 20px;
+
+/* White-Mode/W-Error */
+background: #FF3440;
+
+
+/*  profile-circle */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Ellipse 31 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 2px solid #D9DBE0;
+
+
+/* bottom-bar */
+
+position: absolute;
+width: 60px;
+height: 4px;
+left: 602px;
+top: 75px;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+
+
+/* bottom-bar */
+
+position: absolute;
+width: 60px;
+height: 4px;
+left: 525px;
+top: 75px;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+
+
+/* Logo-2022 */
+
+position: absolute;
+width: 126px;
+height: 32px;
+left: 365px;
+top: 24px;
+
+
+
+/* Group 107 */
+
+position: absolute;
+width: 123.37px;
+height: 26.27px;
+left: 1.4px;
+top: 4.82px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 17.34%;
+right: 73.96%;
+top: 27.21%;
+bottom: 15.21%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.62%;
+right: 17.85%;
+top: 37.93%;
+bottom: 21.74%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 28.58%;
+right: 57.27%;
+top: 37.93%;
+bottom: 15.04%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 84.87%;
+right: 0.98%;
+top: 31.23%;
+bottom: 21.74%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 44.96%;
+right: 40.89%;
+top: 17.77%;
+bottom: 15.04%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 61.75%;
+right: 24.1%;
+top: 37.93%;
+bottom: 2.84%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.12%;
+right: 17.36%;
+top: 15.1%;
+bottom: 67.72%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 1.11%;
+right: 84.25%;
+top: 15.06%;
+bottom: 15.05%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* GNB-NO-login */
+
+position: relative;
+width: 1920px;
+height: 80px;
+left: 100px;
+top: 360px;
+
+
+
+/* bgc */
+
+position: absolute;
+width: 1920px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* Rectangle 73 */
+
+position: absolute;
+width: 1920px;
+height: 1px;
+left: 0px;
+top: 79px;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Logo */
+
+position: absolute;
+visibility: hidden;
+width: 200px;
+height: 28px;
+left: 365px;
+top: 26px;
+
+
+
+/*  profile-circle */
+
+position: absolute;
+visibility: hidden;
+width: 44px;
+height: 44px;
+left: 1511px;
+top: 18px;
+
+
+
+/* icon-Notification */
+
+position: absolute;
+visibility: hidden;
+width: 30px;
+height: 30px;
+left: 1451px;
+top: 25px;
+
+
+
+/* icon-chatting */
+
+position: absolute;
+visibility: hidden;
+width: 30px;
+height: 30px;
+left: 1401px;
+top: 25px;
+
+
+
+/* 내 지역 */
+
+position: absolute;
+width: 48px;
+height: 24px;
+left: 531px;
+top: 28px;
+
+/* 16p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* 온라인 */
+
+position: absolute;
+width: 45px;
+height: 24px;
+left: 609px;
+top: 28px;
+
+/* 16p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* notice-circle */
+
+position: absolute;
+visibility: hidden;
+width: 10px;
+height: 10px;
+left: 1421px;
+top: 45px;
+
+/* FF254C */
+background: #FF3440;
+
+
+/* notice-circle */
+
+position: absolute;
+visibility: hidden;
+width: 10px;
+height: 10px;
+left: 1471px;
+top: 45px;
+
+/* FF254C */
+background: #FF3440;
+
+
+/* bottom-bar */
+
+position: absolute;
+width: 60px;
+height: 4px;
+left: 602px;
+top: 75px;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+
+
+/* bottom-bar */
+
+position: absolute;
+width: 60px;
+height: 4px;
+left: 525px;
+top: 75px;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+
+
+/* Frame 1026 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 32px;
+
+position: absolute;
+width: 532px;
+height: 44px;
+left: 1023px;
+top: 18px;
+
+
+
+/*  search-bar */
+
+width: 400px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Rectangle 74 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+border: 2px solid #D9DBE0;
+border-radius: 44px;
+
+
+/* 어떤 스터디를 찾고 계신가요? */
+
+position: absolute;
+width: 171px;
+height: 20px;
+left: 20px;
+top: 12px;
+
+/* 14p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+
+/* icon-Search */
+
+position: absolute;
+width: 28px;
+height: 28px;
+right: 14px;
+top: 8px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 6.25%;
+right: 6.25%;
+top: 6.25%;
+bottom: 6.25%;
+
+/* White-Mode/W-Gray-Lv4 */
+background: #47494D;
+
+
+/* button-M-blue */
+
+width: 100px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Rectangle 78 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+border-radius: 8px;
+
+
+/* 스터디 만들기 */
+
+position: absolute;
+left: 23.38%;
+right: 24.62%;
+top: 25%;
+bottom: 25%;
+
+/* 14p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Logo-2022 */
+
+position: absolute;
+width: 126px;
+height: 32px;
+left: 365px;
+top: 24px;
+
+
+
+/* Group 107 */
+
+position: absolute;
+width: 123.37px;
+height: 26.27px;
+left: 1.4px;
+top: 4.82px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 17.34%;
+right: 73.96%;
+top: 27.21%;
+bottom: 15.21%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.62%;
+right: 17.85%;
+top: 37.93%;
+bottom: 21.74%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 28.58%;
+right: 57.27%;
+top: 37.93%;
+bottom: 15.04%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 84.87%;
+right: 0.98%;
+top: 31.23%;
+bottom: 21.74%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 44.96%;
+right: 40.89%;
+top: 17.77%;
+bottom: 15.04%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 61.75%;
+right: 24.1%;
+top: 37.93%;
+bottom: 2.84%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.12%;
+right: 17.36%;
+top: 15.1%;
+bottom: 67.72%;
+
+/* White-Mode/W-Surface */
+background: #121314;
+
+
+/* Vector */
+
+position: absolute;
+left: 1.11%;
+right: 84.25%;
+top: 15.06%;
+bottom: 15.05%;
+
+/* White-Mode/W-Surface */
+background: #121314;
