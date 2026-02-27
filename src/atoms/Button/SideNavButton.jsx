@@ -1,5 +1,5 @@
 import React from 'react';
-import PersonIcon from '../../asset/icons/common/icon-person.svg?react';
+import Icon from '../Icon/Common/Icon';
 
 const SideNavButton = ({
   children,
@@ -40,7 +40,9 @@ const SideNavButton = ({
     >
       {/* 아이콘 영역: 텍스트와 정렬을 위해 flex 유지 */}
       <span className="mr-3 flex items-center justify-center shrink-0">
-        <PersonIcon width={16} height={16} fill={iconColor} />
+        {/* <PersonIcon width={16} height={16} fill={iconColor} /> */}
+
+        <Icon name="Person" size={16} />
       </span>
 
       {/* 텍스트 영역: truncate로 넘침 방지 */}
