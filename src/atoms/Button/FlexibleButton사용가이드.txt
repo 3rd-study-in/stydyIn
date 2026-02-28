@@ -1,3 +1,25 @@
-<FlexibleButton variant="lightgray" size="L" width="400px">
-          시작하기
-        </FlexibleButton>
+<FlexibleButton
+        variant="lightgray"
+        size="L"
+        width="400px"
+        className="mt-[20px]" 
+      >
+        시작하기
+      </FlexibleButton>
+
+      {/* 2. 여러 개의 Tailwind 클래스도 함께 전달 가능 (그림자, 호버 효과 등) */}
+      <FlexibleButton
+        variant="blue"
+        size="M"
+        className="mt-8 shadow-md hover:scale-105"
+      >
+        스터디 만들기
+      </FlexibleButton>
+
+      {/* 3. 카카오 버튼도 외부 마진 적용 가능 */}
+      <FlexibleButton
+        variant="kakao"
+        className="mt-4"
+      >
+        Kakao 계정으로 로그인
+      </FlexibleButton>
