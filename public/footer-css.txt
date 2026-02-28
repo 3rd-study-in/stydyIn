@@ -1,0 +1,1177 @@
+/* 푸터 */
+
+position: relative;
+width: 1920px;
+height: 334px;
+left: 100px;
+top: 2164px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* Rectangle 160 */
+
+position: absolute;
+width: 1920px;
+height: 1px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Frame 1047 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: flex-start;
+padding: 0px;
+gap: 400px;
+
+position: absolute;
+width: 1190px;
+height: 120px;
+left: 365px;
+top: 50px;
+
+
+
+/* Frame 1043 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+width: 600px;
+height: 120px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1039 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 20px;
+
+width: 200px;
+height: 90px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 위니브 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1038 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 10px;
+
+width: 200px;
+height: 50px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1036 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 4px;
+
+width: 69px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 회사 소개 */
+
+width: 55px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* icon-diagonal-arrow */
+
+width: 10px;
+height: 10px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Union */
+
+position: absolute;
+left: 16.25%;
+right: 16.25%;
+top: 16.25%;
+bottom: 16.25%;
+
+/* White-Mode/W-Gray-Lv3 */
+background: #8D9299;
+
+
+/* Frame 1037 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 4px;
+
+width: 200px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 제주코딩베이스캠프 */
+
+width: 116px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* icon-diagonal-arrow */
+
+width: 10px;
+height: 10px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Union */
+
+position: absolute;
+left: 16.25%;
+right: 16.25%;
+top: 16.25%;
+bottom: 16.25%;
+
+/* White-Mode/W-Gray-Lv3 */
+background: #8D9299;
+
+
+/* Frame 1040 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 20px;
+
+width: 200px;
+height: 60px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 위니브월드 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 위니브월드 이용 가이드 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1042 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 20px;
+
+width: 200px;
+height: 120px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* 정책 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1041 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 10px;
+
+width: 200px;
+height: 80px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 이용약관 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 위치기반서비스이용약관 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 개인정보 처리방침 */
+
+width: 200px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1045 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 10px;
+
+width: 190px;
+height: 30px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Rectangle 166 */
+
+box-sizing: border-box;
+
+width: 30px;
+height: 30px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Rectangle 165 */
+
+box-sizing: border-box;
+
+width: 30px;
+height: 30px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Rectangle 164 */
+
+box-sizing: border-box;
+
+width: 30px;
+height: 30px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Rectangle 163 */
+
+box-sizing: border-box;
+
+width: 30px;
+height: 30px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Rectangle 162 */
+
+box-sizing: border-box;
+
+width: 30px;
+height: 30px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+
+
+/* Frame 1046 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: flex-end;
+padding: 0px;
+gap: 531px;
+
+position: absolute;
+width: 1190px;
+height: 64px;
+left: 365px;
+top: 230px;
+
+
+
+/* Frame 1044 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 16px;
+
+width: 571px;
+height: 64px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Logo-2022 */
+
+width: 126px;
+height: 32px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group 107 */
+
+position: absolute;
+width: 123.37px;
+height: 26.27px;
+left: 1.4px;
+top: 4.82px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 17.34%;
+right: 73.96%;
+top: 27.21%;
+bottom: 15.21%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.62%;
+right: 17.85%;
+top: 37.93%;
+bottom: 21.74%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 28.58%;
+right: 57.27%;
+top: 37.93%;
+bottom: 15.04%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 84.87%;
+right: 0.98%;
+top: 31.23%;
+bottom: 21.74%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 44.96%;
+right: 40.89%;
+top: 17.77%;
+bottom: 15.04%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 61.75%;
+right: 24.1%;
+top: 37.93%;
+bottom: 2.84%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.12%;
+right: 17.36%;
+top: 15.1%;
+bottom: 67.72%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Vector */
+
+position: absolute;
+left: 1.11%;
+right: 84.25%;
+top: 15.06%;
+bottom: 15.05%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* (주)위니브 | 대표 : 이호준 | 사업자 번호 : 546-86-01737 | 정보통신업 | 주소 : 제주특별자치도 제주시 수목원길 */
+
+width: 571px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* ⓒ WENIV Corp. */
+
+width: 88px;
+height: 16px;
+
+/* 12p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+/* 푸터-Login */
+
+position: relative;
+width: 1920px;
+height: 128px;
+left: 100px;
+bottom: 1013px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* Rectangle 160 */
+
+position: absolute;
+width: 1920px;
+height: 1px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* Frame 64 */
+
+position: absolute;
+visibility: hidden;
+width: 200px;
+height: 90px;
+left: 365px;
+top: 50px;
+
+
+
+/* 위니브 */
+
+position: absolute;
+width: 39px;
+height: 20px;
+left: 0px;
+top: 0px;
+
+/* 14p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* 121314 */
+color: #121314;
+
+
+
+/* 회사 소개 */
+
+position: absolute;
+width: 55px;
+height: 20px;
+left: 0px;
+top: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* 8D9299 */
+color: #8D9299;
+
+
+
+/* 제주코딩베이스캠프 */
+
+position: absolute;
+width: 116px;
+height: 20px;
+left: 0px;
+top: 70px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* 8D9299 */
+color: #8D9299;
+
+
+
+/* Frame 65 */
+
+position: absolute;
+visibility: hidden;
+width: 200px;
+height: 120px;
+left: 200px;
+top: 0px;
+
+
+
+/* 위니브월드 */
+
+position: absolute;
+width: 65px;
+height: 20px;
+left: 0px;
+top: 0px;
+
+/* 14p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* 121314 */
+color: #121314;
+
+
+
+/* 위니브월드 이용 가이드 */
+
+position: absolute;
+width: 136px;
+height: 20px;
+left: 0px;
+top: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* 8D9299 */
+color: #8D9299;
+
+
+
+/* icon-diagonal-arrow */
+
+position: absolute;
+visibility: hidden;
+width: 10px;
+height: 10px;
+left: 485px;
+top: 125px;
+
+
+
+/* icon-diagonal-arrow */
+
+position: absolute;
+visibility: hidden;
+width: 10px;
+height: 10px;
+left: 424px;
+top: 95px;
+
+
+
+/* 정책 */
+
+position: absolute;
+visibility: hidden;
+width: 26px;
+height: 20px;
+left: 765px;
+top: 50px;
+
+/* 14p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* 121314 */
+color: #121314;
+
+
+
+/* Frame 72 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 10px;
+
+position: absolute;
+width: 349px;
+height: 20px;
+left: 786px;
+top: 40px;
+
+
+
+/* 이용약관 */
+
+width: 52px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* | */
+
+width: 4px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* 위치기반서비스이용약관 */
+
+width: 142px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* | */
+
+width: 4px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 개인정보 처리방침 */
+
+width: 107px;
+height: 20px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+
+
+/* Group 99 */
+
+position: absolute;
+width: 257px;
+height: 16px;
+left: 832px;
+top: 72px;
+
+
+
+/* ⓒ Copyright WENIV Corp. All Rights Reserved. */
+
+position: absolute;
+width: 257px;
+height: 16px;
+left: 832px;
+top: 72px;
+
+/* 12p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
