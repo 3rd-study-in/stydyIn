@@ -1,13 +1,14 @@
 <FlexibleButton
-        variant="lightgray"
+        variant="blue"
         size="L"
-        width="400px"
-        className="mt-[20px]" 
+        width="100%"
+        className="mt-[400px]"
       >
         시작하기
       </FlexibleButton>
 
-      {/* 2. 여러 개의 Tailwind 클래스도 함께 전달 가능 (그림자, 호버 효과 등) */}
+
+    {/* 2. 여러 개의 Tailwind 클래스도 함께 전달 가능 (그림자, 호버 효과 등) */}
       <FlexibleButton
         variant="blue"
         size="M"
