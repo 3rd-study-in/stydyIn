@@ -1,5 +1,5 @@
 import React from 'react';
-import * as Icons from './index'; 
+import * as Icons from './index';
 
 /**
  * @param {string} name - 사용할 아이콘의 이름 (ex: 'Heart', 'Check', 'Project')
@@ -10,16 +10,8 @@ import * as Icons from './index';
  * @param {object} rest - 기타 SVG 태그에 전달할 나머지 속성들
  */
 
-const Icon = ({ 
-  name, 
-  size = 24, 
-  color,
-  className = "", 
-  onClick, 
-  ...rest 
-}) => {
-
-  const SVGIcon = Icons[name]; 
+const Icon = ({ name, size = 24, color, className = '', onClick, ...rest }) => {
+  const SVGIcon = Icons[name];
 
   if (!SVGIcon) {
     console.warn(`Icon "${name}"을 찾을 수 없습니다.`);
@@ -29,20 +21,17 @@ const Icon = ({
   if (!SVGIcon) return null;
 
   return (
-    <SVGIcon 
-      width={size} 
-      height={size} 
-      style={{ color: color }} 
-      className={`${onClick ? "cursor-pointer" : ""} ${className}`} 
+    <SVGIcon
+      width={size}
+      height={size}
+      style={{ color: color }}
+      className={`${onClick ? 'cursor-pointer' : ''} ${className}`}
       onClick={onClick}
       aria-hidden="true"
       {...rest}
     />
   );
-
 };
-
-
 
 export default Icon;
 
