@@ -35,6 +35,9 @@ const AuthSystem = () => {
   const [isVerifyLoading, setIsVerifyLoading] = useState(false);
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
+  // 인증코드 안내 툴팁
+  const [showCodeHelp, setShowCodeHelp] = useState(false);
+
   // 버튼 활성화 조건
   const isLoginValid = email.includes('@') && password.length > 0;
   const isSignupValid =
@@ -146,6 +149,7 @@ const AuthSystem = () => {
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
+        localStorage.setItem('email', email);
         alert('로그인 성공!');
       } else if (response.status === 401) {
         setEmailError('이메일을 확인해 주세요.');
@@ -335,8 +339,14 @@ const AuthSystem = () => {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-xs text-xs text-secondary-dark">
-                    <Icon name="HelpCircle" size={14} />
+                  <div className="relative flex items-center gap-xs text-xs text-secondary-dark">
+                    <button
+                      type="button"
+                      onClick={() => setShowCodeHelp((prev) => !prev)}
+                      className="flex items-center cursor-pointer"
+                    >
+                      <Icon name="HelpCircle" size={14} />
+                    </button>
                     <span>
                       인증코드를 받지 못하셨나요?{' '}
                       <span
@@ -346,6 +356,38 @@ const AuthSystem = () => {
                         재전송
                       </span>
                     </span>
+
+                    {showCodeHelp && (
+                      <div className="absolute top-full mt-2 left-[-10px] z-20 w-[310px] rounded-lg bg-secondary-dark p-xl text-white shadow-lg">
+                        <div
+                          className="absolute -top-2 left-[10px]"
+                          style={{
+                            width: 0,
+                            height: 0,
+                            borderLeft: '8px solid transparent',
+                            borderRight: '8px solid transparent',
+                            borderBottom:
+                              '8px solid var(--color-secondary-dark)',
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-sm top-sm cursor-pointer opacity-70"
+                          onClick={() => setShowCodeHelp(false)}
+                        >
+                          <Icon name="X" size={20} color="white" />
+                        </button>
+                        <p className="text-base font-bold pb-sm">
+                          이메일이 수신되지 않나요? : (
+                        </p>
+                        <ul className="flex flex-col text-xm leading-relaxed">
+                          <li>
+                            - 이메일 주소가 정확히 입력되었는지 확인해 주세요.
+                            <br />- 스팸 메일함을 확인해 주세요.
+                          </li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -490,7 +532,11 @@ const AuthSystem = () => {
             className="absolute top-4 right-4 cursor-pointer"
             onClick={() => setShowResetModal(false)}
           >
-            <Icon name="X" size={20} className="text-secondary" />
+            <Icon
+              name="X"
+              size={20}
+              className="text-secondary cursor-pointer"
+            />
           </button>
 
           <h2 className="text-xl font-bold">비밀번호 찾기</h2>

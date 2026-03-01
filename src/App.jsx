@@ -1,15 +1,22 @@
 //
 
 import React from 'react';
-import AuthSystem from './shared/components/Auth/AuthSystem.jsx';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import AuthSystem from './shared/components/Auth/AuthSystem.jsx';
+import ResetPasswordPage from './shared/components/Auth/ResetPasswordPage.jsx';
 
 function App() {
   return (
-    <div className=" bg-bg font-sans antialiased">
-      <main className="flex ">
-        <AuthSystem />
-      </main>
-    </div>
+    <BrowserRouter>
+      <div className="bg-bg font-sans antialiased">
+        <main className="flex">
+          {/* <Routes> */}
+          {/* <Route path="/" element={<AuthSystem />} /> */}
+          <ResetPasswordPage></ResetPasswordPage>
+          {/* </Routes> */}
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }
 export default App;
