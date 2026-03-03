@@ -1,6 +1,7 @@
-import { TriangleDownIcon, TriangleUpIcon } from '../Icon'
+
 import { OptionList } from './OptionList'
 import { useDisclosure } from '../../shared/hooks/useDisclosure'
+import { TriangleDownIcon, TriangleUpIcon } from '../Icon/Common'
 
 // Dropdown.png / Dropdown-ON.png 기반
 // 렌더: [placeholder or 선택값] [▼ / ▲]
