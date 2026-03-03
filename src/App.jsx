@@ -1,12 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
-import StudyStateCard from './atoms/Card/StudyStateCard';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <StudyStateCard />
-    </BrowserRouter>
-  );
+  return <div className="app"></div>;
 }
 
 export default App;
