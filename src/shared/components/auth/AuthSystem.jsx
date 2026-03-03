@@ -3,209 +3,63 @@ import Image from '../../../atoms/Images/Common/Image';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 import Icon from '../../../atoms/Icon/Common/Icon';
 import Modal from '../../../atoms/Modal/Modal';
-
-const api = {
-  get: (path) => fetch(`https://api.wenivops.co.kr/services/studyin${path}`),
-  post: (path, body) =>
-    fetch(`https://api.wenivops.co.kr/services/studyin${path}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    }),
-};
+import { useLogin } from '../../../features/auth/hooks/useLogin';
+import { useSignup } from '../../../features/auth/hooks/useSignup';
 
 const AuthSystem = () => {
-  const [view, setView] = useState('login'); // login | signup | complete
+  const [view, setView] = useState('signup'); // login | signup | complete
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
-  const [step, setStep] = useState(1); // 1: 기본, 2: 인증번호입력중, 3: 인증완료
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
 
-  // 에러 및 성공 피드백 상태
-  const [emailError, setEmailError] = useState('');
-  const [pwError, setPwError] = useState('');
-  const [pwConfirmError, setPwConfirmError] = useState('');
-  const [verifyStatus, setVerifyStatus] = useState(null); // 'success' | 'fail' | null
+  const {
+    setEmail: setLoginEmail,
+    setPassword: setLoginPassword,
+    emailError: loginEmailError,
+    setEmailError: setLoginEmailError,
+    pwError,
+    setPwError,
+    isLoading: isLoginLoading,
+    handleLogin,
+  } = useLogin();
 
-  // 로딩 상태
-  const [isEmailAuthLoading, setIsEmailAuthLoading] = useState(false);
-  const [isVerifyLoading, setIsVerifyLoading] = useState(false);
-  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
-
-  // 인증코드 안내 툴팁
-  const [showCodeHelp, setShowCodeHelp] = useState(false);
-
-  // 버튼 활성화 조건
-  const isLoginValid = email.includes('@') && password.length > 0;
-  const isSignupValid =
-    step === 3 && password.length > 0 && password === passwordConfirm;
-
-  // 1.1 이메일 중복 확인 → 1.2 인증번호 발송
-  const handleEmailAuth = async () => {
-    setEmailError('');
-    setIsEmailAuthLoading(true);
-    try {
-      // 1.1 이메일 중복 확인
-      const checkRes = await api.get(
-        `/accounts/emails/check/?email=${encodeURIComponent(email)}`,
-      );
-      const checkData = await checkRes.json();
-
-      if (!checkRes.ok) {
-        if (checkRes.status === 409) {
-          setEmailError(checkData.error || '사용 중인 이메일입니다.');
-        } else {
-          setEmailError(
-            checkData.error || '이메일 확인 중 오류가 발생했습니다.',
-          );
-        }
-        return;
-      }
-
-      // 1.2 인증번호 발송
-      const sendRes = await api.post('/accounts/email-verifications/', {
-        email,
-      });
-      const sendData = await sendRes.json();
-
-      if (!sendRes.ok) {
-        if (sendRes.status === 409) {
-          setEmailError(sendData.error || '이미 가입되어 있는 회원입니다.');
-        } else {
-          setEmailError(
-            sendData.email?.[0] || '인증 메일 발송에 실패했습니다.',
-          );
-        }
-        return;
-      }
-
-      setStep(2);
-    } catch (err) {
-      setEmailError('서버 연결 오류가 발생했습니다.');
-    } finally {
-      setIsEmailAuthLoading(false);
-    }
-  };
-
-  // 인증번호 재전송
-  const handleResendCode = async () => {
-    setVerifyStatus(null);
-    setVerificationCode('');
-    setEmailError('');
-    setIsEmailAuthLoading(true);
-    try {
-      const sendRes = await api.post('/accounts/email-verifications/', {
-        email,
-      });
-      const sendData = await sendRes.json();
-      if (!sendRes.ok) {
-        setEmailError(sendData.error || '재전송에 실패했습니다.');
-      }
-    } catch (err) {
-      setEmailError('서버 연결 오류가 발생했습니다.');
-    } finally {
-      setIsEmailAuthLoading(false);
-    }
-  };
-
-  // 1.3 인증 코드 체크
-  const handleVerifyCode = async () => {
-    setIsVerifyLoading(true);
-    try {
-      const res = await api.post('/accounts/email-verifications/verify/', {
-        email,
-        verification_number: verificationCode,
-      });
-      const data = await res.json();
-
-      if (res.ok) {
-        setVerifyStatus('success');
-        setStep(3);
-      } else {
-        setVerifyStatus('fail');
-      }
-    } catch (err) {
-      setVerifyStatus('fail');
-    } finally {
-      setIsVerifyLoading(false);
-    }
-  };
-
-  // 1.5 로그인
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setEmailError('');
-    setPwError('');
-    setIsSubmitLoading(true);
-    try {
-      const response = await api.post('/accounts/login/', {
-        email,
-        password,
-      });
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-        localStorage.setItem('email', email);
-        alert('로그인 성공!');
-      } else if (response.status === 401) {
-        setEmailError('이메일을 확인해 주세요.');
-        setPwError('비밀번호를 확인해 주세요.');
-      } else if (response.status === 403) {
-        setEmailError(
-          data.error || '이메일 인증이 완료되지 않았거나 만료되었습니다.',
-        );
-      } else {
-        setEmailError(data.error || '로그인에 실패했습니다.');
-      }
-    } catch (err) {
-      alert('서버 연결 오류');
-    } finally {
-      setIsSubmitLoading(false);
-    }
-  };
-
-  // 1.4 회원가입 완료
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setIsSubmitLoading(true);
-    try {
-      const response = await api.post('/accounts/register/', {
-        email,
-        password,
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setView('complete');
-      } else if (response.status === 403) {
-        setEmailError(
-          data.error || '이메일 인증이 완료되지 않았거나 만료되었습니다.',
-        );
-      } else if (response.status === 409) {
-        setEmailError(data.error || '이미 가입되어 있는 회원입니다.');
-      } else {
-        alert(data.error || '가입 중 오류가 발생했습니다.');
-      }
-    } catch (err) {
-      alert('가입 중 오류');
-    } finally {
-      setIsSubmitLoading(false);
-    }
-  };
+  const {
+    step,
+    email: signupEmail,
+    setEmail: setSignupEmail,
+    password: signupPassword,
+    setPassword: setSignupPassword,
+    setPasswordConfirm,
+    verificationCode,
+    setVerificationCode,
+    emailError: signupEmailError,
+    setEmailError: setSignupEmailError,
+    pwError: signupPwError,
+    setPwError: setSignupPwError,
+    pwConfirmError,
+    setPwConfirmError,
+    verifyStatus,
+    isEmailAuthLoading,
+    isVerifyLoading,
+    isSubmitLoading,
+    showCodeHelp,
+    setShowCodeHelp,
+    isSignupValid,
+    handleEmailAuth,
+    handleResendCode,
+    handleVerifyCode,
+    handleRegister,
+  } = useSignup({ onSuccess: () => setView('complete') });
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-bg">
       <div className="w-[322px] flex flex-col font-sans text-text">
         {view === 'complete' ? (
           <div className="flex flex-col items-center justify-center min-h-screen gap-xl text-center">
-            <div className="w-18 h-18 rounded-full bg-primary flex items-center justify-center">
-              <Icon name="Check" color="white" size={36} />
+            <div>
+              <Icon name="CheckFill" color="var(--color-primary)" size={60} />
             </div>
             <h2 className="text-3xl font-bold">회원가입 완료!</h2>
-            <p className="text-sm text-text leading-relaxed">
+            <p className="text-base text-secondary-dark leading-relaxed pb-sm">
               스터디인 회원가입을 완료했어요.
               <br />
               로그인 후 <strong>프로필 생성</strong>을 진행해 볼까요?
@@ -234,15 +88,15 @@ const AuthSystem = () => {
                 <div className="flex items-center gap-2">
                   <div
                     className={`flex-1 border-b-2 transition-colors
-                    ${emailError ? 'border-error' : 'border-border focus-within:border-primary'}`}
+                    ${signupEmailError ? 'border-error' : 'border-border focus-within:border-primary'}`}
                   >
                     <input
                       type="email"
                       placeholder="이메일"
                       className="w-full h-[40px] outline-none text-base"
                       onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (emailError) setEmailError('');
+                        setSignupEmail(e.target.value);
+                        if (signupEmailError) setSignupEmailError('');
                       }}
                     />
                   </div>
@@ -252,22 +106,24 @@ const AuthSystem = () => {
                     type="button"
                     onClick={handleEmailAuth}
                     disabled={
-                      !!emailError || !email.includes('@') || isEmailAuthLoading
-                    } // 에러가 있거나 형식이 틀리면 비활성화
-                    className={`shrink-0 transition-colors 
+                      !!signupEmailError ||
+                      !signupEmail.includes('@') ||
+                      isEmailAuthLoading
+                    }
+                    className={`shrink-0 transition-colors
                         ${
-                          emailError ||
-                          !email.includes('@') ||
+                          signupEmailError ||
+                          !signupEmail.includes('@') ||
                           isEmailAuthLoading
-                            ? 'bg-secondary-light cursor-not-allowed opacity-70' // 비활성 스타일
-                            : 'cursor-pointer hover:bg-primary-dark' // 활성 스타일
+                            ? 'bg-secondary-light cursor-not-allowed opacity-70'
+                            : 'cursor-pointer hover:bg-primary-dark'
                         }`}
                   >
-                    {isEmailAuthLoading ? '전송중...' : '인증'}
+                    {isEmailAuthLoading ? '인증' : '인증'}
                   </FlexibleButton>
                 </div>
-                {emailError && (
-                  <p className="text-error text-sm">{emailError}</p>
+                {signupEmailError && (
+                  <p className="text-error text-sm">{signupEmailError}</p>
                 )}
               </div>
 
@@ -311,7 +167,7 @@ const AuthSystem = () => {
                             : 'cursor-pointer'
                         }`}
                       >
-                        {isVerifyLoading ? '확인중...' : '확인'}
+                        {isVerifyLoading ? '확인' : '확인'}
                       </FlexibleButton>
                     </div>
 
@@ -392,12 +248,26 @@ const AuthSystem = () => {
                 </div>
               )}
 
-              <input
-                type="password"
-                placeholder="비밀번호"
-                className="w-full h-[40px] border-b-2 border-border outline-none focus:border-primary"
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="flex flex-col gap-1">
+                <input
+                  type="password"
+                  placeholder="비밀번호"
+                  className={`w-full h-10 border-b-2 outline-none
+                    ${signupPwError ? 'border-error' : 'border-border focus:border-primary'}`}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSignupPassword(value);
+                    if (value && value.length < 8) {
+                      setSignupPwError('비밀번호는 8자 이상이어야 합니다.');
+                    } else {
+                      setSignupPwError('');
+                    }
+                  }}
+                />
+                {signupPwError && (
+                  <p className="text-error text-sm">{signupPwError}</p>
+                )}
+              </div>
 
               <div className="flex flex-col gap-1">
                 <input
@@ -408,7 +278,7 @@ const AuthSystem = () => {
                   onChange={(e) => {
                     const value = e.target.value;
                     setPasswordConfirm(value);
-                    if (value && password !== value) {
+                    if (value && signupPassword !== value) {
                       setPwConfirmError('비밀번호가 일치하지 않아요.');
                     } else {
                       setPwConfirmError('');
@@ -467,14 +337,14 @@ const AuthSystem = () => {
                 <input
                   type="email"
                   placeholder="이메일"
-                  className={`w-full h-[40px] border-b-2 outline-none ${emailError ? 'border-error' : 'border-border focus:border-primary'}`}
+                  className={`w-full h-[40px] border-b-2 outline-none ${loginEmailError ? 'border-error' : 'border-border focus:border-primary'}`}
                   onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (emailError) setEmailError('');
+                    setLoginEmail(e.target.value);
+                    if (loginEmailError) setLoginEmailError('');
                   }}
                 />
-                {emailError && (
-                  <p className="text-error text-sm">{emailError}</p>
+                {loginEmailError && (
+                  <p className="text-error text-sm">{loginEmailError}</p>
                 )}
               </div>
               <div className="flex flex-col gap-1 mt-2">
@@ -483,7 +353,7 @@ const AuthSystem = () => {
                   placeholder="비밀번호"
                   className={`w-full h-[40px] border-b-2 outline-none ${pwError ? 'border-error' : 'border-border focus:border-primary'}`}
                   onChange={(e) => {
-                    setPassword(e.target.value);
+                    setLoginPassword(e.target.value);
                     if (pwError) setPwError('');
                   }}
                 />
@@ -496,9 +366,9 @@ const AuthSystem = () => {
                   width="100%"
                   type="submit"
                   className="cursor-pointer text-white"
-                  disabled={isSubmitLoading}
+                  disabled={isLoginLoading}
                 >
-                  {isSubmitLoading ? '로그인' : '로그인'}
+                  {isLoginLoading ? '로그인' : '로그인'}
                 </FlexibleButton>
               </div>
             </form>
