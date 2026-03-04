@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '../../../atoms/Button/Button';
 import Icon from '../../../atoms/Icon/Common/Icon';
 import ProfileCircle from '../../../atoms/ProfileCircle/ProfileCircle';
 import SearchBar from '../../../atoms/SearchBar/SearchBar';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
+import Badge from '../../../atoms/Badge/Badge';
+import useNotificationStore from '../../../stores/notificationStore';
+import useAuthStore from '../../../stores/authStore';
 
 const GNBWrapper = ({ children }) => (
   <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
@@ -44,21 +47,37 @@ const LoggedOutButtons = () => (
   </div>
 );
 
-const LoggedInActions = ({ profileSrc }) => (
-  <div className="flex items-center gap-x-5">
-    <div className="relative cursor-pointer">
-      <Icon name="Chatting" size={30} />
-      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-error rounded-full"></div>
-    </div>
-    <div className="relative cursor-pointer">
-      <Icon name="Notification" size={30} />
-      <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-error rounded-full"></div>
-    </div>
-    <ProfileCircle src={profileSrc} isLoggedIn={true} size={44} />
-  </div>
-);
+function LoggedInActions({ profileSrc }) {
+  const hasUnread = useNotificationStore((s) => s.hasUnread)
+  const fetchNotifications = useNotificationStore((s) => s.fetchNotifications)
 
-const GNB = ({ isLoggedIn = true, profileSrc = '' }) => {
+  // 마운트 시 즉시 fetch + 30초 폴링
+  useEffect(() => {
+    fetchNotifications()
+    const interval = setInterval(fetchNotifications, 30_000)
+    return () => clearInterval(interval)
+  }, [fetchNotifications])
+
+  return (
+    <div className="flex items-center gap-x-5">
+      {/* 채팅 아이콘 — TODO: 채팅 store 연결 시 show 값 교체 */}
+      <Badge show={true}>
+        <Icon name="Chatting" size={30} className="cursor-pointer" />
+      </Badge>
+
+      {/* 알림 아이콘 — hasUnread일 때 빨간 점 표시 */}
+      <Badge show={hasUnread}>
+        <Icon name="Notification" size={30} className="cursor-pointer" />
+      </Badge>
+
+      <ProfileCircle src={profileSrc} isLoggedIn={true} size={44} />
+    </div>
+  )
+}
+
+const GNB = ({ profileSrc = '' }) => {
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+
   return (
     <GNBWrapper>
       <div className="flex items-center gap-x-14 h-full">
