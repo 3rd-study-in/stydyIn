@@ -1,0 +1,865 @@
+/*  main-notice-list */
+
+position: absolute;
+width: 358px;
+height: 548px;
+left: 1287px;
+top: 147px;
+
+filter: drop-shadow(0px 5px 15px rgba(71, 73, 77, 0.1));
+
+
+/* Rectangle 167 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 358px;
+height: 548px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 12px;
+
+
+/* 확인하지 않은 알림 3개 */
+
+position: absolute;
+width: 153px;
+height: 24px;
+left: 103px;
+top: 20px;
+
+/* 16p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+
+color: #000000;
+
+
+
+/* 알림 더보기 */
+
+position: absolute;
+width: 58px;
+height: 16px;
+left: 151px;
+top: 512px;
+
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+text-decoration-line: underline;
+
+color: #959595;
+
+
+
+/*  main-notice-list-ON */
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 20px;
+top: 60px;
+
+
+
+/* Frame 71 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 10px;
+gap: 10px;
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+
+/* Frame 70 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 270px;
+height: 60px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* [크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 새로운 유저가 참가했어요. */
+
+width: 270px;
+height: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3분 전 */
+
+width: 32px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Primary */
+color: #2E6FF2;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* btn-X */
+
+position: absolute;
+width: 18px;
+height: 18px;
+right: 10px;
+top: 10px;
+
+
+
+/* Ellipse 54 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* icon-X */
+
+position: absolute;
+left: 16.67%;
+right: 16.67%;
+top: 16.67%;
+bottom: 16.67%;
+
+
+
+/* Union */
+
+position: absolute;
+left: 21.25%;
+right: 21.75%;
+top: 21.25%;
+bottom: 21.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* notice-circle */
+
+position: absolute;
+width: 8px;
+height: 8px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Error */
+background: #FF3440;
+
+
+/*  main-notice-list-ON */
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 20px;
+top: 148px;
+
+
+
+/* Frame 71 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 10px;
+gap: 10px;
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+
+/* Frame 70 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 270px;
+height: 60px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* [크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 새로운 유저가 참가했어요. */
+
+width: 270px;
+height: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3분 전 */
+
+width: 40px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Primary */
+color: #2E6FF2;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* btn-X */
+
+position: absolute;
+width: 18px;
+height: 18px;
+right: 10px;
+top: 10px;
+
+
+
+/* Ellipse 54 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* icon-X */
+
+position: absolute;
+left: 16.67%;
+right: 16.67%;
+top: 16.67%;
+bottom: 16.67%;
+
+
+
+/* Union */
+
+position: absolute;
+left: 21.25%;
+right: 21.75%;
+top: 21.25%;
+bottom: 21.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* notice-circle */
+
+position: absolute;
+width: 8px;
+height: 8px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Error */
+background: #FF3440;
+
+
+/*  main-notice-list-ON */
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 20px;
+top: 236px;
+
+
+
+/* Frame 71 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 10px;
+gap: 10px;
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+
+/* Frame 70 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 270px;
+height: 60px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* [크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 새로운 유저가 참가했어요. */
+
+width: 270px;
+height: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3분 전 */
+
+width: 40px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Primary */
+color: #2E6FF2;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* btn-X */
+
+position: absolute;
+width: 18px;
+height: 18px;
+right: 10px;
+top: 10px;
+
+
+
+/* Ellipse 54 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* icon-X */
+
+position: absolute;
+left: 16.67%;
+right: 16.67%;
+top: 16.67%;
+bottom: 16.67%;
+
+
+
+/* Union */
+
+position: absolute;
+left: 21.25%;
+right: 21.75%;
+top: 21.25%;
+bottom: 21.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* notice-circle */
+
+position: absolute;
+width: 8px;
+height: 8px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Error */
+background: #FF3440;
+
+
+/*  main-notice-list-OFF */
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 20px;
+top: 324px;
+
+
+
+/* Frame 71 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 10px;
+gap: 10px;
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+border-radius: 8px;
+
+
+/* Frame 70 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 270px;
+height: 60px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* [크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 새로운 유저가 참가했어요. */
+
+width: 270px;
+height: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3분 전 */
+
+width: 63px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* btn-X */
+
+position: absolute;
+width: 18px;
+height: 18px;
+right: 10px;
+top: 10px;
+
+
+
+/* Ellipse 54 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* icon-X */
+
+position: absolute;
+left: 16.67%;
+right: 16.67%;
+top: 16.67%;
+bottom: 16.67%;
+
+
+
+/* Union */
+
+position: absolute;
+left: 21.25%;
+right: 21.75%;
+top: 21.25%;
+bottom: 21.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* notice-circle */
+
+position: absolute;
+visibility: hidden;
+width: 8px;
+height: 8px;
+left: 0px;
+top: 0px;
+
+/* FF254C */
+background: #FF3440;
+
+
+/*  main-notice-list-OFF */
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 20px;
+top: 412px;
+
+
+
+/* Frame 71 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 10px;
+gap: 10px;
+
+position: absolute;
+width: 318px;
+height: 80px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+border-radius: 8px;
+
+
+/* Frame 70 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 270px;
+height: 60px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* [크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 새로운 유저가 참가했어요. */
+
+width: 270px;
+height: 40px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3분 전 */
+
+width: 63px;
+height: 16px;
+
+/* 12p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+text-align: right;
+
+/* White-Mode/W-Gray-Lv3 */
+color: #8D9299;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* btn-X */
+
+position: absolute;
+width: 18px;
+height: 18px;
+right: 10px;
+top: 10px;
+
+
+
+/* Ellipse 54 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Gray-Lv2 */
+background: #D9DBE0;
+
+
+/* icon-X */
+
+position: absolute;
+left: 16.67%;
+right: 16.67%;
+top: 16.67%;
+bottom: 16.67%;
+
+
+
+/* Union */
+
+position: absolute;
+left: 21.25%;
+right: 21.75%;
+top: 21.25%;
+bottom: 21.25%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+
+
+/* notice-circle */
+
+position: absolute;
+visibility: hidden;
+width: 8px;
+height: 8px;
+left: 0px;
+top: 0px;
+
+/* FF254C */
+background: #FF3440;
