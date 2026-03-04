@@ -107,7 +107,7 @@ const ResetPasswordPage = () => {
                 className="cursor-pointer text-white mt-md"
                 disabled={!isValid || isLoading}
               >
-                {isLoading ? '변경 중...' : '비밀번호 변경'}
+                {isLoading ? '비밀번호 변경' : '비밀번호 변경'}
               </FlexibleButton>
             </form>
           </>
