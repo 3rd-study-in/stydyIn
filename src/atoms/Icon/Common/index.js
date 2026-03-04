@@ -70,7 +70,6 @@ export { default as Job } from '../../../asset/icons/category/subject_취업코�
 export { default as Special } from '../../../asset/icons/category/subject_특강.svg?react';
 export { default as Project } from '../../../asset/icons/category/subject_프로젝트.svg?react';
 
-
 /* ================================
 Third-party Logos
 ================================ */
@@ -79,8 +78,6 @@ export { default as Facebook } from '../../../asset/third-party/Logo-facebook.sv
 export { default as Github } from '../../../asset/third-party/Logo-github.svg?react';
 export { default as Google } from '../../../asset/third-party/Logo-google.svg?react';
 export { default as Kakao } from '../../../asset/third-party/Logo-kakao-message.svg?react';
-
-
 
 /* ================================
 StudyIn Logos

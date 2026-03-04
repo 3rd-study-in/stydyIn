@@ -1,6 +1,6 @@
-import { FilterIcon, TriangleDownIcon, TriangleUpIcon } from '../Icon'
-import { OptionList } from './OptionList'
-import { useDisclosure } from '../../shared/hooks/useDisclosure'
+import Icon from '../Icon/Common/Icon';
+import { OptionList } from './OptionList';
+import { useDisclosure } from '../../shared/hooks/useDisclosure';
 
 // filter-dropdown-OFF.png / filter-dropdown-ON.png 기반
 // 렌더: [🔽 FilterIcon] [label] [▼ / ▲]
@@ -24,12 +24,13 @@ function FilterDropdown({
   className = '',
   disabled = false,
 }) {
-  const { isOpen, toggle, close, containerRef, triggerBorderClass } = useDisclosure({ disabled })
+  const { isOpen, toggle, close, containerRef, triggerBorderClass } =
+    useDisclosure({ disabled });
 
   const handleSelect = (option) => {
-    onChange?.(option.value)
-    close()
-  }
+    onChange?.(option.value);
+    close();
+  };
 
   return (
     <div
@@ -45,16 +46,22 @@ function FilterDropdown({
         aria-expanded={isOpen}
         className={`flex items-center gap-2 h-10 px-3 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
       >
-        <FilterIcon />
+        <Icon name="Filter" />
         <span className="flex-1 text-left text-base font-medium text-text-muted">
           {label}
         </span>
-        {isOpen ? <TriangleUpIcon /> : <TriangleDownIcon />}
+        {isOpen ? (
+          <Icon name="TriangleUpIcon" />
+        ) : (
+          <Icon name="TriangleDownIcon" />
+        )}
       </button>
 
-      {isOpen && <OptionList options={options} value={value} onSelect={handleSelect} />}
+      {isOpen && options.length > 0 && (
+        <OptionList options={options} value={value} onSelect={handleSelect} />
+      )}
     </div>
-  )
+  );
 }
 
-export default FilterDropdown
+export default FilterDropdown;
