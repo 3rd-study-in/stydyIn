@@ -427,6 +427,7 @@ const AuthSystem = () => {
           type="button"
           disabled={!resetEmail.includes('@')}
           className="w-full py-4 mt-3xl bg-primary text-white text-lg font-medium disabled:bg-secondary-light cursor-pointer disabled:cursor-not-allowed"
+          onClick={() => alert('이메일 전송 기능은 아직 구현되지 않았습니다.')}
         >
           이메일 보내기
         </button>
