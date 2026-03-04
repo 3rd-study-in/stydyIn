@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import Button from '../../../atoms/Button/Button';
 import Icon from '../../../atoms/Icon/Common/Icon';
 import ProfileCircle from '../../../atoms/ProfileCircle/ProfileCircle';
 import SearchBar from '../../../atoms/SearchBar/SearchBar';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 import { useDisclosure } from '../../hooks/useDisclosure';
 import Modal from '../../../atoms/Modal/Modal';
+import MainNoticeCard from '../Cards/MainNoticeCard';
 
 const GNBWrapper = ({ children }) => (
   <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
-    <div className="flex items-center justify-between w-full max-w-[1190px]">
+    <div className="flex items-center justify-between w-full max-w-(--container-max-width-lg)">
       {children}
     </div>
   </header>
@@ -39,7 +39,7 @@ const NavLinks = () => (
 );
 
 const LoggedOutButtons = () => (
-  <div className="flex items-center gap-x-2">
+  <div className="flex items-center gap-x-xs">
     <FlexibleButton variant="blue" size="M">
       시작하기
     </FlexibleButton>
@@ -53,6 +53,12 @@ const PROFILE_MENU = [
 
 const LoggedInActions = ({ profileSrc }) => {
   const { isOpen, toggle, close, containerRef } = useDisclosure();
+  const {
+    isOpen: isNoticeOpen,
+    toggle: toggleNotice,
+    close: closeNotice,
+    containerRef: noticeRef,
+  } = useDisclosure();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleSelect = (option) => {
@@ -70,22 +76,29 @@ const LoggedInActions = ({ profileSrc }) => {
 
   return (
     <>
-      <div className="flex items-center gap-x-5">
+      <div className="flex items-center gap-x-xl">
         <div className="relative cursor-pointer">
           <Icon name="Chatting" size={30} />
-          <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-error rounded-full"></div>
+          <div className="absolute bottom-0 right-0 w-sm h-sm bg-error rounded-full"></div>
         </div>
-        <div className="relative cursor-pointer">
-          <Icon name="Notification" size={30} />
-          <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-error rounded-full"></div>
+        <div ref={noticeRef} className="relative cursor-pointer">
+          <div onClick={toggleNotice}>
+            <Icon name="Notification" size={30} />
+            <div className="absolute bottom-0 right-0 w-sm h-sm bg-error rounded-full"></div>
+          </div>
+          {isNoticeOpen && (
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-xs z-50">
+              <MainNoticeCard onMoreClick={closeNotice} />
+            </div>
+          )}
         </div>
         <div ref={containerRef} className="relative">
           <div onClick={toggle} className="cursor-pointer">
             <ProfileCircle src={profileSrc} isLoggedIn={true} size={44} />
           </div>
           {isOpen && (
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[160px] bg-white border border-border rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] py-1 z-50">
-              <div className="px-2 py-1">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-xs w-[160px] bg-bg border border-border rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] py-xxxs z-50">
+              <div className="px-xs py-xxxs">
                 <FlexibleButton variant="blue" size="S" className="w-full">
                   스터디 만들기
                 </FlexibleButton>
@@ -95,9 +108,9 @@ const LoggedInActions = ({ profileSrc }) => {
                   key={option.value}
                   type="button"
                   onClick={() => handleSelect(option)}
-                  className="w-full h-10 px-2 text-left flex items-center font-sans"
+                  className="w-full h-10 px-xs text-left flex items-center font-sans"
                 >
-                  <span className="flex-1 h-[30px] flex items-center px-2 text-sm text-text rounded-lg hover:bg-bg-muted transition-colors">
+                  <span className="flex-1 h-[30px] flex items-center px-xs text-sm text-text rounded-lg hover:bg-bg-muted transition-colors">
                     {option.label}
                   </span>
                 </button>
@@ -107,10 +120,15 @@ const LoggedInActions = ({ profileSrc }) => {
         </div>
       </div>
 
-      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)}>
-        <div className="bg-white rounded-2xl p-6 w-[320px] flex flex-col gap-5">
-          <p className="text-center text-text font-medium">로그아웃 하시겠습니까?</p>
-          <div className="flex gap-3">
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+      >
+        <div className="bg-bg rounded-2xl p-1xl w-[320px] flex flex-col gap-5">
+          <p className="text-center text-text font-medium">
+            로그아웃 하시겠습니까?
+          </p>
+          <div className="flex gap-md">
             <button
               onClick={() => setIsLogoutModalOpen(false)}
               className="flex-1 h-11 rounded-xl border border-border text-sm text-text hover:bg-bg-muted transition-colors"
@@ -137,7 +155,7 @@ const GNB = ({ isLoggedIn = true, profileSrc = '' }) => {
         <Logo />
         <NavLinks />
       </div>
-      <div className="flex items-center gap-x-8">
+      <div className="flex items-center gap-x-4xl">
         <SearchBar />
         {isLoggedIn ? (
           <LoggedInActions profileSrc={profileSrc} />
