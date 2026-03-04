@@ -13,3 +13,4 @@ export { default as LoginImg } from '../../../asset/images/login-image.png';
 export { default as MainProfile } from '../../../asset/images/main-profile.png';
 export { default as MainThumbnail } from '../../../asset/images/UserProfileDefault.png';
 export { default as User } from '../../../asset/images/user-profile.png';
+export { default as StudyDetail } from '../../../asset/images/studydetailtest.png';
