@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import prettierPlugin from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import zustandPlugin from 'eslint-plugin-zustand';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -18,7 +19,8 @@ export default defineConfig([
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      prettier: prettierPlugin, // 2. Prettier 플러그인 등록
+      prettier: prettierPlugin,
+      zustand: zustandPlugin,
     },
     languageOptions: {
       ecmaVersion: 2020,
@@ -38,8 +40,11 @@ export default defineConfig([
         { allowConstantExport: true },
       ],
 
-      // 3. Prettier 규칙 활성화 (띄어쓰기, 세미콜론 등 강제)
+      // Prettier 규칙 활성화 (띄어쓰기, 세미콜론 등 강제)
       'prettier/prettier': 'error',
+
+      // Zustand store 구조분해 금지 → selector 함수 사용 강제
+      'zustand/no-destructure': 'error',
     },
   },
   prettierConfig,

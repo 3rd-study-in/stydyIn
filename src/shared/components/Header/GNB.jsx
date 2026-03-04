@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Button from '../../../atoms/Button/Button';
 import Icon from '../../../atoms/Icon/Common/Icon';
 import ProfileCircle from '../../../atoms/ProfileCircle/ProfileCircle';
 import SearchBar from '../../../atoms/SearchBar/SearchBar';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
+import Badge from '../../../atoms/Badge/Badge';
+import useNotificationStore from '../../../stores/notificationStore';
+import useAuthStore from '../../../stores/authStore';
 import { useDisclosure } from '../../hooks/useDisclosure';
 import Modal from '../../../atoms/Modal/Modal';
 import MainNoticeCard from '../Cards/MainNoticeCard';
@@ -23,16 +27,10 @@ const Logo = () => (
 
 const NavLinks = () => (
   <nav className="flex items-center gap-x-8 text-lg text-text font-regular h-full">
-    <a
-      href="#"
-      className="flex items-center h-full border-b-4 border-transparent hover:border-primary transition-all"
-    >
+    <a href="#" className="flex items-center h-full border-b-4 border-transparent hover:border-primary transition-all">
       내 지역
     </a>
-    <a
-      href="#"
-      className="flex items-center h-full border-b-4 border-transparent hover:border-primary transition-all"
-    >
+    <a href="#" className="flex items-center h-full border-b-4 border-transparent hover:border-primary transition-all">
       온라인
     </a>
   </nav>
@@ -40,9 +38,7 @@ const NavLinks = () => (
 
 const LoggedOutButtons = () => (
   <div className="flex items-center gap-x-xs">
-    <FlexibleButton variant="blue" size="M">
-      시작하기
-    </FlexibleButton>
+    <FlexibleButton variant="blue" size="M">시작하기</FlexibleButton>
   </div>
 );
 
@@ -51,7 +47,18 @@ const PROFILE_MENU = [
   { value: 'logout', label: '로그아웃' },
 ];
 
-const LoggedInActions = ({ profileSrc }) => {
+function LoggedInActions({ profileSrc }) {
+  // wooseok: 알림 store + 30초 폴링
+  const hasUnread = useNotificationStore((s) => s.hasUnread);
+  const fetchNotifications = useNotificationStore((s) => s.fetchNotifications);
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 30_000);
+    return () => clearInterval(interval);
+  }, [fetchNotifications]);
+
+  // dev: 드롭다운 / 모달 상태
   const { isOpen, toggle, close, containerRef } = useDisclosure();
   const {
     isOpen: isNoticeOpen,
@@ -63,28 +70,28 @@ const LoggedInActions = ({ profileSrc }) => {
 
   const handleSelect = (option) => {
     close();
-    if (option.value === 'logout') {
-      setIsLogoutModalOpen(true);
-    }
-    // settings: 추후 페이지 이동 연결
+    if (option.value === 'logout') setIsLogoutModalOpen(true);
   };
 
   const handleLogoutConfirm = () => {
     setIsLogoutModalOpen(false);
-    // 추후 로그아웃 로직 연결
+    useAuthStore.getState().logout(); // wooseok: authStore 연결
   };
 
   return (
     <>
       <div className="flex items-center gap-x-xl">
-        <div className="relative cursor-pointer">
-          <Icon name="Chatting" size={30} />
-          <div className="absolute bottom-0 right-0 w-sm h-sm bg-error rounded-full"></div>
-        </div>
+        {/* 채팅 아이콘 — TODO: 채팅 store 연결 시 show 값 교체 */}
+        <Badge show={true}>
+          <Icon name="Chatting" size={30} className="cursor-pointer" />
+        </Badge>
+
+        {/* 알림 아이콘 — hasUnread일 때 빨간 점, 클릭 시 패널 */}
         <div ref={noticeRef} className="relative cursor-pointer">
           <div onClick={toggleNotice}>
-            <Icon name="Notification" size={30} />
-            <div className="absolute bottom-0 right-0 w-sm h-sm bg-error rounded-full"></div>
+            <Badge show={hasUnread}>
+              <Icon name="Notification" size={30} className="cursor-pointer" />
+            </Badge>
           </div>
           {isNoticeOpen && (
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-xs z-50">
@@ -92,6 +99,8 @@ const LoggedInActions = ({ profileSrc }) => {
             </div>
           )}
         </div>
+
+        {/* 프로필 드롭다운 */}
         <div ref={containerRef} className="relative">
           <div onClick={toggle} className="cursor-pointer">
             <ProfileCircle src={profileSrc} isLoggedIn={true} size={44} />
@@ -120,14 +129,9 @@ const LoggedInActions = ({ profileSrc }) => {
         </div>
       </div>
 
-      <Modal
-        isOpen={isLogoutModalOpen}
-        onClose={() => setIsLogoutModalOpen(false)}
-      >
+      <Modal isOpen={isLogoutModalOpen} onClose={() => setIsLogoutModalOpen(false)}>
         <div className="bg-bg rounded-2xl p-1xl w-[320px] flex flex-col gap-5">
-          <p className="text-center text-text font-medium">
-            로그아웃 하시겠습니까?
-          </p>
+          <p className="text-center text-text font-medium">로그아웃 하시겠습니까?</p>
           <div className="flex gap-md">
             <button
               onClick={() => setIsLogoutModalOpen(false)}
@@ -146,9 +150,11 @@ const LoggedInActions = ({ profileSrc }) => {
       </Modal>
     </>
   );
-};
+}
 
-const GNB = ({ isLoggedIn = true, profileSrc = '' }) => {
+const GNB = ({ profileSrc = '' }) => {
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+
   return (
     <GNBWrapper>
       <div className="flex items-center gap-x-14 h-full">

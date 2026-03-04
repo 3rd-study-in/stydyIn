@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { login } from '../api';
+import useAuthStore from '../../../stores/authStore';
 
 export const useLogin = () => {
   const [email, setEmail] = useState('');
@@ -7,6 +8,7 @@ export const useLogin = () => {
   const [emailError, setEmailError] = useState('');
   const [pwError, setPwError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const setTokens = useAuthStore((s) => s.setTokens);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,10 +19,7 @@ export const useLogin = () => {
       const response = await login(email, password);
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-        localStorage.setItem('email', email);
-        alert('로그인 성공!');
+        setTokens(data.access_token, data.refresh_token, email);
       } else if (response.status === 401) {
         setEmailError('이메일을 확인해 주세요.');
         setPwError('비밀번호를 확인해 주세요.');
