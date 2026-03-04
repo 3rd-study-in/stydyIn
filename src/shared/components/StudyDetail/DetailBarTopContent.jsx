@@ -69,10 +69,12 @@ const DetailBarTopContent = ({
             size="L"
             width="190px"
             onClick={handleShareLink}
-            className="flex items-center justify-center gap-2 border-secondary-light active:scale-95 transition-transform"
+            className="h-[54px] border-secondary-light active:scale-95 transition-transform"
           >
-            <Share className="h-5 w-5" />
-            <span>공유하기</span>
+            <span className="flex items-center justify-center gap-[8px]">
+              <Share className="w-[20px] h-[20px]" />
+              <span className="text-[16px] font-medium">공유하기</span>
+            </span>
           </FlexibleButton>
 
           <FlexibleButton
@@ -80,12 +82,12 @@ const DetailBarTopContent = ({
             size="L"
             width="50px"
             onClick={handleLikeToggle}
-            className="flex items-center justify-center border-secondary-light p-0 active:scale-90 transition-transform"
+            className="h-[50px] flex items-center justify-center border-secondary-light p-[15px] active:scale-90 transition-transform"
           >
             {isLiked ? (
-              <HeartFill className="h-6 w-6 text-accent-dark" />
+              <HeartFill className="w-[20px] h-[20px] text-accent-dark" />
             ) : (
-              <Heart className="h-6 w-6 text-secondary" />
+              <Heart className="w-[20px] h-[20px] text-secondary" />
             )}
           </FlexibleButton>
         </div>
