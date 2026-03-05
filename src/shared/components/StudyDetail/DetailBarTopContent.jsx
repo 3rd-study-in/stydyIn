@@ -21,9 +21,10 @@ const DetailBarTopContent = ({
 
   const handleShareLink = () => {
     const currentUrl = window.location.href;
-    navigator.clipboard.writeText(currentUrl)
+    navigator.clipboard
+      .writeText(currentUrl)
       .then(() => alert('링크가 클립보드에 복사되었습니다!'))
-      .catch(err => console.error('링크 복사 실패:', err));
+      .catch((err) => console.error('링크 복사 실패:', err));
   };
 
   return (
@@ -52,10 +53,9 @@ const DetailBarTopContent = ({
 
       {/* 해시태그 + 버튼 */}
       <div className="mt-[138px] flex items-start justify-between">
-        
         {/* 해시태그 */}
         {hashtags.length > 0 && (
-          <div className="flex flex-wrap gap-[6px] text-[16px] font-bold text-info max-w-[460px]">
+          <div className="flex flex-wrap gap-xxs text-lg font-bold text-info max-w-[460px]">
             {hashtags.map((tag, idx) => (
               <span key={idx}>{tag}</span>
             ))}
@@ -63,17 +63,17 @@ const DetailBarTopContent = ({
         )}
 
         {/* 버튼 */}
-        <div className="flex gap-[10px]">
+        <div className="flex gap-sm">
           <FlexibleButton
             variant="white"
             size="L"
             width="190px"
             onClick={handleShareLink}
-            className="h-[54px] border-secondary-light active:scale-95 transition-transform"
+            className="border-secondary-light active:scale-95 transition-transform"
           >
-            <span className="flex items-center justify-center gap-[8px]">
+            <span className="flex items-center justify-center gap-xs">
               <Share className="w-[20px] h-[20px]" />
-              <span className="text-[16px] font-medium">공유하기</span>
+              <span className="text-lg font-medium">공유하기</span>
             </span>
           </FlexibleButton>
 
@@ -82,7 +82,7 @@ const DetailBarTopContent = ({
             size="L"
             width="50px"
             onClick={handleLikeToggle}
-            className="h-[50px] flex items-center justify-center border-secondary-light p-[15px] active:scale-90 transition-transform"
+            className="flex items-center justify-center border-secondary-light p-[15px] active:scale-90 transition-transform"
           >
             {isLiked ? (
               <HeartFill className="w-[20px] h-[20px] text-accent-dark" />
