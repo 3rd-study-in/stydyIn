@@ -1,0 +1,378 @@
+/* Frame 1204 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 50px;
+
+position: absolute;
+width: 780px;
+height: 320px;
+left: calc(50% - 780px/2);
+top: 380px;
+
+
+
+/* Group 117 */
+
+width: 320px;
+height: 320px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3 4 */
+
+position: absolute;
+width: 320px;
+height: 320px;
+left: 0px;
+top: 0px;
+
+background: url(3.png), #F3F5FA;
+border-radius: 30px;
+
+
+/* Group 116 */
+
+position: absolute;
+width: 47.88px;
+height: 47.88px;
+left: 105.63px;
+top: 58.64px;
+
+transform: rotate(-3.36deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 14.58%;
+right: 84.12%;
+top: 29.71%;
+bottom: 67.52%;
+
+/* etc/5C8EF2 */
+border: 4px solid #5C8EF2;
+border-radius: 30px;
+transform: rotate(-48.36deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 16.32%;
+right: 82.39%;
+top: 24.96%;
+bottom: 72.26%;
+
+/* etc/5C8EF2 */
+border: 4px solid #5C8EF2;
+border-radius: 30px;
+transform: rotate(-48.36deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 18.05%;
+right: 80.65%;
+top: 20.21%;
+bottom: 77.01%;
+
+/* etc/5C8EF2 */
+border: 4px solid #5C8EF2;
+border-radius: 30px;
+transform: rotate(-48.36deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 13.71%;
+right: 85%;
+top: 23.56%;
+bottom: 73.67%;
+
+/* etc/5C8EF2 */
+border: 4px solid #5C8EF2;
+border-radius: 30px;
+transform: rotate(-48.36deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 15.44%;
+right: 83.26%;
+top: 18.81%;
+bottom: 78.42%;
+
+/* etc/5C8EF2 */
+border: 4px solid #5C8EF2;
+border-radius: 30px;
+transform: rotate(-48.36deg);
+
+
+/* Frame 1203 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 30px;
+
+width: 410px;
+height: 313px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame 1202 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 368px;
+height: 233px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 404 */
+
+width: 368px;
+height: 125px;
+
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 100px;
+line-height: 125px;
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Primary */
+color: #2E6FF2;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1201 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 16px;
+
+width: 368px;
+height: 104px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 페이지를 찾을 수 없습니다. */
+
+width: 368px;
+height: 40px;
+
+/* 30p_B */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 700;
+font-size: 30px;
+line-height: 40px;
+/* identical to box height, or 133% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* 페이지가 존재하지 않거나 사용할 수 없는 페이지입니다. 웹 주소가 올바른지 확인해 주세요. */
+
+width: 368px;
+height: 48px;
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* or 150% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Gray-Lv4 */
+color: #47494D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 1200 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 10px;
+
+width: 410px;
+height: 50px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* button-L-blue */
+
+width: 200px;
+height: 50px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Rectangle 78 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Primary
+
+메인 컬러(로고, 버튼 등)
+*/
+background: #2E6FF2;
+border-radius: 8px;
+
+
+/* 스터디 만들기 */
+
+position: absolute;
+left: 35.1%;
+right: 35.4%;
+top: 28%;
+bottom: 24%;
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* button-L-White */
+
+width: 200px;
+height: 50px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Rectangle 78 */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+border-radius: 8px;
+
+
+/* 스터디 만들기 */
+
+position: absolute;
+left: 30.1%;
+right: 30.9%;
+top: 28%;
+bottom: 24%;
+
+/* 16p_M */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+display: flex;
+align-items: center;
+text-align: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
