@@ -4,8 +4,8 @@ import ProfileCircle from '../../../atoms/ProfileCircle/ProfileCircle';
 import SearchBar from '../../../atoms/SearchBar/SearchBar';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 import { useDisclosure } from '../../hooks/useDisclosure';
-import Modal from '../../../atoms/Modal/Modal';
 import MainNoticeCard from '../Cards/MainNoticeCard';
+import LogoutConfirmModal from '../Modal/LogoutConfirmModal';
 
 const GNBWrapper = ({ children }) => (
   <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
@@ -16,9 +16,9 @@ const GNBWrapper = ({ children }) => (
 );
 
 const Logo = () => (
-  <div className="cursor-pointer">
+  <a href="/">
     <Icon name="SymbolLogo" size={126} />
-  </div>
+  </a>
 );
 
 const NavLinks = () => (
@@ -39,11 +39,9 @@ const NavLinks = () => (
 );
 
 const LoggedOutButtons = () => (
-  <div className="flex items-center gap-x-xs">
-    <FlexibleButton variant="blue" size="M">
-      시작하기
-    </FlexibleButton>
-  </div>
+  <FlexibleButton variant="blue" size="M">
+    시작하기
+  </FlexibleButton>
 );
 
 const PROFILE_MENU = [
@@ -120,30 +118,11 @@ const LoggedInActions = ({ profileSrc }) => {
         </div>
       </div>
 
-      <Modal
+      <LogoutConfirmModal
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
-      >
-        <div className="bg-bg rounded-2xl p-1xl w-[320px] flex flex-col gap-5">
-          <p className="text-center text-text font-medium">
-            로그아웃 하시겠습니까?
-          </p>
-          <div className="flex gap-md">
-            <button
-              onClick={() => setIsLogoutModalOpen(false)}
-              className="flex-1 h-11 rounded-xl border border-border text-sm text-text hover:bg-bg-muted transition-colors"
-            >
-              취소
-            </button>
-            <button
-              onClick={handleLogoutConfirm}
-              className="flex-1 h-11 rounded-xl bg-primary text-white text-sm hover:opacity-90 transition-opacity"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      </Modal>
+        onConfirm={handleLogoutConfirm}
+      />
     </>
   );
 };
