@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { resetPassword } from '../api';
+import useAuthStore from '../../../stores/authStore';
 
 export const useResetPassword = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -24,8 +25,7 @@ export const useResetPassword = () => {
 
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const email = localStorage.getItem('email');
+      const { accessToken: token, email } = useAuthStore.getState();
       const res = await resetPassword(email, currentPassword, newPassword, token);
 
       if (res.ok) {

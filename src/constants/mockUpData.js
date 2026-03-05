@@ -25,7 +25,7 @@ export const MOCK_STUDIES = [
 ]
 
 export const MOCK_NOTIFICATIONS = [
-  { id: 1, text: '새로운 스터디에 참여 요청이 들어왔습니다.',                  time: '방금' },
-  { id: 2, text: 'Python 기초 스터디가 시작되었습니다.',                       time: '1시간 전' },
-  { id: 3, text: '관심 스터디 "React 프로젝트"의 모집이 시작되었습니다.',      time: '3시간 전' },
+  { notification_id: 1, notification_type: 'PARTICIPATION', content: '새로운 스터디에 참여 요청이 들어왔습니다.', created: '방금', checked: false },
+  { notification_id: 2, notification_type: 'COMMENT',       content: 'Python 기초 스터디가 시작되었습니다.',      created: '1시간 전', checked: false },
+  { notification_id: 3, notification_type: 'RECOMMENT',     content: '관심 스터디 "React 프로젝트"의 모집이 시작되었습니다.', created: '3시간 전', checked: true },
 ]

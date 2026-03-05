@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import GNB from '../shared/components/Header/GNB'
 import Footer from '../shared/components/Footer/Footer'
@@ -16,7 +16,8 @@ import Pagination from '../shared/components/Pagination/Pagination'
 import NoContents from '../shared/components/NoContents/NoContents'
 import NotificationItem from '../atoms/NotificationItem/NotificationItem'
 
-import { MOCK_PROFILE, MOCK_STUDIES, MOCK_NOTIFICATIONS } from '../constants/mockUpData'
+import { MOCK_PROFILE, MOCK_STUDIES } from '../constants/mockUpData'
+import useNotificationStore from '../stores/notificationStore'
 import { REGION_OPTIONS } from '../constants/regions'
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags'
 import useUserData from '../features/profile/hooks/useUserData'
@@ -194,22 +195,33 @@ function StudyTab() {
 // ─── 알림 탭 ──────────────────────────────────────────────────────────────────
 
 function NotificationTab() {
-    const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS)
+    const notifications = useNotificationStore((s) => s.notifications)
+    const markAllRead = useNotificationStore((s) => s.markAllRead)
+    const deleteOne = useNotificationStore((s) => s.deleteOne)
 
-    const remove = (id) =>
-        setNotifications((prev) => prev.filter((n) => n.id !== id))
+    // 탭이 열리는 순간 읽음 처리 → GNB 빨간 점 제거
+    useEffect(() => {
+        markAllRead()
+    }, [markAllRead])
+
+    const unreadCount = notifications.filter((n) => !n.checked).length
 
     return (
         <div className="flex flex-col gap-5 p-[40px] w-full">
             <h2 className="text-2xl font-bold text-text font-sans">
-                확인하지 않은 알림 {notifications.length}개
+                확인하지 않은 알림 {unreadCount}개
             </h2>
             {notifications.length === 0 ? (
                 <p className="text-base text-text-disabled mt-4">알림이 없습니다.</p>
             ) : (
                 <ul className="flex flex-col gap-3 mt-2">
                     {notifications.map((n) => (
-                        <NotificationItem key={n.id} text={n.text} time={n.time} onClose={() => remove(n.id)} />
+                        <NotificationItem
+                            key={n.notification_id}
+                            text={n.content}
+                            time={n.created}
+                            onClose={() => deleteOne(n.notification_id)}
+                        />
                     ))}
                 </ul>
             )}
@@ -225,7 +237,7 @@ function ProfilePage() {
 
     return (
         <div className="min-h-screen flex flex-col bg-white">
-            <GNB isLoggedIn={true} />
+            <GNB />
 
             <main className="flex flex-row gap-[30px]  w-[1190px] max-w-[1560px] mx-auto pt-[200px] pb-10">
                 <MypageSideNav activeTab={activeTab} onTabChange={setActiveTab} />
