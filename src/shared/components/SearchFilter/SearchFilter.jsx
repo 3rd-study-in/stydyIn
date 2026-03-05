@@ -22,7 +22,7 @@ const TAG_FILTERS = {
 const FilterTag = ({ children, isSelected, onClick }) => (
   <span
     onClick={onClick}
-    className={`inline-flex items-center h-[44px] px-4 rounded-[44px] text-base cursor-pointer transition-colors
+    className={`inline-flex items-center h-[44px] px-lg rounded-full text-base cursor-pointer transition-colors
       ${isSelected ? 'bg-primary text-white' : 'bg-bg-muted text-text-muted'}`}
   >
     {children}
@@ -45,14 +45,14 @@ const TagDropdown = () => {
   const reset = () => setSelected({});
 
   return (
-    <div className="w-full border border-border rounded-lg p-[30px] bg-white">
-      <div className="flex flex-col gap-5">
+    <div className="w-full border border-border rounded-lg p-3xl bg-white">
+      <div className="flex flex-col gap-xl">
         {Object.entries(TAG_FILTERS).map(([category, tags]) => (
-          <div key={category} className="flex items-center gap-5">
+          <div key={category} className="flex items-center gap-xl">
             <p className="w-[70px] font-bold text-base text-text-muted">
               {category}
             </p>
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex gap-lg flex-wrap">
               {tags.map((tag) => (
                 <FilterTag
                   key={tag}
@@ -66,7 +66,7 @@ const TagDropdown = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-end gap-2.5 mt-[28px]">
+      <div className="flex justify-end gap-sm mt-2xl">
         <Button variant="white" size="M" onClick={reset}>
           초기화
         </Button>
@@ -82,7 +82,7 @@ const SearchFilter = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className="w-full max-w-[1190px] flex flex-col gap-[19px]">
+    <div className="w-full max-w-(--container-max-width-lg) flex flex-col gap-[19px]">
       <div className="self-end" onClick={() => setIsOpen((prev) => !prev)}>
         <FilterDropdown label="검색 필터" options={[]} />
       </div>
