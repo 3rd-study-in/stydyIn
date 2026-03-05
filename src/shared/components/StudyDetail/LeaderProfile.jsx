@@ -33,10 +33,10 @@ const LeaderProfile = ({
           {/* 닉네임 + 왕관 + 지역 태그 */}
           <div className="flex items-center">
             <span className="text-[18px] font-bold text-text">{nickname}</span>
-            <Crown className="w-[26px] h-[26px] ml-[6px]" />
+            <Crown className="w-[26px] h-[26px] ml-[6px] text-accent" />
             {location && (
               <div className="ml-[10px]">
-                <TagSize size="M" variant="lightgray">
+                <TagSize size="S" variant="lightgray">
                   {location}
                 </TagSize>
               </div>
@@ -44,23 +44,13 @@ const LeaderProfile = ({
           </div>
 
           {/* 말풍선 */}
-          <div className="mt-[10px] relative">
-            {/* 말풍선 꼬리 */}
-            <div 
-              className="absolute top-[10px] left-0 w-0 h-0"
-              style={{
-                borderTop: '8px solid transparent',
-                borderBottom: '8px solid transparent',
-                borderRight: '10px solid #FFE187',
-                marginLeft: '-10px',
-              }}
-            />
-            {/* 말풍선 본체 */}
-            <div className="bg-accent-light rounded-lg py-[20px] px-[30px] max-w-[620px]">
-              <p className="text-[14px] font-normal text-text leading-relaxed">
-                {introduction}
-              </p>
-            </div>
+          <div 
+            className="mt-[10px] bg-accent-light py-[20px] px-[30px] w-[680px]"
+            style={{ borderRadius: '2px 30px 30px 30px' }}
+          >
+            <p className="text-[14px] font-normal text-text leading-[20px]">
+              {introduction}
+            </p>
           </div>
         </div>
       </div>
