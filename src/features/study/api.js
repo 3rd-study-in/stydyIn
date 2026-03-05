@@ -1,3 +1,15 @@
+
+import axiosInstance from '../../lib/axiosInstance'
+
+/**
+ * 스터디 목록 조회
+ * GET /study/?page=1&limit=6
+ * @param {{ page?: number, limit?: number }} params
+ * @returns Promise<{ count, next, previous, results }>
+ */
+export const getStudyList = (params = {}) =>
+  axiosInstance.get('/study/', { params })
+ 
 import { BASE_URL } from '../../constants/api';
 
 const studyUrl = (path = '') => `${BASE_URL}/study${path}`;
@@ -12,14 +24,14 @@ const jsonHeaders = (token) => ({
 });
 
 // 2.1 스터디 전체 가져오기
-export const getStudyList = ({ page, limit, skip } = {}) => {
-  const params = new URLSearchParams();
-  if (page !== undefined) params.set('page', page);
-  if (limit !== undefined) params.set('limit', limit);
-  if (skip !== undefined) params.set('skip', skip);
-  const query = params.toString() ? `?${params}` : '';
-  return fetch(studyUrl(`/${query}`));
-};
+// export const getStudyList = ({ page, limit, skip } = {}) => {
+//  const params = new URLSearchParams();
+//  if (page !== undefined) params.set('page', page);
+//  if (limit !== undefined) params.set('limit', limit);
+//  if (skip !== undefined) params.set('skip', skip);
+//  const query = params.toString() ? `?${params}` : '';
+//  return fetch(studyUrl(`/${query}`));
+//};
 
 // 2.2 스터디 상세
 export const getStudyDetail = (studyPk) =>
@@ -120,3 +132,4 @@ export const getStudyListPaged = (params = {}) => {
   ).toString();
   return fetch(studyUrl(`/list/${query ? `?${query}` : ''}`));
 };
+
