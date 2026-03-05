@@ -243,3 +243,26 @@ function StudyStateCard({
 }
 
 export default StudyStateCard;
+
+// import StudyCard from './shared/components/Cards/StudyStateCard';
+
+// function App() {
+//   return (
+//     <div>
+//       <StudyCard
+//         status="in_progress"
+//         dDay={-10}
+//         selectedDays={['수', '금', '토']}
+//         startDate="2022. 03. 29(화)"
+//         startTime="14:00"
+//         endTime="16:00"
+//         duration="8주/총 24회 48시간"
+//         currentCount={8}
+//         maxCount={10}
+//         isOwner={true}
+//       />
+//     </div>
+//   );
+// }
+
+// export default App;
