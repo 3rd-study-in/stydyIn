@@ -13,7 +13,7 @@
  * @param {string} [className]     추가 Tailwind 클래스
  */
 
-import Icon from "../Icon/Common/Icon"
+import Icon from '../Icon/Common/Icon';
 
 // 상태 → 텍스트/색상 매핑
 const STATUS_MAP = {
@@ -21,7 +21,7 @@ const STATUS_MAP = {
   in_progress: { label: '진행 중', color: 'text-primary' },
   completed: { label: '모집 완료', color: 'text-text-disabled' },
   closed: { label: '종료', color: 'text-text-disabled' },
-}
+};
 
 function StudyListCard({
   status = 'recruiting',
@@ -34,7 +34,7 @@ function StudyListCard({
   children,
   className = '',
 }) {
-  const { label, color } = STATUS_MAP[status] ?? STATUS_MAP.recruiting
+  const { label, color } = STATUS_MAP[status] ?? STATUS_MAP.recruiting;
 
   return (
     <div
@@ -44,7 +44,9 @@ function StudyListCard({
       {/* 헤더 — 상태 뱃지 + 위치 뱃지 */}
       <div className="absolute top-0 left-0 w-full h-[52px] px-4 flex items-center justify-between">
         {/* 상태 */}
-        <div className={`flex items-center gap-1.5 text-base font-bold ${color}`}>
+        <div
+          className={`flex items-center gap-1.5 text-base font-bold ${color}`}
+        >
           {/* 스피커 아이콘 */}
           <Icon name="Speaker" />
           <span>{label}</span>
@@ -88,12 +90,16 @@ function StudyListCard({
           <div className="flex items-center gap-1 text-sm text-text-muted">
             {/* 사람 아이콘 */}
 
-            <span>현재 <strong className="font-bold text-text">{currentCount}명</strong>이 신청했어요.</span>
+            <span>
+              현재{' '}
+              <strong className="font-bold text-text">{currentCount}명</strong>
+              이 신청했어요.
+            </span>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default StudyListCard
+export default StudyListCard;
