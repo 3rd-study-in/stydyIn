@@ -1,12 +1,5 @@
-import StudyCard from './atoms/Card/StudyStateCard';
-// import { StudyDetail } from './atoms/Images/Common';
-
 function App() {
-  return (
-    <div>
-      <StudyCard></StudyCard>
-    </div>
-  );
+  return <></>;
 }
 
 export default App;
