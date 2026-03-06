@@ -134,3 +134,7 @@ Container - 너비 설정
   /* 최대 너비 */
   --container-max-width-lg: 1190px;
 }
+
+header {
+  transition: all 0.2s ease-in-out;
+}
