@@ -13,7 +13,7 @@ const STATUS_NAME_MAP = {
   '모집 중': 'recruiting',
   '진행 중': 'in_progress',
   '모집 완료': 'completed',
-  '종료': 'closed',
+  종료: 'closed',
 };
 
 function calcDDay(startDateStr) {
@@ -28,11 +28,26 @@ function calcDDay(startDateStr) {
 function StudyDetailPage() {
   const { studyId } = useParams();
   const navigate = useNavigate();
-  const { study, cardProps, isLoading, error, refetch } = useStudyDetail(studyId);
-  const { handleJoin, handleLeave } = useStudyParticipate(studyId, { onSuccess: refetch });
+  const { study, cardProps, isLoading, error, refetch } =
+    useStudyDetail(studyId);
+  const { handleJoin, handleLeave } = useStudyParticipate(studyId, {
+    onSuccess: refetch,
+  });
   const email = useAuthStore((s) => s.email);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const [comment, setComment] = useState('');
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleShare = () => {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => alert('링크가 클립보드에 복사되었습니다!'))
+      .catch(() => alert('링크 복사에 실패했습니다.'));
+  };
+
+  const handleLike = () => {
+    setIsLiked((prev) => !prev);
+  };
 
   if (isLoading) {
     return (
@@ -44,7 +59,7 @@ function StudyDetailPage() {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-64 text-accent">
+      <div className="flex justify-center items-center h-64 text-text">
         {error}
       </div>
     );
@@ -53,14 +68,21 @@ function StudyDetailPage() {
   if (!study || !cardProps) return null;
 
   const isOwner = study.leader?.email === email;
-  const isParticipant = (study.participants ?? []).some((p) => p.email === email);
+  const isParticipant = (study.participants ?? []).some(
+    (p) => p.email === email,
+  );
   const dDay = calcDDay(study.start_date);
   const hashtags = (study.search_tag ?? []).map((t) => `#${t.name}`);
-  const categories = [study.subject?.name, study.difficulty?.name].filter(Boolean);
+  const categories = [study.subject?.name, study.difficulty?.name].filter(
+    Boolean,
+  );
   const status = STATUS_NAME_MAP[study.study_status?.name] ?? 'recruiting';
 
   const handleParticipateClick = () => {
-    if (!isLoggedIn) { navigate('/login'); return; }
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
     if (isParticipant) handleLeave();
     else handleJoin();
   };
@@ -74,6 +96,9 @@ function StudyDetailPage() {
           title={study.title}
           hashtags={hashtags}
           location={study.is_offline ? study.study_location?.location : ''}
+          isLiked={isLiked}
+          onLike={handleLike}
+          onShare={handleShare}
         />
       </DetailBarTopContainer>
 
@@ -82,7 +107,9 @@ function StudyDetailPage() {
         {/* 본문 */}
         <div className="flex-1 min-w-0 flex flex-col">
           <section>
-            <h2 className="text-[30px] font-bold text-text mb-3xl">스터디 소개</h2>
+            <h2 className="text-[30px] font-bold text-text mb-3xl">
+              스터디 소개
+            </h2>
             <p className="text-base text-text leading-relaxed whitespace-pre-wrap">
               {study.study_info || '스터디 소개가 없습니다.'}
             </p>
@@ -91,7 +118,9 @@ function StudyDetailPage() {
           <hr className="border-border my-3xl" />
 
           <section>
-            <h2 className="text-[30px] font-bold text-text mb-3xl">스터디 일정</h2>
+            <h2 className="text-[30px] font-bold text-text mb-3xl">
+              스터디 일정
+            </h2>
             <p className="text-base text-text leading-relaxed whitespace-pre-wrap">
               {study.schedule || '스터디 일정이 없습니다.'}
             </p>
@@ -109,7 +138,9 @@ function StudyDetailPage() {
           <hr className="border-border my-3xl" />
 
           <section>
-            <h2 className="text-[30px] font-bold text-text mb-3xl">그룹장에게 질문하기</h2>
+            <h2 className="text-[30px] font-bold text-text mb-3xl">
+              그룹장에게 질문하기
+            </h2>
             <div className="border border-border rounded-lg p-[16px] flex gap-4">
               <textarea
                 value={comment}
@@ -119,8 +150,15 @@ function StudyDetailPage() {
                 className="flex-1 h-17.5 text-sm text-text placeholder:text-text-disabled outline-none resize-none"
               />
               <div className="flex flex-col items-end justify-between shrink-0">
-                <span className="text-sm text-text-disabled">{comment.length}/300</span>
-                <FlexibleButton variant="blue" size="S" width="60px" disabled={!comment.trim()}>
+                <span className="text-sm text-text-disabled">
+                  {comment.length}/300
+                </span>
+                <FlexibleButton
+                  variant="blue"
+                  size="S"
+                  width="60px"
+                  disabled={!comment.trim()}
+                >
                   등록
                 </FlexibleButton>
               </div>
@@ -135,8 +173,11 @@ function StudyDetailPage() {
             status={status}
             dDay={dDay}
             isOwner={isOwner}
+            isLiked={isLiked}
             onParticipate={handleParticipateClick}
             onEdit={() => navigate(`/study/${studyId}/edit`)}
+            onShare={handleShare}
+            onLike={handleLike}
           />
         </div>
       </div>
