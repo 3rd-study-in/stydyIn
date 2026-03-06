@@ -7,7 +7,6 @@ import {
   getSubjects,
   getDifficulties,
 } from '../features/study/api';
-import useAuthStore from '../stores/authStore';
 import InputBox from '../atoms/Input/InputBox';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
 
@@ -35,7 +34,6 @@ const chipInactive = 'bg-white text-text border-border hover:bg-bg-muted';
 // 폼을 study 데이터가 로드된 후 초기화하기 위해 내부 컴포넌트로 분리
 function StudyEditForm({ study, studyId }) {
   const navigate = useNavigate();
-  const accessToken = useAuthStore((s) => s.accessToken);
   const { form, setField, toggleDay, isValid, isLoading, error, handleSubmit } =
     useStudyForm({
       mode: 'edit',
@@ -50,12 +48,10 @@ function StudyEditForm({ study, studyId }) {
 
   useEffect(() => {
     getSubjects()
-      .then((r) => r.json())
-      .then(setSubjects)
+      .then((r) => setSubjects(r.data))
       .catch(() => {});
     getDifficulties()
-      .then((r) => r.json())
-      .then(setDifficulties)
+      .then((r) => setDifficulties(r.data))
       .catch(() => {});
   }, []);
 
@@ -78,7 +74,7 @@ function StudyEditForm({ study, studyId }) {
   };
 
   const onDelete = async () => {
-    await deleteStudy(studyId, accessToken);
+    await deleteStudy(studyId);
     navigate('/');
   };
 

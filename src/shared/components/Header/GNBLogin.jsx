@@ -2,9 +2,9 @@ import React from 'react';
 import Icon from '../../../atoms/Icon/Common/Icon';
 
 const Logo = () => (
-  <div className="cursor-pointer">
+  <a href="/">
     <Icon name="SymbolLogo" size={126} />
-  </div>
+  </a>
 );
 
 const GNBLogin = () => {

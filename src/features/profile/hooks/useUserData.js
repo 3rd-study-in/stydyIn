@@ -14,7 +14,7 @@ function useUserData(profile) {
     name:         profile.name,
     phone:        profile.phone,
     github:       profile.github_username,
-    region:       profile.preferred_region?.location ?? null,
+    region:       profile.preferred_region?.id ?? null,
     introduction: profile.introduction,
   })
 

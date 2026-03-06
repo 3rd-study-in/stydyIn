@@ -21,6 +21,7 @@ export default function SearchPage() {
     const [searchParams] = useSearchParams()
     const subjectId = searchParams.get('subject')
     const searchQuery = searchParams.get('search')
+    const typeParam = searchParams.get('type') // 'local' | 'online' | null
 
     const [studies, setStudies] = useState([])
     const [totalCount, setTotalCount] = useState(0)
@@ -31,13 +32,15 @@ export default function SearchPage() {
 
     useEffect(() => {
         setCurrentPage(1)
-    }, [subjectId, searchQuery])
+    }, [subjectId, searchQuery, typeParam])
 
     useEffect(() => {
         setLoading(true)
         const params = { page: currentPage, limit: PAGE_SIZE }
         if (subjectId) params.subject = subjectId
         if (searchQuery) params.search = searchQuery
+        if (typeParam === 'local') params.is_offline = 1
+        if (typeParam === 'online') params.is_offline = 0
 
         getStudyList(params)
             .then((res) => {
@@ -46,12 +49,22 @@ export default function SearchPage() {
             })
             .catch(() => setStudies([]))
             .finally(() => setLoading(false))
-    }, [subjectId, searchQuery, currentPage])
+    }, [subjectId, searchQuery, typeParam, currentPage])
 
     const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
 
+    const sectionTitle =
+        typeParam === 'local' ? '내 지역 스터디' :
+        typeParam === 'online' ? '온라인 스터디' : null
+
     return (
         <div className="max-w-max-width-lg mx-auto py-5xl px-xl">
+
+            {sectionTitle && (
+                <h1 className="text-[30px] font-bold leading-[40px] text-text mb-xl">
+                    {sectionTitle}
+                </h1>
+            )}
 
             {/* 필터 */}
             <SearchFilter />

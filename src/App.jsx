@@ -11,6 +11,9 @@ import StudyDetailPage from './pages/StudyDetailPage'
 import StudyCreatePage from './pages/StudyCreatePage'
 import StudyEditPage from './pages/StudyEditPage'
 import ProfilePage from './pages/ProfilePage'
+import ProfileCreatePage from './pages/ProfileCreatePage'
+import PasswordResetPage from './pages/PasswordResetPage'
+import NotFoundPage from './pages/404Page'
 
 // 로그인/회원가입 전용 (GNBLogin)
 function AuthLayout() {
@@ -75,8 +78,11 @@ const router = createBrowserRouter([
       { path: '/study/:studyId', element: <StudyDetailPage /> },
       { path: '/study/:studyId/edit', element: <StudyEditPage /> },
       { path: '/profile/:userId', element: <ProfilePage /> },
+      { path: '/profile/create', element: <ProfileCreatePage /> },
+      { path: '/password-reset', element: <PasswordResetPage /> },
     ],
   },
+  { path: '*', element: <NotFoundPage /> },
 ])
 
 export default function App() {

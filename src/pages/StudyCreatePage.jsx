@@ -34,7 +34,7 @@ function StudyCreatePage() {
   const { form, setField, toggleDay, isLoading, error, handleSubmit } =
     useStudyForm({ mode: 'create' });
 
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const userId = useAuthStore((s) => s.userId);
   const { upload, isUploading, uploadError } = useImageUpload();
   const [subjects, setSubjects] = useState([]);
   const [difficulties, setDifficulties] = useState([]);
@@ -45,23 +45,17 @@ function StudyCreatePage() {
 
   useEffect(() => {
     getSubjects()
-      .then((r) => r.json())
-      .then(setSubjects)
-      .catch(() => {});
+      .then((r) => setSubjects(r.data))
+      .catch(() => { });
     getDifficulties()
-      .then((r) => r.json())
-      .then(setDifficulties)
-      .catch(() => {});
-    try {
-      const userId = JSON.parse(atob(accessToken.split('.')[1])).user_id;
-      getProfile(userId, accessToken)
-        .then((r) => r.json())
-        .then((data) => {
-          if (data.preferred_region) setUserRegion(data.preferred_region);
+      .then((r) => setDifficulties(r.data))
+      .catch(() => { });
+    if (userId) {
+      getProfile(userId)
+        .then((r) => {
+          if (r.data.preferred_region) setUserRegion(r.data.preferred_region);
         })
-        .catch(() => {});
-    } catch {
-      // 토큰 디코딩 실패 시 무시
+        .catch(() => { });
     }
   }, []);
 

@@ -1,6 +1,7 @@
-import { BASE_URL } from '../../constants/api';
+import axiosInstance from '../../lib/axiosInstance'
 
-export const getProfile = (userId, token) =>
-  fetch(`${BASE_URL}/accounts/profiles/${userId}/`, {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
+export const getProfile = (userId) =>
+  axiosInstance.get(`/accounts/profiles/${userId}/`)
+
+export const saveProfile = (userId, body) =>
+  axiosInstance.put(`/accounts/profiles/${userId}/`, body)
