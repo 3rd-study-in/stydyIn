@@ -157,7 +157,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 제목 */}
           <div>
             <label className="block text-sm font-bold text-text mb-2">
-              스터디 제목 <span className="text-accent">*</span>
+              스터디 제목 <span className="text-error">*</span>
             </label>
             <InputBox
               value={form.title}
@@ -171,7 +171,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 유형 */}
           <div>
             <label className="block text-sm font-bold text-text mb-2">
-              스터디 유형 <span className="text-accent">*</span>
+              스터디 유형 <span className="text-error">*</span>
             </label>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -203,7 +203,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 모집 인원 */}
           <div>
             <label className="block text-sm font-bold text-text mb-2">
-              모집 인원 <span className="text-accent">*</span>
+              모집 인원 <span className="text-error">*</span>
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -265,7 +265,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 시작일 */}
           <div className="flex items-center gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0">
-              스터디 시작일 <span className="text-accent">*</span>
+              스터디 시작일 <span className="text-error">*</span>
             </label>
             <input
               type="date"
@@ -278,7 +278,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 기간 */}
           <div className="flex items-center gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0">
-              스터디 기간 <span className="text-accent">*</span>
+              스터디 기간 <span className="text-error">*</span>
             </label>
             <select
               value={form.term}
@@ -297,7 +297,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 시간 */}
           <div className="flex items-center gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0">
-              스터디 시간 <span className="text-accent">*</span>
+              스터디 시간 <span className="text-error">*</span>
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -325,7 +325,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 주제 */}
           <div className="flex items-start gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-              스터디 주제 <span className="text-accent">*</span>
+              스터디 주제 <span className="text-error">*</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {subjects.map((s) => (
@@ -346,7 +346,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 난이도 */}
           <div className="flex items-start gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-              스터디 난이도 <span className="text-accent">*</span>
+              스터디 난이도 <span className="text-error">*</span>
             </label>
             <div className="flex gap-2">
               {difficulties.map((d) => (
@@ -369,7 +369,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 검색 태그 */}
           <div className="flex items-start gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-              검색 태그 <span className="text-accent">*</span>
+              검색 태그 <span className="text-error">*</span>
             </label>
             <div className="flex-1">
               {form.search_tag.length > 0 && (
@@ -408,7 +408,7 @@ function StudyEditForm({ study, studyId }) {
         </div>
       </section>
 
-      {error && <p className="text-accent text-sm text-center mb-4">{error}</p>}
+      {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
     </div>
   );
 }
