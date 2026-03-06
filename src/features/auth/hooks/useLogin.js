@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { login } from '../api';
+import { useNavigate } from 'react-router-dom';
+import { login, getMemberType } from '../api';
 import useAuthStore from '../../../stores/authStore';
 
 export const useLogin = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -19,7 +21,10 @@ export const useLogin = () => {
       const response = await login(email, password);
       const data = await response.json();
       if (response.ok) {
-        setTokens(data.access_token, data.refresh_token, email);
+        setTokens(data.access_token, data.refresh_token, data.user);
+        const typeRes = await getMemberType(data.access_token);
+        const typeData = await typeRes.json();
+        navigate(typeData.is_associate_member ? '/' : '/profile/create');
       } else if (response.status === 401) {
         setEmailError('이메일을 확인해 주세요.');
         setPwError('비밀번호를 확인해 주세요.');

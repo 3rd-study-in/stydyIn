@@ -17,6 +17,8 @@ const useAuthStore = create((set, get) => ({
   accessToken: null,
   refreshToken: null,
   email: null,
+  userId: null,
+  uid: null,
   isLoggedIn: false,
 
   // 앱 초기화 시 1회 호출 — JWT exp 체크로 로그인 상태 복원
@@ -24,21 +26,39 @@ const useAuthStore = create((set, get) => ({
     const access = localStorage.getItem('access_token');
     const refresh = localStorage.getItem('refresh_token');
     const email = localStorage.getItem('email');
+    const userId = localStorage.getItem('userId');
+    const uid = localStorage.getItem('uid');
 
     if (access && !isExpired(access)) {
-      set({ accessToken: access, refreshToken: refresh, email, isLoggedIn: true });
+      set({
+        accessToken: access,
+        refreshToken: refresh,
+        email,
+        userId: userId ? Number(userId) : null,
+        uid,
+        isLoggedIn: true,
+      });
     } else {
       // 만료 → 정리 (refresh 갱신 API 생기면 여기서 호출)
       get().logout();
     }
   },
 
-  // 로그인 성공 후 토큰 저장
-  setTokens: (accessToken, refreshToken, email) => {
+  // 로그인 성공 후 토큰 저장 — user: { pk, email, uid }
+  setTokens: (accessToken, refreshToken, user) => {
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('refresh_token', refreshToken);
-    if (email) localStorage.setItem('email', email);
-    set({ accessToken, refreshToken, email, isLoggedIn: true });
+    if (user?.email) localStorage.setItem('email', user.email);
+    if (user?.pk) localStorage.setItem('userId', String(user.pk));
+    if (user?.uid) localStorage.setItem('uid', user.uid);
+    set({
+      accessToken,
+      refreshToken,
+      email: user?.email ?? null,
+      userId: user?.pk ?? null,
+      uid: user?.uid ?? null,
+      isLoggedIn: true,
+    });
   },
 
   // 로그아웃
@@ -46,7 +66,9 @@ const useAuthStore = create((set, get) => ({
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('email');
-    set({ accessToken: null, refreshToken: null, email: null, isLoggedIn: false });
+    localStorage.removeItem('userId');
+    localStorage.removeItem('uid');
+    set({ accessToken: null, refreshToken: null, email: null, userId: null, uid: null, isLoggedIn: false });
   },
 }));
 

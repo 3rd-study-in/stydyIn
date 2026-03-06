@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import GNB from '../shared/components/Header/GNB'
 import Footer from '../shared/components/Footer/Footer'
@@ -12,21 +13,81 @@ import { TagSize, TagM2 } from '../atoms/Tag'
 import Dropdown from '../atoms/DropdownSelect/Dropdown'
 import UserProfileLPlaceholder from '../shared/components/UserProfile/UserProfileLPlaceholder'
 import StudyListCard from '../shared/components/Cards/StudyListCard'
-import Pagination from '../shared/components/Pagination/Pagination'
 import NoContents from '../shared/components/NoContents/NoContents'
 import NotificationItem from '../atoms/NotificationItem/NotificationItem'
 
-import { MOCK_PROFILE, MOCK_STUDIES } from '../constants/mockUpData'
 import useNotificationStore from '../stores/notificationStore'
+import useAuthStore from '../stores/authStore'
 import { REGION_OPTIONS } from '../constants/regions'
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags'
 import useUserData from '../features/profile/hooks/useUserData'
+import { getProfile, saveProfile, uploadImage } from '../features/profile/api'
+import { getMyStudies, getMyParticipatingStudies, getLikedStudies } from '../features/study/api'
+
+const STUDY_STATUS_MAP = {
+    '모집 중': 'recruiting',
+    '진행 중': 'in_progress',
+    '모집 완료': 'completed',
+    '종료': 'closed',
+}
 
 // ─── 내 프로필 탭 ─────────────────────────────────────────────────────────────
 
-function ProfileTab({ profile }) {
+function ProfileTab({ profile, accessToken, userId, onProfileUpdated }) {
     const [isEditing, setIsEditing] = useState(false)
     const { form, handleField, selectedTags, toggleTag, removeTag } = useUserData(profile)
+    const [profileImage, setProfileImage] = useState(null)
+    const [previewUrl, setPreviewUrl] = useState(null)
+    const [saveError, setSaveError] = useState('')
+    const [isSaving, setIsSaving] = useState(false)
+    const fileInputRef = useRef(null)
+
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+        setProfileImage(file)
+        setPreviewUrl(URL.createObjectURL(file))
+    }
+
+    const handleSave = async () => {
+        setSaveError('')
+        setIsSaving(true)
+        try {
+            let imageUrl = null
+            if (profileImage) {
+                const imgRes = await uploadImage(accessToken, profileImage)
+                const imgData = await imgRes.json()
+                if (imgRes.ok) imageUrl = imgData.image_url
+            }
+
+            const body = {
+                name: form.name,
+                nickname: form.nickname,
+                phone: form.phone,
+            }
+            if (form.introduction) body.introduction = form.introduction
+            if (form.github) body.github_username = form.github
+            if (imageUrl) body.profile_img = imageUrl
+            if (form.region) body.preferred_region = { id: form.region }
+            if (selectedTags.length > 0) body.tag = selectedTags.map((t) => ({ id: t.id, name: t.name }))
+
+            const res = await saveProfile(accessToken, userId, body)
+            const data = await res.json()
+
+            if (res.ok) {
+                onProfileUpdated(data)
+                setIsEditing(false)
+                setProfileImage(null)
+                setPreviewUrl(null)
+            } else {
+                setSaveError(data.error || '저장에 실패했습니다.')
+            }
+        } catch {
+            setSaveError('서버 연결 오류가 발생했습니다.')
+        } finally {
+            setIsSaving(false)
+        }
+    }
 
     // 수정 모드
     if (isEditing) {
@@ -34,19 +95,26 @@ function ProfileTab({ profile }) {
             <div className="flex flex-col gap-[30px] p-[40px] w-full">
                 {/* 프로필 이미지 */}
                 <div className="flex justify-center">
-                    <UserProfileLPlaceholder onClick={() => { }} />
+                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                    {previewUrl || profile.profile_img ? (
+                        <button onClick={() => fileInputRef.current?.click()} className="relative w-[130px] h-[130px] rounded-full overflow-hidden border border-border">
+                            <img src={previewUrl ?? profile.profile_img} alt="프로필" className="w-full h-full object-cover" />
+                        </button>
+                    ) : (
+                        <UserProfileLPlaceholder onClick={() => fileInputRef.current?.click()} />
+                    )}
                 </div>
 
                 {/* 입력 필드 */}
-                <div className="flex flex-col  gap-5 ">
-                    <EditProfileInputBox label="닉네임" value={form.nickname} onChange={handleField('nickname')} placeholder="닉네임을 입력하세요" />
-                    <EditProfileInputBox label="이름" required value={form.name} onChange={handleField('name')} placeholder="이름을 입력하세요" />
-                    <EditProfileInputBox label="전화번호" required value={form.phone} onChange={handleField('phone')} placeholder="010-0000-0000" />
-                    <EditProfileInputBox label="GitHub" value={form.github} onChange={handleField('github')} placeholder="GitHub 사용자명" />
+                <div className="flex flex-col gap-5">
+                    <EditProfileInputBox label="닉네임" required labelWidth="52px" value={form.nickname} onChange={handleField('nickname')} placeholder="닉네임을 입력하세요" />
+                    <EditProfileInputBox label="이름" required labelWidth="52px" value={form.name} onChange={handleField('name')} placeholder="이름을 입력하세요" />
+                    <EditProfileInputBox label="전화번호" required labelWidth="52px" value={form.phone} onChange={handleField('phone')} placeholder="010-0000-0000" />
+                    <EditProfileInputBox label="GitHub" labelWidth="52px" value={form.github} onChange={handleField('github')} placeholder="GitHub 사용자명" />
 
                     {/* 선호 지역 */}
                     <div className="flex items-center gap-[64px]">
-                        <span className="text-sm text-text shrink-0">선호 지역</span>
+                        <span className="text-sm text-text shrink-0" style={{ minWidth: '52px' }}>선호 지역</span>
                         <Dropdown
                             options={REGION_OPTIONS}
                             value={form.region}
@@ -58,10 +126,10 @@ function ProfileTab({ profile }) {
 
                     {/* 소개글 */}
                     <div className="flex items-start gap-[64px]">
-                        <span className="text-sm text-text shrink-0 pt-2">소개</span>
+                        <span className="text-sm text-text shrink-0 pt-2" style={{ minWidth: '52px' }}>소개</span>
                         <InputBox
                             value={form.introduction}
-                            onChange={(e) => handleField('introduction')(e.target.value)}
+                            onChange={handleField('introduction')}
                             placeholder="자기소개를 입력하세요"
                             maxLength={200}
                             width="600px"
@@ -86,7 +154,6 @@ function ProfileTab({ profile }) {
                                 )
                             })}
                         </div>
-                        {/* 선택된 태그 (제거 버튼 포함) */}
                         {selectedTags.length > 0 && (
                             <div className="flex flex-wrap gap-2 mt-1">
                                 {selectedTags.map((tag) => (
@@ -99,10 +166,12 @@ function ProfileTab({ profile }) {
                     </div>
                 </div>
 
+                {saveError && <p className="text-sm text-error">{saveError}</p>}
+
                 {/* 버튼 */}
                 <div className="flex gap-3 justify-end">
-                    <Button variant="white" size="M" onClick={() => setIsEditing(false)}>취소</Button>
-                    <Button variant="blue" size="M" onClick={() => setIsEditing(false)}>저장하기</Button>
+                    <Button variant="white" size="M" onClick={() => { setIsEditing(false); setSaveError('') }}>취소</Button>
+                    <Button variant="blue" size="M" disabled={isSaving} onClick={handleSave}>저장하기</Button>
                 </div>
             </div>
         )
@@ -116,7 +185,7 @@ function ProfileTab({ profile }) {
             </div>
 
             <MypageProfileCard
-                hasUser={!profile.is_associate_member}
+                hasUser={profile.is_associate_member}
                 profileImage={profile.profile_img}
                 nickname={profile.nickname}
             >
@@ -129,7 +198,7 @@ function ProfileTab({ profile }) {
                 phone={profile.phone}
                 location={profile.preferred_region?.location}
                 github={profile.github_username}
-                interestSlot={profile.tag.map((t) => (
+                interestSlot={profile.tag?.map((t) => (
                     <TagSize key={t.id} size="M">{t.name}</TagSize>
                 ))}
             >
@@ -141,13 +210,29 @@ function ProfileTab({ profile }) {
 
 // ─── 내 스터디 탭 ─────────────────────────────────────────────────────────────
 
-function StudyTab() {
+function StudyTab({ accessToken }) {
+    const navigate = useNavigate()
     const [activeStudyTab, setActiveStudyTab] = useState('created')
-    const [currentPage, setCurrentPage] = useState(1)
-    const studies = MOCK_STUDIES
+    const [studies, setStudies] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (!accessToken) return
+        setLoading(true)
+        const fetcher =
+            activeStudyTab === 'created' ? getMyStudies :
+            activeStudyTab === 'joined' ? getMyParticipatingStudies :
+            getLikedStudies
+
+        fetcher(accessToken)
+            .then((res) => res.json())
+            .then((data) => setStudies(Array.isArray(data) ? data : []))
+            .catch(() => setStudies([]))
+            .finally(() => setLoading(false))
+    }, [activeStudyTab, accessToken])
 
     return (
-        <div className="flex flex-col  px-[55px] w-full">
+        <div className="flex flex-col px-[55px] w-full">
             {/* 탭 필터 */}
             <div className="flex gap-[14px] my-[30px]">
                 {STUDY_TABS.map(({ key, label }) => (
@@ -155,38 +240,46 @@ function StudyTab() {
                         key={key}
                         size="L"
                         variant={activeStudyTab === key ? 'blue' : 'lightgray'}
-                        onClick={() => { setActiveStudyTab(key); setCurrentPage(1) }}
+                        onClick={() => setActiveStudyTab(key)}
                     >
                         {label}
                     </TagSize>
                 ))}
             </div>
 
-            {studies.length === 0 ? (
+            {loading ? (
+                <div className="py-5xl flex justify-center">
+                    <span className="text-text-muted text-sm">불러오는 중...</span>
+                </div>
+            ) : studies.length === 0 ? (
                 <NoContents
                     title="스터디가 없습니다"
                     description="아직 등록된 스터디가 없어요."
                     buttonText="스터디 만들기"
-                    onButtonClick={() => { }}
+                    onButtonClick={() => navigate('/study/create')}
                 />
             ) : (
-                <>
-                    <div className="flex flex-wrap justify-between gap-y-[30px]">
-                        {studies.map((study) => (
-                            <StudyListCard
-                                key={study.id}
-                                status={study.status}
-                                location={study.location}
-                                category={study.category}
-                                difficulty={study.difficulty}
-                                title={study.title}
-                                currentCount={study.currentCount}
-                                onClick={() => { }}
-                            />
-                        ))}
-                    </div>
-                    <Pagination currentPage={currentPage} totalPages={3} onPageChange={setCurrentPage} />
-                </>
+                <div className="flex flex-wrap justify-between gap-y-[30px]">
+                    {studies.map((study) => (
+                        <StudyListCard
+                            key={study.id}
+                            status={STUDY_STATUS_MAP[study.study_status?.name] ?? 'recruiting'}
+                            location={study.is_offline ? study.study_location?.location : null}
+                            category={study.subject?.name}
+                            difficulty={study.difficulty?.name}
+                            title={study.title}
+                            currentCount={study.participant_count}
+                            isLiked={study.user_liked}
+                            onClick={() => navigate(`/study/${study.id}`)}
+                        >
+                            {study.thumbnail ? (
+                                <img src={study.thumbnail} alt={study.title} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full bg-bg-muted" />
+                            )}
+                        </StudyListCard>
+                    ))}
+                </div>
             )}
         </div>
     )
@@ -199,7 +292,6 @@ function NotificationTab() {
     const markAllRead = useNotificationStore((s) => s.markAllRead)
     const deleteOne = useNotificationStore((s) => s.deleteOne)
 
-    // 탭이 열리는 순간 읽음 처리 → GNB 빨간 점 제거
     useEffect(() => {
         markAllRead()
     }, [markAllRead])
@@ -232,20 +324,48 @@ function NotificationTab() {
 // ─── 메인 페이지 ──────────────────────────────────────────────────────────────
 
 function ProfilePage() {
+    const { userId } = useParams()
+    const accessToken = useAuthStore((s) => s.accessToken)
     const [activeTab, setActiveTab] = useState('profile')
-    const profile = MOCK_PROFILE
+    const [profile, setProfile] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        if (!userId || !accessToken) return
+        setLoading(true)
+        getProfile(accessToken, userId)
+            .then((res) => res.json())
+            .then((data) => setProfile(data))
+            .catch(() => setProfile(null))
+            .finally(() => setLoading(false))
+    }, [userId, accessToken])
 
     return (
         <div className="min-h-screen flex flex-col bg-white">
             <GNB />
 
-            <main className="flex flex-row gap-[30px]  w-[1190px] max-w-[1560px] mx-auto pt-[200px] pb-10">
+            <main className="flex flex-row gap-[30px] w-[1190px] max-w-[1560px] mx-auto pt-[200px] pb-10">
                 <MypageSideNav activeTab={activeTab} onTabChange={setActiveTab} />
 
-                <section className="w-[990px] border border-border rounded-xl ">
-                    {activeTab === 'profile' && <ProfileTab profile={profile} />}
-                    {activeTab === 'study' && <StudyTab />}
-                    {activeTab === 'notification' && <NotificationTab />}
+                <section className="w-[990px] border border-border rounded-xl">
+                    {loading ? (
+                        <div className="flex justify-center items-center h-64">
+                            <span className="text-text-muted text-sm">불러오는 중...</span>
+                        </div>
+                    ) : (
+                        <>
+                            {activeTab === 'profile' && profile && (
+                                <ProfileTab
+                                    profile={profile}
+                                    accessToken={accessToken}
+                                    userId={userId}
+                                    onProfileUpdated={setProfile}
+                                />
+                            )}
+                            {activeTab === 'study' && <StudyTab accessToken={accessToken} />}
+                            {activeTab === 'notification' && <NotificationTab />}
+                        </>
+                    )}
                 </section>
             </main>
 

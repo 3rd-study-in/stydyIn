@@ -10,6 +10,7 @@ function EditProfileInputBox({
   placeholder = '',
   disabled = false,
   width = '282px',
+  labelWidth = 'auto',
   className = '',
 }) {
   const [isFocused, setIsFocused] = useState(false)
@@ -21,7 +22,7 @@ function EditProfileInputBox({
   return (
     <div className={`font-['Spoqa_Han_Sans_Neo'] flex items-center gap-[64px] ${className}`}>
       {label && (
-        <label className="text-sm text-text">
+        <label className="text-sm text-text shrink-0" style={{ minWidth: labelWidth }}>
           {label}
           {required && <span className="text-error">*</span>}
         </label>

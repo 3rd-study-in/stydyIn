@@ -33,6 +33,14 @@ export const register = (email, password) =>
     body: JSON.stringify({ email, password }),
   });
 
+export const getMemberType = (accessToken) =>
+  fetch(`${BASE_URL}/accounts/members/type/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
 export const resetPassword = (email, currentPassword, newPassword, token) =>
   fetch(`${BASE_URL}/accounts/password/`, {
     method: 'PUT',
