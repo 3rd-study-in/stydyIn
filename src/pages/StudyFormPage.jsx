@@ -1,7 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import useStudyForm from '../features/study/hooks/useStudyForm';
-import { getSubjects, getDifficulties } from '../features/study/api';
+import useStudyDetail from '../features/study/hooks/useStudyDetail';
+import {
+  deleteStudy,
+  getSubjects,
+  getDifficulties,
+} from '../features/study/api';
+import useAuthStore from '../stores/authStore';
 import useImageUpload from '../features/file/hooks/useImageUpload';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import InputBox from '../atoms/Input/InputBox';
@@ -28,26 +34,39 @@ const chipBase =
 const chipActive = 'bg-primary-dark text-white border-primary-dark';
 const chipInactive = 'bg-white text-text border-border hover:bg-bg-muted';
 
-function StudyCreatePage() {
+function StudyForm({ studyId, initialData }) {
+  const isEdit = Boolean(studyId);
   const navigate = useNavigate();
+  const accessToken = useAuthStore((s) => s.accessToken);
+
   const { form, setField, toggleDay, isLoading, error, handleSubmit } =
-    useStudyForm({ mode: 'create' });
+    useStudyForm({
+      mode: isEdit ? 'edit' : 'create',
+      studyPk: studyId,
+      initialData,
+    });
 
   const { upload, isUploading, uploadError } = useImageUpload();
   const { detectRegion, consent, isDetecting, geoError } = useGeoLocation();
   const [subjects, setSubjects] = useState([]);
   const [difficulties, setDifficulties] = useState([]);
-  const [detectedRegion, setDetectedRegion] = useState(null);
+  const [detectedRegion, setDetectedRegion] = useState(
+    initialData?.study_location ?? null,
+  );
+  const [scheduleText, setScheduleText] = useState(initialData?.schedule_text ?? '');
   const [tagInput, setTagInput] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const thumbnailInputRef = useRef(null);
 
   useEffect(() => {
     getSubjects()
-      .then((r) => setSubjects(r.data))
+      .then((r) => r.json())
+      .then(setSubjects)
       .catch(() => {});
     getDifficulties()
-      .then((r) => setDifficulties(r.data))
+      .then((r) => r.json())
+      .then(setDifficulties)
       .catch(() => {});
   }, []);
 
@@ -73,7 +92,13 @@ function StudyCreatePage() {
 
   const onSubmit = async () => {
     const result = await handleSubmit();
-    if (result?.ok) navigate(`/study/${result.data.id}`);
+    if (result?.ok)
+      navigate(isEdit ? `/study/${studyId}` : `/study/${result.data.id}`);
+  };
+
+  const onDelete = async () => {
+    await deleteStudy(studyId, accessToken);
+    navigate('/');
   };
 
   return (
@@ -81,7 +106,18 @@ function StudyCreatePage() {
       {/* 서브 헤더 */}
       <nav className="sticky top-[80px] z-40 bg-bg border-b border-border">
         <div className="relative max-w-[1190px] mx-auto px-5 h-[60px] flex items-center">
-          <div className="absolute right-5">
+          <div className="absolute right-5 flex gap-2">
+            {isEdit && (
+              <FlexibleButton
+                variant="lightgray"
+                size="M"
+                width="80px"
+                height="40px"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                삭제
+              </FlexibleButton>
+            )}
             <FlexibleButton
               variant="blue"
               size="M"
@@ -91,14 +127,43 @@ function StudyCreatePage() {
               disabled={isLoading}
               className="flex items-center justify-center text-base"
             >
-              스터디 만들기
+              {isEdit ? '저장하기' : '스터디 만들기'}
             </FlexibleButton>
           </div>
         </div>
       </nav>
 
+      {/* 삭제 확인 모달 */}
+      {isEdit && showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-8 flex flex-col items-center gap-6 w-[320px]">
+            <p className="text-base font-bold text-text">
+              스터디를 삭제하시겠습니까?
+            </p>
+            <div className="flex gap-3 w-full">
+              <FlexibleButton
+                variant="lightgray"
+                size="M"
+                width="100%"
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                취소
+              </FlexibleButton>
+              <FlexibleButton
+                variant="blue"
+                size="M"
+                width="100%"
+                onClick={onDelete}
+              >
+                삭제
+              </FlexibleButton>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-[1190px] mx-auto px-5 py-10">
-        {/* 썸네일 + 기본 정보 — DetailBarTopContainer 스타일 */}
+        {/* 썸네일 + 기본 정보 */}
         <div className="flex h-[390px] w-full overflow-hidden rounded-lg border border-border bg-bg shadow-sm mb-10">
           {/* 이미지 영역 (클릭 시 업로드) */}
           <div
@@ -133,7 +198,7 @@ function StudyCreatePage() {
             {/* 제목 */}
             <div>
               <label className="block text-sm font-bold text-text mb-2">
-                스터디 제목 <span className="text-primary">*</span>
+                스터디 제목 <span className="text-error">*</span>
               </label>
               <InputBox
                 value={form.title}
@@ -160,11 +225,11 @@ function StudyCreatePage() {
                       setField('is_offline')(true);
                       try {
                         const region = await detectRegion();
-                        if (region) {
-                          setDetectedRegion(region);
-                          setField('study_location')({ id: region.id });
-                        }
-                      } catch {}
+                        setDetectedRegion(region);
+                        setField('study_location')({ id: region.id });
+                      } catch {
+                        // geoError가 hook 내부에서 설정됨
+                      }
                     }}
                     className="accent-primary"
                   />
@@ -177,6 +242,7 @@ function StudyCreatePage() {
                     onChange={() => {
                       setField('is_offline')(false);
                       setField('study_location')(null);
+                      setDetectedRegion(null);
                     }}
                     className="accent-primary"
                   />
@@ -185,21 +251,25 @@ function StudyCreatePage() {
               </div>
               {form.is_offline && (
                 <p className="mt-2 text-sm flex items-center gap-1">
-                  {!consent ? (
-                    <span className="text-text-muted">위치 공유에 동의하면 지역을 자동으로 감지합니다.</span>
-                  ) : isDetecting ? (
+                  {isDetecting ? (
                     <span className="text-text-muted">위치 감지 중...</span>
                   ) : geoError ? (
                     <span className="text-error">{geoError}</span>
                   ) : detectedRegion ? (
                     <>
                       <span>📍</span>
-                      <span className="font-medium text-info">{detectedRegion.location}</span>
-                      <span className="text-text-muted">에서 스터디원을 모집합니다.</span>
+                      <span className="font-medium text-info">
+                        {detectedRegion.location}
+                      </span>
+                      <span className="text-text-muted">
+                        에서 스터디원을 모집합니다.
+                      </span>
                     </>
-                  ) : (
-                    <span className="text-text-muted">지역 정보 없음</span>
-                  )}
+                  ) : !consent ? (
+                    <span className="text-text-muted">
+                      프로필에서 위치 정보 공개에 동의해주세요.
+                    </span>
+                  ) : null}
                 </p>
               )}
             </div>
@@ -237,6 +307,22 @@ function StudyCreatePage() {
           />
           <p className="text-right text-sm text-text-disabled mt-1">
             {form.study_info.length}/1000
+          </p>
+        </section>
+
+        {/* 스터디 일정 */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-text mb-4">스터디 일정</h2>
+          <textarea
+            value={scheduleText}
+            onChange={(e) => setScheduleText(e.target.value)}
+            placeholder="스터디 일정을 입력해 주세요."
+            maxLength={500}
+            rows={6}
+            className={textareaCls}
+          />
+          <p className="text-right text-sm text-text-disabled mt-1">
+            {scheduleText.length}/500
           </p>
         </section>
 
@@ -425,4 +511,22 @@ function StudyCreatePage() {
   );
 }
 
-export default StudyCreatePage;
+function StudyFormPage() {
+  const { studyId } = useParams();
+  const isEdit = Boolean(studyId);
+  const { study, isLoading } = useStudyDetail(studyId);
+
+  if (isEdit && isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64 text-text-muted">
+        로딩 중...
+      </div>
+    );
+  }
+
+  if (isEdit && !study) return null;
+
+  return <StudyForm studyId={studyId} initialData={isEdit ? study : null} />;
+}
+
+export default StudyFormPage;

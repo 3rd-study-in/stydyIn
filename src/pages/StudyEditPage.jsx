@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import useStudyForm from '../features/study/hooks/useStudyForm';
 import {
@@ -41,6 +42,10 @@ function StudyEditForm({ study, studyId }) {
       initialData: study,
     });
 
+  const { detectRegion, consent, isDetecting, geoError } = useGeoLocation();
+  const [detectedRegion, setDetectedRegion] = useState(
+    study?.is_offline ? study.study_location ?? null : null,
+  );
   const [subjects, setSubjects] = useState([]);
   const [difficulties, setDifficulties] = useState([]);
   const [tagInput, setTagInput] = useState('');
@@ -174,7 +179,16 @@ function StudyEditForm({ study, studyId }) {
                 <input
                   type="radio"
                   checked={form.is_offline}
-                  onChange={() => setField('is_offline')(true)}
+                  onChange={async () => {
+                    setField('is_offline')(true);
+                    try {
+                      const region = await detectRegion();
+                      if (region) {
+                        setDetectedRegion(region);
+                        setField('study_location')({ id: region.id });
+                      }
+                    } catch {}
+                  }}
                   className="accent-primary"
                 />
                 <span className="text-sm text-text">내 지역</span>
@@ -183,15 +197,32 @@ function StudyEditForm({ study, studyId }) {
                 <input
                   type="radio"
                   checked={!form.is_offline}
-                  onChange={() => setField('is_offline')(false)}
+                  onChange={() => {
+                    setField('is_offline')(false);
+                    setField('study_location')(null);
+                  }}
                   className="accent-primary"
                 />
                 <span className="text-sm text-text">온라인</span>
               </label>
             </div>
             {form.is_offline && (
-              <p className="mt-1 text-xs text-text-muted">
-                오프라인 지역을 선택해주세요.
+              <p className="mt-1 text-sm flex items-center gap-1">
+                {!consent ? (
+                  <span className="text-text-muted">위치 공유에 동의하면 지역을 자동으로 감지합니다.</span>
+                ) : isDetecting ? (
+                  <span className="text-text-muted">위치 감지 중...</span>
+                ) : geoError ? (
+                  <span className="text-error">{geoError}</span>
+                ) : detectedRegion ? (
+                  <>
+                    <span>📍</span>
+                    <span className="font-medium text-info">{detectedRegion.location}</span>
+                    <span className="text-text-muted">에서 스터디원을 모집합니다.</span>
+                  </>
+                ) : (
+                  <span className="text-text-muted">지역 정보 없음</span>
+                )}
               </p>
             )}
           </div>
