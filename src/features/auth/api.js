@@ -33,6 +33,9 @@ export const register = (email, password) =>
     body: JSON.stringify({ email, password }),
   });
 
+export const getRegions = () =>
+  fetch(`${BASE_URL}/accounts/regions/`);
+
 export const resetPassword = (email, currentPassword, newPassword, token) =>
   fetch(`${BASE_URL}/accounts/password/`, {
     method: 'PUT',
