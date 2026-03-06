@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import TagSize from '../../../atoms/Tag/TagSize';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 import { Share, Heart, HeartFill } from '../../../atoms/Icon/Common';
@@ -11,21 +10,10 @@ const DetailBarTopContent = ({
   title = '',
   hashtags = [],
   location = '',
-  isInitialLiked = false,
+  isLiked = false,
+  onLike,
+  onShare,
 }) => {
-  const [isLiked, setIsLiked] = useState(isInitialLiked);
-
-  const handleLikeToggle = () => {
-    setIsLiked(!isLiked);
-  };
-
-  const handleShareLink = () => {
-    const currentUrl = window.location.href;
-    navigator.clipboard
-      .writeText(currentUrl)
-      .then(() => alert('링크가 클립보드에 복사되었습니다!'))
-      .catch((err) => console.error('링크 복사 실패:', err));
-  };
 
   return (
     <>
@@ -68,7 +56,7 @@ const DetailBarTopContent = ({
             variant="white"
             size="L"
             width="190px"
-            onClick={handleShareLink}
+            onClick={onShare}
             className="border-secondary-light active:scale-95 transition-transform"
           >
             <span className="flex items-center justify-center gap-xs">
@@ -81,7 +69,7 @@ const DetailBarTopContent = ({
             variant="white"
             size="L"
             width="50px"
-            onClick={handleLikeToggle}
+            onClick={onLike}
             className="flex items-center justify-center border-secondary-light p-[15px] active:scale-90 transition-transform"
           >
             {isLiked ? (
