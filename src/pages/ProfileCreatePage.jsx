@@ -2,7 +2,8 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../stores/authStore'
 import useUserData from '../features/profile/hooks/useUserData'
-import { uploadImage, saveProfile } from '../features/profile/api'
+import { saveProfile } from '../features/profile/api'
+import { uploadImage } from '../features/file/api'
 import EditProfileInputBox from '../atoms/Input/EditProfileInputBox'
 import InputBox from '../atoms/Input/InputBox'
 import Dropdown from '../atoms/DropdownSelect/Dropdown'
@@ -24,7 +25,6 @@ const EMPTY_PROFILE = {
 
 export default function ProfileCreatePage() {
   const navigate = useNavigate()
-  const accessToken = useAuthStore((s) => s.accessToken)
   const userId = useAuthStore((s) => s.userId)
   const { form, handleField, selectedTags, toggleTag, removeTag } = useUserData(EMPTY_PROFILE)
   const [profileImage, setProfileImage] = useState(null)
@@ -48,11 +48,8 @@ export default function ProfileCreatePage() {
     try {
       let imageUrl = null
       if (profileImage) {
-        const imgRes = await uploadImage(accessToken, profileImage)
-        const imgData = await imgRes.json()
-        if (imgRes.ok) {
-          imageUrl = imgData.image_url
-        }
+        const { data: imgData } = await uploadImage(profileImage)
+        imageUrl = imgData.image_url
       }
 
       const body = {
@@ -66,18 +63,16 @@ export default function ProfileCreatePage() {
       if (form.region) body.preferred_region = { id: form.region }
       if (selectedTags.length > 0) body.tag = selectedTags.map((t) => ({ id: t.id, name: t.name }))
 
-      const res = await saveProfile(accessToken, userId, body)
-      const data = await res.json()
-
-      if (res.ok) {
-        navigate('/')
-      } else if (res.status === 409) {
-        setSubmitError(data.error || '닉네임 또는 전화번호가 이미 사용 중입니다.')
+      await saveProfile(userId, body)
+      navigate('/')
+    } catch (err) {
+      const status = err.response?.status
+      const data = err.response?.data
+      if (status === 409) {
+        setSubmitError(data?.error || '닉네임 또는 전화번호가 이미 사용 중입니다.')
       } else {
-        setSubmitError(data.error || '프로필 저장에 실패했습니다.')
+        setSubmitError(data?.error || '프로필 저장에 실패했습니다.')
       }
-    } catch {
-      setSubmitError('서버 연결 오류가 발생했습니다.')
     } finally {
       setIsLoading(false)
     }

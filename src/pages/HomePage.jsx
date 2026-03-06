@@ -37,7 +37,6 @@ const STATUS_MAP = {
 export default function HomePage() {
     const navigate = useNavigate()
     const isLoggedIn = useAuthStore((s) => s.isLoggedIn)
-    const accessToken = useAuthStore((s) => s.accessToken)
     const userId = useAuthStore((s) => s.userId)
 
     const [activeTab, setActiveTab] = useState('latest')
@@ -67,17 +66,17 @@ export default function HomePage() {
 
     // 로그인 시 프로필 + 참여 중인 스터디 fetch
     useEffect(() => {
-        if (!isLoggedIn || !accessToken || !userId) return
+        if (!isLoggedIn || !userId) return
         Promise.all([
-            getProfile(accessToken, userId).then((res) => res.json()),
-            getMyParticipatingStudies(accessToken).then((res) => res.json()),
+            getProfile(userId).then((res) => res.data),
+            getMyParticipatingStudies().then((res) => res.data),
         ])
             .then(([profileData, studyData]) => {
                 setProfile(profileData)
                 setParticipatingStudies(Array.isArray(studyData) ? studyData : [])
             })
             .catch(() => {})
-    }, [isLoggedIn, accessToken, userId])
+    }, [isLoggedIn, userId])
 
     const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
 

@@ -1,33 +1,24 @@
 import { useState } from 'react';
 import { createStudy, updateStudy } from '../api';
-import useAuthStore from '../../../stores/authStore';
 
 const INITIAL_FORM = {
   title: '',
   thumbnail: '',
   is_offline: false,
-  study_location: null, // { id } — 오프라인일 때 필수
+  study_location: null,
   recruitment: '',
   study_info: '',
-  study_day: [],        // [{ id, name }]
+  study_day: [],
   start_date: '',
   term: '',
   start_time: '',
   end_time: '',
-  difficulty: null,     // { id, name }
-  subject: null,        // { id, name }
-  search_tag: [],       // [{ name }]
+  difficulty: null,
+  subject: null,
+  search_tag: [],
 };
 
-/**
- * 스터디 생성/수정 폼 상태와 제출 로직을 관리하는 훅 (2.3 / 2.4)
- *
- * @param {{ mode?: 'create'|'edit', studyPk?: number, initialData?: object }} [options]
- * @returns {{ form, setField, toggleDay, isValid, isLoading, error, handleSubmit }}
- */
 function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
-  const accessToken = useAuthStore((s) => s.accessToken);
-
   const [form, setForm] = useState(
     initialData
       ? {
@@ -52,11 +43,9 @@ function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  /** 단일 필드 업데이트 */
   const setField = (field) => (value) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
-  /** 요일 토글: { id, name } 객체를 넣으면 있으면 제거, 없으면 추가 */
   const toggleDay = (day) =>
     setForm((prev) => {
       const exists = prev.study_day.some((d) => d.id === day.id);
@@ -68,7 +57,6 @@ function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
       };
     });
 
-  /** 필수 필드 모두 채워졌는지 */
   const isValid =
     !!form.title &&
     !!form.thumbnail &&
@@ -95,24 +83,16 @@ function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
     };
 
     try {
-      const res =
+      const { data } =
         mode === 'edit'
-          ? await updateStudy(studyPk, body, accessToken)
-          : await createStudy(body, accessToken);
-
-      const data = await res.json();
-
-      if (res.ok) {
-        return { ok: true, data };
-      }
-
-      const message =
-        data.validationError ?? data.detail ?? '스터디 저장에 실패했습니다.';
+          ? await updateStudy(studyPk, body)
+          : await createStudy(body);
+      return { ok: true, data };
+    } catch (err) {
+      const data = err.response?.data;
+      const message = data?.validationError ?? data?.detail ?? '스터디 저장에 실패했습니다.';
       setError(message);
       return { ok: false, message };
-    } catch {
-      setError('서버 연결 오류');
-      return { ok: false, message: '서버 연결 오류' };
     } finally {
       setIsLoading(false);
     }

@@ -17,11 +17,11 @@ import NoContents from '../shared/components/NoContents/NoContents'
 import NotificationItem from '../atoms/NotificationItem/NotificationItem'
 
 import useNotificationStore from '../stores/notificationStore'
-import useAuthStore from '../stores/authStore'
 import { REGION_OPTIONS } from '../constants/regions'
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags'
 import useUserData from '../features/profile/hooks/useUserData'
-import { getProfile, saveProfile, uploadImage } from '../features/profile/api'
+import { getProfile, saveProfile } from '../features/profile/api'
+import { uploadImage } from '../features/file/api'
 import { getMyStudies, getMyParticipatingStudies, getLikedStudies } from '../features/study/api'
 
 const STUDY_STATUS_MAP = {
@@ -33,7 +33,7 @@ const STUDY_STATUS_MAP = {
 
 // ─── 내 프로필 탭 ─────────────────────────────────────────────────────────────
 
-function ProfileTab({ profile, accessToken, userId, onProfileUpdated }) {
+function ProfileTab({ profile, userId, onProfileUpdated }) {
     const [isEditing, setIsEditing] = useState(false)
     const { form, handleField, selectedTags, toggleTag, removeTag } = useUserData(profile)
     const [profileImage, setProfileImage] = useState(null)
@@ -55,9 +55,8 @@ function ProfileTab({ profile, accessToken, userId, onProfileUpdated }) {
         try {
             let imageUrl = null
             if (profileImage) {
-                const imgRes = await uploadImage(accessToken, profileImage)
-                const imgData = await imgRes.json()
-                if (imgRes.ok) imageUrl = imgData.image_url
+                const { data: imgData } = await uploadImage(profileImage)
+                imageUrl = imgData.image_url
             }
 
             const body = {
@@ -71,19 +70,13 @@ function ProfileTab({ profile, accessToken, userId, onProfileUpdated }) {
             if (form.region) body.preferred_region = { id: form.region }
             if (selectedTags.length > 0) body.tag = selectedTags.map((t) => ({ id: t.id, name: t.name }))
 
-            const res = await saveProfile(accessToken, userId, body)
-            const data = await res.json()
-
-            if (res.ok) {
-                onProfileUpdated(data)
-                setIsEditing(false)
-                setProfileImage(null)
-                setPreviewUrl(null)
-            } else {
-                setSaveError(data.error || '저장에 실패했습니다.')
-            }
-        } catch {
-            setSaveError('서버 연결 오류가 발생했습니다.')
+            const { data } = await saveProfile(userId, body)
+            onProfileUpdated(data)
+            setIsEditing(false)
+            setProfileImage(null)
+            setPreviewUrl(null)
+        } catch (err) {
+            setSaveError(err.response?.data?.error || '저장에 실패했습니다.')
         } finally {
             setIsSaving(false)
         }
@@ -210,26 +203,24 @@ function ProfileTab({ profile, accessToken, userId, onProfileUpdated }) {
 
 // ─── 내 스터디 탭 ─────────────────────────────────────────────────────────────
 
-function StudyTab({ accessToken }) {
+function StudyTab() {
     const navigate = useNavigate()
     const [activeStudyTab, setActiveStudyTab] = useState('created')
     const [studies, setStudies] = useState([])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (!accessToken) return
         setLoading(true)
         const fetcher =
             activeStudyTab === 'created' ? getMyStudies :
             activeStudyTab === 'joined' ? getMyParticipatingStudies :
             getLikedStudies
 
-        fetcher(accessToken)
-            .then((res) => res.json())
-            .then((data) => setStudies(Array.isArray(data) ? data : []))
+        fetcher()
+            .then((res) => setStudies(Array.isArray(res.data) ? res.data : []))
             .catch(() => setStudies([]))
             .finally(() => setLoading(false))
-    }, [activeStudyTab, accessToken])
+    }, [activeStudyTab])
 
     return (
         <div className="flex flex-col px-[55px] w-full">
@@ -325,20 +316,18 @@ function NotificationTab() {
 
 function ProfilePage() {
     const { userId } = useParams()
-    const accessToken = useAuthStore((s) => s.accessToken)
     const [activeTab, setActiveTab] = useState('profile')
     const [profile, setProfile] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (!userId || !accessToken) return
+        if (!userId) return
         setLoading(true)
-        getProfile(accessToken, userId)
-            .then((res) => res.json())
-            .then((data) => setProfile(data))
+        getProfile(userId)
+            .then((res) => setProfile(res.data))
             .catch(() => setProfile(null))
             .finally(() => setLoading(false))
-    }, [userId, accessToken])
+    }, [userId])
 
     return (
         <div className="min-h-screen flex flex-col bg-white">
@@ -357,12 +346,11 @@ function ProfilePage() {
                             {activeTab === 'profile' && profile && (
                                 <ProfileTab
                                     profile={profile}
-                                    accessToken={accessToken}
                                     userId={userId}
                                     onProfileUpdated={setProfile}
                                 />
                             )}
-                            {activeTab === 'study' && <StudyTab accessToken={accessToken} />}
+                            {activeTab === 'study' && <StudyTab />}
                             {activeTab === 'notification' && <NotificationTab />}
                         </>
                     )}

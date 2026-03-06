@@ -1,56 +1,32 @@
-import { BASE_URL } from '../../constants/api';
+import axiosInstance from '../../lib/axiosInstance'
 
 export const checkEmailAvailability = (email) =>
-  fetch(
-    `${BASE_URL}/accounts/emails/check/?email=${encodeURIComponent(email)}`,
-  );
+  axiosInstance.get(`/accounts/emails/check/?email=${encodeURIComponent(email)}`)
 
 export const sendEmailVerification = (email) =>
-  fetch(`${BASE_URL}/accounts/email-verifications/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
-  });
+  axiosInstance.post('/accounts/email-verifications/', { email })
 
 export const verifyEmailCode = (email, verificationNumber) =>
-  fetch(`${BASE_URL}/accounts/email-verifications/verify/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, verification_number: verificationNumber }),
-  });
+  axiosInstance.post('/accounts/email-verifications/verify/', {
+    email,
+    verification_number: verificationNumber,
+  })
 
 export const login = (email, password) =>
-  fetch(`${BASE_URL}/accounts/login/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
+  axiosInstance.post('/accounts/login/', { email, password })
 
 export const register = (email, password) =>
-  fetch(`${BASE_URL}/accounts/register/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
+  axiosInstance.post('/accounts/register/', { email, password })
 
-export const getMemberType = (accessToken) =>
-  fetch(`${BASE_URL}/accounts/members/type/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
+export const getMemberType = () =>
+  axiosInstance.get('/accounts/members/type/')
 
-export const resetPassword = (email, currentPassword, newPassword, token) =>
-  fetch(`${BASE_URL}/accounts/password/`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` }),
-    },
-    body: JSON.stringify({
-      email,
-      current_password: currentPassword,
-      new_password: newPassword,
-    }),
-  });
+export const getRegions = () =>
+  axiosInstance.get('/accounts/regions/')
+
+export const resetPassword = (email, currentPassword, newPassword) =>
+  axiosInstance.put('/accounts/password/', {
+    email,
+    current_password: currentPassword,
+    new_password: newPassword,
+  })
