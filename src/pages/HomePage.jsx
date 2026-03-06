@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../stores/authStore'
-import { MOCK_PROFILE } from '../constants/mockUpData'
 import { CATEGORIES } from '../constants/categories'
 import { getStudyList } from '../features/study/api'
+import { getMyParticipatingStudies } from '../features/study/api'
+import { getProfile } from '../features/profile/api'
 import BannerSlider from '../shared/components/Banner/BannerSlider'
 import MainProfileCard from '../shared/components/Cards/MainProfileCard'
 import StudySideList from '../shared/components/Cards/StudySideList'
@@ -36,6 +37,7 @@ const STATUS_MAP = {
 export default function HomePage() {
     const navigate = useNavigate()
     const isLoggedIn = useAuthStore((s) => s.isLoggedIn)
+    const userId = useAuthStore((s) => s.userId)
 
     const [activeTab, setActiveTab] = useState('latest')
     const [currentPage, setCurrentPage] = useState(1)
@@ -43,6 +45,10 @@ export default function HomePage() {
     const [totalCount, setTotalCount] = useState(0)
     const [loading, setLoading] = useState(false)
 
+    const [profile, setProfile] = useState(null)
+    const [participatingStudies, setParticipatingStudies] = useState([])
+
+    // 스터디 목록 fetch
     useEffect(() => {
         setLoading(true)
         const params = { page: currentPage, limit: PAGE_SIZE }
@@ -57,7 +63,20 @@ export default function HomePage() {
             .catch(() => setStudies([]))
             .finally(() => setLoading(false))
     }, [activeTab, currentPage])
-    // TODO: activeTab 변경 시 API status 필터 파라미터 추가 예정
+
+    // 로그인 시 프로필 + 참여 중인 스터디 fetch
+    useEffect(() => {
+        if (!isLoggedIn || !userId) return
+        Promise.all([
+            getProfile(userId).then((res) => res.data),
+            getMyParticipatingStudies().then((res) => res.data),
+        ])
+            .then(([profileData, studyData]) => {
+                setProfile(profileData)
+                setParticipatingStudies(Array.isArray(studyData) ? studyData : [])
+            })
+            .catch(() => {})
+    }, [isLoggedIn, userId])
 
     const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
 
@@ -165,12 +184,12 @@ export default function HomePage() {
                 <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
                     <MainProfileCard
                         hasUser={isLoggedIn}
-                        profileImage={isLoggedIn ? MOCK_PROFILE.profile_img ?? undefined : undefined}
-                        nickname={isLoggedIn ? MOCK_PROFILE.nickname : undefined}
+                        profileImage={isLoggedIn ? profile?.profile_img ?? undefined : undefined}
+                        nickname={isLoggedIn ? profile?.nickname : undefined}
                         onButtonClick={() => navigate(isLoggedIn ? '/study/create' : '/login')}
                     />
 
-                    {isLoggedIn && <StudySideList studies={[]} />}
+                    {isLoggedIn && <StudySideList studies={participatingStudies} />}
                 </aside>
 
             </div>

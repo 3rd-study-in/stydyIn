@@ -3,10 +3,10 @@ import Icon from '../../../atoms/Icon/Common/Icon';
 import { TagSize } from '../../../atoms/Tag/index';
 
 const STATUS_MAP = {
-  recruiting:  { label: '모집 중!',  color: '#2E6FF2' },
-  in_progress: { label: '진행 중',   color: '#2E6FF2' },
-  completed:   { label: '모집 완료', color: '#B0B4BA' },
-  closed:      { label: '종료',      color: '#B0B4BA' },
+  recruiting: { label: '모집 중!', color: 'var(--color-primary)' },
+  in_progress: { label: '진행 중!', color: 'var(--color-accent)' },
+  completed: { label: '모집 완료', color: 'var(--color-secondary)' },
+  closed: { label: '종료', color: 'var(--color-secondary)' },
 };
 
 /**
@@ -53,7 +53,7 @@ function StudyListCard({
   return (
     <div
       onClick={onClick}
-      className={`relative w-[280px] h-[480px] bg-white border border-border rounded-xl overflow-hidden font-sans ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className}`}
+      className={`relative w-[280px] h-[480px] bg-white border border-border rounded-md overflow-hidden font-sans ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className}`}
     >
       {/* 헤더 — 상태(사이렌 + 텍스트) + 위치 TagSize */}
       <div className="absolute top-0 left-0 w-full h-[52px] px-4 flex items-center justify-between">
@@ -85,7 +85,9 @@ function StudyListCard({
         <Icon
           name={isLiked ? 'HeartFill' : 'Heart'}
           size={20}
-          color={isLiked ? '#FF3440' : '#8D9299'}
+          color={
+            isLiked ? 'var(--color-accent-dark)' : 'var(--color-secondary)'
+          }
         />
       </button>
 
@@ -113,9 +115,11 @@ function StudyListCard({
         {/* 참가자 수 */}
         {currentCount !== undefined && (
           <div className="flex items-center gap-1 text-sm text-text-muted">
-            <Icon name="People" size={18} color="#8D9299" />
+            <Icon name="People" size={18} color="var(--color-secondary)" />
             <span>
-              현재 <strong className="font-bold text-text">{currentCount}명</strong>이 신청했어요.
+              현재{' '}
+              <strong className="font-bold text-text">{currentCount}명</strong>
+              이 신청했어요.
             </span>
           </div>
         )}

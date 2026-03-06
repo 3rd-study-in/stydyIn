@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import useStudyForm from '../features/study/hooks/useStudyForm';
 import {
@@ -7,7 +8,6 @@ import {
   getSubjects,
   getDifficulties,
 } from '../features/study/api';
-import useAuthStore from '../stores/authStore';
 import InputBox from '../atoms/Input/InputBox';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
 
@@ -35,7 +35,6 @@ const chipInactive = 'bg-white text-text border-border hover:bg-bg-muted';
 // 폼을 study 데이터가 로드된 후 초기화하기 위해 내부 컴포넌트로 분리
 function StudyEditForm({ study, studyId }) {
   const navigate = useNavigate();
-  const accessToken = useAuthStore((s) => s.accessToken);
   const { form, setField, toggleDay, isValid, isLoading, error, handleSubmit } =
     useStudyForm({
       mode: 'edit',
@@ -43,6 +42,10 @@ function StudyEditForm({ study, studyId }) {
       initialData: study,
     });
 
+  const { detectRegion, consent, isDetecting, geoError } = useGeoLocation();
+  const [detectedRegion, setDetectedRegion] = useState(
+    study?.is_offline ? study.study_location ?? null : null,
+  );
   const [subjects, setSubjects] = useState([]);
   const [difficulties, setDifficulties] = useState([]);
   const [tagInput, setTagInput] = useState('');
@@ -50,12 +53,10 @@ function StudyEditForm({ study, studyId }) {
 
   useEffect(() => {
     getSubjects()
-      .then((r) => r.json())
-      .then(setSubjects)
+      .then((r) => setSubjects(r.data))
       .catch(() => {});
     getDifficulties()
-      .then((r) => r.json())
-      .then(setDifficulties)
+      .then((r) => setDifficulties(r.data))
       .catch(() => {});
   }, []);
 
@@ -78,7 +79,7 @@ function StudyEditForm({ study, studyId }) {
   };
 
   const onDelete = async () => {
-    await deleteStudy(studyId, accessToken);
+    await deleteStudy(studyId);
     navigate('/');
   };
 
@@ -157,7 +158,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 제목 */}
           <div>
             <label className="block text-sm font-bold text-text mb-2">
-              스터디 제목 <span className="text-accent">*</span>
+              스터디 제목 <span className="text-error">*</span>
             </label>
             <InputBox
               value={form.title}
@@ -171,14 +172,23 @@ function StudyEditForm({ study, studyId }) {
           {/* 유형 */}
           <div>
             <label className="block text-sm font-bold text-text mb-2">
-              스터디 유형 <span className="text-accent">*</span>
+              스터디 유형 <span className="text-error">*</span>
             </label>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
                   checked={form.is_offline}
-                  onChange={() => setField('is_offline')(true)}
+                  onChange={async () => {
+                    setField('is_offline')(true);
+                    try {
+                      const region = await detectRegion();
+                      if (region) {
+                        setDetectedRegion(region);
+                        setField('study_location')({ id: region.id });
+                      }
+                    } catch {}
+                  }}
                   className="accent-primary"
                 />
                 <span className="text-sm text-text">내 지역</span>
@@ -187,15 +197,32 @@ function StudyEditForm({ study, studyId }) {
                 <input
                   type="radio"
                   checked={!form.is_offline}
-                  onChange={() => setField('is_offline')(false)}
+                  onChange={() => {
+                    setField('is_offline')(false);
+                    setField('study_location')(null);
+                  }}
                   className="accent-primary"
                 />
                 <span className="text-sm text-text">온라인</span>
               </label>
             </div>
             {form.is_offline && (
-              <p className="mt-1 text-xs text-text-muted">
-                오프라인 지역을 선택해주세요.
+              <p className="mt-1 text-sm flex items-center gap-1">
+                {!consent ? (
+                  <span className="text-text-muted">위치 공유에 동의하면 지역을 자동으로 감지합니다.</span>
+                ) : isDetecting ? (
+                  <span className="text-text-muted">위치 감지 중...</span>
+                ) : geoError ? (
+                  <span className="text-error">{geoError}</span>
+                ) : detectedRegion ? (
+                  <>
+                    <span>📍</span>
+                    <span className="font-medium text-info">{detectedRegion.location}</span>
+                    <span className="text-text-muted">에서 스터디원을 모집합니다.</span>
+                  </>
+                ) : (
+                  <span className="text-text-muted">지역 정보 없음</span>
+                )}
               </p>
             )}
           </div>
@@ -203,7 +230,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 모집 인원 */}
           <div>
             <label className="block text-sm font-bold text-text mb-2">
-              모집 인원 <span className="text-accent">*</span>
+              모집 인원 <span className="text-error">*</span>
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -265,7 +292,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 시작일 */}
           <div className="flex items-center gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0">
-              스터디 시작일 <span className="text-accent">*</span>
+              스터디 시작일 <span className="text-error">*</span>
             </label>
             <input
               type="date"
@@ -278,7 +305,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 기간 */}
           <div className="flex items-center gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0">
-              스터디 기간 <span className="text-accent">*</span>
+              스터디 기간 <span className="text-error">*</span>
             </label>
             <select
               value={form.term}
@@ -297,7 +324,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 시간 */}
           <div className="flex items-center gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0">
-              스터디 시간 <span className="text-accent">*</span>
+              스터디 시간 <span className="text-error">*</span>
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -325,7 +352,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 주제 */}
           <div className="flex items-start gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-              스터디 주제 <span className="text-accent">*</span>
+              스터디 주제 <span className="text-error">*</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {subjects.map((s) => (
@@ -346,7 +373,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 난이도 */}
           <div className="flex items-start gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-              스터디 난이도 <span className="text-accent">*</span>
+              스터디 난이도 <span className="text-error">*</span>
             </label>
             <div className="flex gap-2">
               {difficulties.map((d) => (
@@ -369,7 +396,7 @@ function StudyEditForm({ study, studyId }) {
           {/* 검색 태그 */}
           <div className="flex items-start gap-4">
             <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-              검색 태그 <span className="text-accent">*</span>
+              검색 태그 <span className="text-error">*</span>
             </label>
             <div className="flex-1">
               {form.search_tag.length > 0 && (
@@ -408,7 +435,7 @@ function StudyEditForm({ study, studyId }) {
         </div>
       </section>
 
-      {error && <p className="text-accent text-sm text-center mb-4">{error}</p>}
+      {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
     </div>
   );
 }

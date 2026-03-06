@@ -6,13 +6,15 @@ import Modal from '../../../atoms/Modal/Modal';
 import { useLogin } from '../../../features/auth/hooks/useLogin';
 import { useSignup } from '../../../features/auth/hooks/useSignup';
 
-const AuthSystem = () => {
-  const [view, setView] = useState('signup'); // login | signup | complete
+const AuthSystem = ({ initialView = 'login' }) => {
+  const [view, setView] = useState(initialView); // login | signup | complete
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
 
   const {
+    email: loginEmail,
     setEmail: setLoginEmail,
+    password: loginPassword,
     setPassword: setLoginPassword,
     emailError: loginEmailError,
     setEmailError: setLoginEmailError,
@@ -51,7 +53,7 @@ const AuthSystem = () => {
   } = useSignup({ onSuccess: () => setView('complete') });
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-bg">
+    <div className="flex flex-col items-center min-h-screen mt-25 bg-bg">
       <div className="w-[322px] flex flex-col font-sans text-text">
         {view === 'complete' ? (
           <div className="flex flex-col items-center justify-center min-h-screen gap-xl text-center">
@@ -111,13 +113,12 @@ const AuthSystem = () => {
                       isEmailAuthLoading
                     }
                     className={`shrink-0 transition-colors
-                        ${
-                          signupEmailError ||
-                          !signupEmail.includes('@') ||
-                          isEmailAuthLoading
-                            ? 'bg-secondary-light cursor-not-allowed opacity-70'
-                            : 'cursor-pointer hover:bg-primary-dark'
-                        }`}
+                        ${signupEmailError ||
+                        !signupEmail.includes('@') ||
+                        isEmailAuthLoading
+                        ? 'bg-secondary-light cursor-not-allowed opacity-70'
+                        : 'cursor-pointer hover:bg-primary-dark'
+                      }`}
                   >
                     {isEmailAuthLoading ? '인증' : '인증'}
                   </FlexibleButton>
@@ -142,6 +143,7 @@ const AuthSystem = () => {
                         <br />
                         <span className="font-bold text-base">인증코드</span>를
                         입력해 주세요 :)
+                        <p>인증코드는 123456 입니다</p>
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -161,11 +163,10 @@ const AuthSystem = () => {
                         disabled={
                           verificationCode.length === 0 || isVerifyLoading
                         }
-                        className={`shrink-0 transition-colors ${
-                          verificationCode.length === 0 || isVerifyLoading
-                            ? 'cursor-not-allowed opacity-70'
-                            : 'cursor-pointer'
-                        }`}
+                        className={`shrink-0 transition-colors ${verificationCode.length === 0 || isVerifyLoading
+                          ? 'cursor-not-allowed opacity-70'
+                          : 'cursor-pointer'
+                          }`}
                       >
                         {isVerifyLoading ? '확인' : '확인'}
                       </FlexibleButton>
@@ -258,7 +259,7 @@ const AuthSystem = () => {
                     const value = e.target.value;
                     setSignupPassword(value);
                     if (value && value.length < 8) {
-                      setSignupPwError('비밀번호는 8자 이상이어야 합니다.');
+                      setSignupPwError('비밀번호는 8자 이상, 숫자+영문이어야 합니다.');
                     } else {
                       setSignupPwError('');
                     }
@@ -311,7 +312,7 @@ const AuthSystem = () => {
                   className="cursor-pointer text-white mt-md"
                   disabled={!isSignupValid || isSubmitLoading}
                 >
-                  {isSubmitLoading ? '동의하고 회원가입' : '동의하고 회원가입'}
+                  동의하고 회원가입
                 </FlexibleButton>
               </div>
             </form>
@@ -366,9 +367,9 @@ const AuthSystem = () => {
                   width="100%"
                   type="submit"
                   className="cursor-pointer text-white"
-                  disabled={isLoginLoading}
+                  disabled={isLoginLoading || !loginEmail || !loginPassword}
                 >
-                  {isLoginLoading ? '로그인' : '로그인'}
+                  로그인
                 </FlexibleButton>
               </div>
             </form>

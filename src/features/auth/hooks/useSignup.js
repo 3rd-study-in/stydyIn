@@ -34,31 +34,25 @@ export const useSignup = ({ onSuccess } = {}) => {
     setEmailError('');
     setIsEmailAuthLoading(true);
     try {
-      const checkRes = await checkEmailAvailability(email);
-      const checkData = await checkRes.json();
-
-      if (!checkRes.ok) {
-        if (checkRes.status === 409) {
-          setEmailError(checkData.error || '사용 중인 이메일입니다.');
-        } else {
-          setEmailError(
-            checkData.error || '이메일 확인 중 오류가 발생했습니다.',
-          );
-        }
+      try {
+        await checkEmailAvailability(email);
+      } catch (err) {
+        const status = err.response?.status;
+        const data = err.response?.data;
+        setEmailError(status === 409
+          ? (data?.error || '사용 중인 이메일입니다.')
+          : (data?.error || '이메일 확인 중 오류가 발생했습니다.'));
         return;
       }
 
-      const sendRes = await sendEmailVerification(email);
-      const sendData = await sendRes.json();
-
-      if (!sendRes.ok) {
-        if (sendRes.status === 409) {
-          setEmailError(sendData.error || '이미 가입되어 있는 회원입니다.');
-        } else {
-          setEmailError(
-            sendData.email?.[0] || '인증 메일 발송에 실패했습니다.',
-          );
-        }
+      try {
+        await sendEmailVerification(email);
+      } catch (err) {
+        const status = err.response?.status;
+        const data = err.response?.data;
+        setEmailError(status === 409
+          ? (data?.error || '이미 가입되어 있는 회원입니다.')
+          : (data?.email?.[0] || '인증 메일 발송에 실패했습니다.'));
         return;
       }
 
@@ -77,13 +71,9 @@ export const useSignup = ({ onSuccess } = {}) => {
     setEmailError('');
     setIsEmailAuthLoading(true);
     try {
-      const sendRes = await sendEmailVerification(email);
-      const sendData = await sendRes.json();
-      if (!sendRes.ok) {
-        setEmailError(sendData.error || '재전송에 실패했습니다.');
-      }
+      await sendEmailVerification(email);
     } catch (err) {
-      setEmailError('서버 연결 오류가 발생했습니다.');
+      setEmailError(err.response?.data?.error || '재전송에 실패했습니다.');
     } finally {
       setIsEmailAuthLoading(false);
     }
@@ -93,15 +83,10 @@ export const useSignup = ({ onSuccess } = {}) => {
   const handleVerifyCode = async () => {
     setIsVerifyLoading(true);
     try {
-      const res = await verifyEmailCode(email, verificationCode);
-
-      if (res.ok) {
-        setVerifyStatus('success');
-        setStep(3);
-      } else {
-        setVerifyStatus('fail');
-      }
-    } catch (err) {
+      await verifyEmailCode(email, verificationCode);
+      setVerifyStatus('success');
+      setStep(3);
+    } catch {
       setVerifyStatus('fail');
     } finally {
       setIsVerifyLoading(false);
@@ -113,22 +98,18 @@ export const useSignup = ({ onSuccess } = {}) => {
     e.preventDefault();
     setIsSubmitLoading(true);
     try {
-      const response = await register(email, password);
-      const data = await response.json();
-      console.log('[register]', response.status, JSON.stringify(data)); // 디버깅
-      if (response.ok) {
-        onSuccess?.();
-      } else if (response.status === 403) {
-        setEmailError(
-          data.error || '이메일 인증이 완료되지 않았거나 만료되었습니다.',
-        );
-      } else if (response.status === 409) {
-        setEmailError(data.error || '이미 가입되어 있는 회원입니다.');
-      } else {
-        alert(data.error || '가입 중 오류가 발생했습니다.');
-      }
+      await register(email, password);
+      onSuccess?.();
     } catch (err) {
-      alert('가입 중 오류');
+      const status = err.response?.status;
+      const data = err.response?.data;
+      if (status === 403) {
+        setEmailError(data?.error || '이메일 인증이 완료되지 않았거나 만료되었습니다.');
+      } else if (status === 409) {
+        setEmailError(data?.error || '이미 가입되어 있는 회원입니다.');
+      } else {
+        alert(data?.error || '가입 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsSubmitLoading(false);
     }

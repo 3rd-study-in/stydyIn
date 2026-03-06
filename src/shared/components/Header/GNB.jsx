@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../../atoms/Button/Button';
 import Icon from '../../../atoms/Icon/Common/Icon';
 import ProfileCircle from '../../../atoms/ProfileCircle/ProfileCircle';
@@ -25,22 +26,31 @@ const Logo = () => (
   </a>
 );
 
-const NavLinks = () => (
-  <nav className="flex items-center gap-x-8 text-lg text-text font-regular h-full">
-    <a href="#" className="flex items-center h-full border-b-4 border-transparent hover:border-primary transition-all">
-      내 지역
-    </a>
-    <a href="#" className="flex items-center h-full border-b-4 border-transparent hover:border-primary transition-all">
-      온라인
-    </a>
-  </nav>
-);
+const NavLinks = () => {
+  const { search } = useLocation();
+  const currentType = new URLSearchParams(search).get('type');
 
-const LoggedOutButtons = () => (
-  <FlexibleButton variant="blue" size="M">
-    시작하기
-  </FlexibleButton>
-);
+  const linkClass = (type) =>
+    `flex items-center h-full border-b-4 transition-all ${
+      currentType === type ? 'border-primary' : 'border-transparent hover:border-primary'
+    }`;
+
+  return (
+    <nav className="flex items-center gap-x-8 text-lg text-text font-regular h-full">
+      <Link to="/search?type=local" className={linkClass('local')}>내 지역</Link>
+      <Link to="/search?type=online" className={linkClass('online')}>온라인</Link>
+    </nav>
+  );
+};
+
+const LoggedOutButtons = () => {
+  const navigate = useNavigate();
+  return (
+    <FlexibleButton variant="blue" size="M" onClick={() => navigate('/login')}>
+      시작하기
+    </FlexibleButton>
+  );
+};
 
 const PROFILE_MENU = [
   { value: 'mypage', label: '마이페이지' },
@@ -139,7 +149,15 @@ function LoggedInActions({ profileSrc }) {
 }
 
 const GNB = ({ profileSrc = '' }) => {
+  const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState('');
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter' && searchValue.trim()) {
+      navigate(`/search?search=${encodeURIComponent(searchValue.trim())}`);
+    }
+  };
 
   return (
     <GNBWrapper>
@@ -148,7 +166,11 @@ const GNB = ({ profileSrc = '' }) => {
         <NavLinks />
       </div>
       <div className="flex items-center gap-x-4xl">
-        <SearchBar />
+        <SearchBar
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={handleSearchKeyDown}
+        />
         {isLoggedIn ? (
           <LoggedInActions profileSrc={profileSrc} />
         ) : (

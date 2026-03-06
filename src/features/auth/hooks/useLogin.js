@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { login } from '../api';
+import { useNavigate } from 'react-router-dom';
+import { login, getMemberType } from '../api';
 import useAuthStore from '../../../stores/authStore';
 
 export const useLogin = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -16,22 +18,21 @@ export const useLogin = () => {
     setPwError('');
     setIsLoading(true);
     try {
-      const response = await login(email, password);
-      const data = await response.json();
-      if (response.ok) {
-        setTokens(data.access_token, data.refresh_token, email);
-      } else if (response.status === 401) {
+      const { data } = await login(email, password);
+      setTokens(data.access_token, data.refresh_token, data.user);
+      const { data: typeData } = await getMemberType();
+      navigate(typeData.is_associate_member ? '/' : '/profile/create');
+    } catch (err) {
+      const status = err.response?.status;
+      const data = err.response?.data;
+      if (status === 401) {
         setEmailError('이메일을 확인해 주세요.');
         setPwError('비밀번호를 확인해 주세요.');
-      } else if (response.status === 403) {
-        setEmailError(
-          data.error || '이메일 인증이 완료되지 않았거나 만료되었습니다.',
-        );
+      } else if (status === 403) {
+        setEmailError(data?.error || '이메일 인증이 완료되지 않았거나 만료되었습니다.');
       } else {
-        setEmailError(data.error || '로그인에 실패했습니다.');
+        setEmailError(data?.error || '로그인에 실패했습니다.');
       }
-    } catch (err) {
-      alert('서버 연결 오류');
     } finally {
       setIsLoading(false);
     }
