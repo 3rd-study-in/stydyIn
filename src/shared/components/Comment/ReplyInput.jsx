@@ -6,6 +6,7 @@ import { CommentArrow, Send } from '../../../atoms/Icon/Common';
  */
 const ReplyInput = ({
   onSubmit,
+  onCancel,
   placeholder = "답글을 입력하세요.",
 }) => {
   const [content, setContent] = useState('');
@@ -14,6 +15,16 @@ const ReplyInput = ({
     if (content.trim() && onSubmit) {
       onSubmit(content);
       setContent('');
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+    if (e.key === 'Escape' && onCancel) {
+      onCancel();
     }
   };
 
@@ -28,7 +39,9 @@ const ReplyInput = ({
           type="text"
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
+          autoFocus
           className="flex-1 px-[16px] text-[16px] font-normal text-text placeholder:text-secondary outline-none"
         />
         <button
