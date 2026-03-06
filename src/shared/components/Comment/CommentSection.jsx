@@ -73,10 +73,12 @@ const transformRecomment = (recomment) => {
 
 /**
  * 그룹장에게 질문하기 섹션
+ * @param {string} currentUserId
  */
 const CommentSection = ({
   studyPk,
   leaderId = '',
+  currentUserId = '',
 }) => {
   const {
     comments: rawComments,
@@ -84,12 +86,21 @@ const CommentSection = ({
     error,
     fetchComments,
     createComment,
+    updateComment,
     deleteComment,
     createRecomment,
+    updateRecomment,
     deleteRecomment,
   } = useComment(studyPk);
 
   const [replyingTo, setReplyingTo] = useState(null);
+  // { id, content, isSecret } | null
+  const [editingComment, setEditingComment] = useState(null);
+  // { commentId, id, content, isSecret } | null
+  const [editingReply, setEditingReply] = useState(null);
+
+  // 현재 사용자가 게시물 주인(그룹장)인지 여부
+  const isPostOwner = !!(currentUserId && leaderId && currentUserId === leaderId);
 
   // 댓글 불러오기
   useEffect(() => {
@@ -115,6 +126,19 @@ const CommentSection = ({
       await deleteComment(commentId);
     }
   };
+  const handleCommentEditStart = (comment) => {
+    setEditingComment({ id: comment.id, content: comment.content, isSecret: comment.isSecret });
+    setEditingReply(null);
+    setReplyingTo(null);
+  };
+
+  const handleCommentEditSubmit = async () => {
+    if (!editingComment || !editingComment.content.trim()) return;
+    const result = await updateComment(editingComment.id, editingComment.content, editingComment.isSecret);
+    if (result) {
+      setEditingComment(null);
+    }
+  };
 
   // 대댓글 작성
   const handleReplySubmit = async (commentId, content, taggedUserId = null) => {
@@ -131,9 +155,30 @@ const CommentSection = ({
     }
   };
 
-  // 답글달기 클릭
+  const handleReplyEditStart = (commentId, reply) => {
+    setEditingReply({ commentId, id: reply.id, content: reply.content, isSecret: reply.isSecret });
+    setEditingComment(null);
+    setReplyingTo(null);
+  };
+
+  const handleReplyEditSubmit = async () => {
+    if (!editingReply || !editingReply.content.trim()) return;
+    const result = await updateRecomment(
+      editingReply.commentId,
+      editingReply.id,
+      editingReply.content,
+      editingReply.isSecret
+    );
+    if (result) {
+      setEditingReply(null);
+    }
+  };
+
+  // 답글달기 클릭 (최초 댓글에만 있음)
   const handleReplyClick = (commentId, taggedUserId = null, taggedNickname = null) => {
     setReplyingTo({ commentId, taggedUserId, taggedNickname });
+    setEditingComment(null);
+    setEditingReply(null);
   };
 
   // 신고
@@ -173,9 +218,16 @@ const CommentSection = ({
               isMine={comment.isMine}
               isSecret={comment.isSecret}
               isDeleted={comment.isDeleted}
-              canViewSecret={comment.isMine}
+              canViewSecret={comment.isMine || isPostOwner}
+              isEditing={editingComment?.id === comment.id}
+              editContent={editingComment?.id === comment.id ? editingComment.content : ''}
+              onEditChange={(e) =>
+                setEditingComment((prev) => ({ ...prev, content: e.target.value }))
+              }
+              onEditSubmit={handleCommentEditSubmit}
+              onEditCancel={() => setEditingComment(null)}
               onReply={() => handleReplyClick(comment.id)}
-              onEdit={() => alert('수정 기능 구현 예정')}
+              onEdit={() => handleCommentEditStart(comment)}
               onDelete={() => handleCommentDelete(comment.id)}
               onReport={() => handleReport(comment.id)}
             />
@@ -193,9 +245,15 @@ const CommentSection = ({
                 isMine={reply.isMine}
                 isSecret={reply.isSecret}
                 isDeleted={reply.isDeleted}
-                canViewSecret={reply.isMine || comment.isMine}
-                onReply={() => handleReplyClick(comment.id, reply.userId, reply.nickname)}
-                onEdit={() => alert('수정 기능 구현 예정')}
+                canViewSecret={reply.isMine || comment.isMine || isPostOwner}
+                isEditing={editingReply?.id === reply.id}
+                editContent={editingReply?.id === reply.id ? editingReply.content : ''}
+                onEditChange={(e) =>
+                  setEditingReply((prev) => ({ ...prev, content: e.target.value }))
+                }
+                onEditSubmit={handleReplyEditSubmit}
+                onEditCancel={() => setEditingReply(null)}
+                onEdit={() => handleReplyEditStart(comment.id, reply)}
                 onDelete={() => handleRecommentDelete(comment.id, reply.id)}
                 onReport={() => handleReport(reply.id)}
               />
@@ -203,10 +261,16 @@ const CommentSection = ({
 
             {/* 답글 입력창 */}
             {replyingTo?.commentId === comment.id && (
-              <ReplyInput
-                placeholder={replyingTo.taggedNickname ? `@${replyingTo.taggedNickname}에게 답글 작성...` : '답글을 입력하세요.'}
-                onSubmit={(content) => handleReplySubmit(comment.id, content, replyingTo.taggedUserId)}
-                onCancel={() => setReplyingTo(null)}
+                          <ReplyInput
+                            placeholder={
+                              replyingTo.taggedNickname
+                                ? `@${replyingTo.taggedNickname}에게 답글 작성...`
+                                : '답글을 입력하세요.'
+                            }
+                            onSubmit={(content) =>
+                              handleReplySubmit(comment.id, content, replyingTo.taggedUserId)
+                            }
+                            onCancel={() => setReplyingTo(null)}
               />
             )}
           </div>

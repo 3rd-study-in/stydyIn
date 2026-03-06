@@ -1,4 +1,4 @@
-import { Crown, Lock } from '../../../atoms/Icon/Common';
+import { Crown, Lock, Send } from '../../../atoms/Icon/Common';
 
 /**
  * 댓글 아이템
@@ -13,6 +13,11 @@ const CommentItem = ({
   isSecret = false,
   isDeleted = false,
   canViewSecret = false,
+  isEditing = false,
+  editContent = '',
+  onEditChange,
+  onEditSubmit,
+  onEditCancel,
   onReply,
   onEdit,
   onDelete,
@@ -28,7 +33,7 @@ const CommentItem = ({
             <div className="flex flex-col gap-[2px]">
               <div className="flex items-center gap-[10px]">
                 <span className="text-[14px] font-bold text-secondary">미지의 사용자</span>
-                <span className="text-[14px] font-normal text-text-muted underline cursor-pointer">답글달기</span>
+                <span className="text-[14px] font-normal text-text-muted underline cursor-pointer" onClick={onReply}>답글달기</span>
               </div>
               <span className="text-[12px] font-normal text-secondary">{date}</span>
             </div>
@@ -96,22 +101,39 @@ const CommentItem = ({
         {/* 우측: 버튼 */}
         <div className="flex items-center gap-[12px]">
           {isMine ? (
-            <>
-              <span 
-                className="text-[14px] font-normal text-text-muted underline cursor-pointer"
-                onClick={onEdit}
-              >
-                수정
-              </span>
-              <span 
-                className="text-[14px] font-normal text-text-muted underline cursor-pointer"
-                onClick={onDelete}
-              >
-                삭제
-              </span>
-            </>
+            isEditing ? (
+              <>
+                <span
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  onClick={onEditCancel}
+                >
+                  취소
+                </span>
+                <span
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  onClick={onDelete}
+                >
+                  삭제
+                </span>
+              </>
+            ) : (
+              <>
+                <span
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  onClick={onEdit}
+                >
+                  수정
+                </span>
+                <span
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  onClick={onDelete}
+                >
+                  삭제
+                </span>
+              </>
+            )
           ) : (
-            <span 
+            <span
               className="text-[14px] font-normal text-text-muted underline cursor-pointer"
               onClick={onReport}
             >
@@ -121,13 +143,32 @@ const CommentItem = ({
         </div>
       </div>
 
-      {/* 내용 */}
-      <div className="flex items-start gap-[8px] ml-[50px]">
-        {isSecret && canViewSecret && (
-          <Lock className="w-[24px] h-[24px] text-info shrink-0" />
-        )}
-        <p className="text-[16px] font-normal text-text">{content}</p>
-      </div>
+      {/* 내용 or 인라인 수정 입력창 */}
+      {isEditing ? (
+        <div className="flex border border-border rounded-[8px] overflow-hidden ml-[50px]">
+          <input
+            type="text"
+            value={editContent}
+            onChange={onEditChange}
+            autoFocus
+            placeholder={isSecret ? '비밀 댓글 수정하기' : '댓글 수정하기'}
+            className="flex-1 px-[16px] h-[50px] text-[16px] font-normal text-text placeholder:text-secondary outline-none"
+          />
+          <button
+            onClick={onEditSubmit}
+            className="w-[50px] h-[50px] bg-secondary-light flex items-center justify-center shrink-0"
+          >
+            <Send className="w-[26px] h-[26px] text-bg" />
+          </button>
+        </div>
+      ) : (
+        <div className="flex items-start gap-[8px] ml-[50px]">
+          {isSecret && canViewSecret && (
+            <Lock className="w-[24px] h-[24px] text-info shrink-0" />
+          )}
+          <p className="text-[16px] font-normal text-text">{content}</p>
+        </div>
+      )}
     </div>
   );
 };

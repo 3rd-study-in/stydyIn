@@ -1,4 +1,4 @@
-import { CommentArrow, Crown, Lock } from '../../../atoms/Icon/Common';
+import { CommentArrow, Crown, Lock, Send } from '../../../atoms/Icon/Common';
 
 /**
  * 대댓글 아이템
@@ -14,7 +14,11 @@ const ReplyItem = ({
   isSecret = false,
   isDeleted = false,
   canViewSecret = false,
-  onReply,
+  isEditing = false,
+  editContent = '',
+  onEditChange,
+  onEditSubmit,
+  onEditCancel,
   onEdit,
   onDelete,
   onReport,
@@ -31,6 +35,12 @@ const ReplyItem = ({
     }
     return <span className="text-[16px] font-normal text-text">{content}</span>;
   };
+
+  const displayNickname = isDeleted
+    ? '미지의 사용자'
+    : isSecret && !canViewSecret
+    ? '익명'
+    : nickname;
 
   return (
     <div className="w-[824px] flex gap-[12px] ml-[16px]">
@@ -54,48 +64,60 @@ const ReplyItem = ({
             )}
             <div className="flex flex-col gap-[2px]">
               <div className="flex items-center gap-[6px]">
-                <span className={`text-[14px] font-bold ${isDeleted ? 'text-secondary' : 'text-text'}`}>
-                  {isDeleted ? '미지의 사용자' : nickname}
+                <span className={`text-[14px] font-bold ${isDeleted || (isSecret && !canViewSecret) ? 'text-secondary' : 'text-text'}`}>
+                  {displayNickname}
                 </span>
-                {isLeader && !isDeleted && <Crown className="w-[20px] h-[20px] text-accent" />}
+                {isLeader && !isDeleted && !(isSecret && !canViewSecret) && (
+                  <Crown className="w-[20px] h-[20px] text-accent" />
+                )}
                 {isMine && !isDeleted && (
                   <span className="px-[8px] py-[4px] text-[12px] font-normal text-primary border border-primary rounded-[4px]">
                     내댓글
                   </span>
                 )}
-                {!isMine && !isDeleted && (
-                  <span 
-                    className="text-[14px] font-normal text-text-muted underline cursor-pointer"
-                    onClick={onReply}
-                  >
-                    답글달기
-                  </span>
-                )}
+                {/* 답글달기 버튼 없음 - 최초 댓글에만 표시 */}
               </div>
               <span className="text-[12px] font-normal text-secondary">{date}</span>
             </div>
           </div>
 
           {/* 우측: 버튼 */}
-          {!isDeleted && (
+          {!isDeleted && !(isSecret && !canViewSecret) && (
             <div className="flex items-center gap-[12px]">
               {isMine ? (
-                <>
-                  <span 
-                    className="text-[14px] font-normal text-text-muted underline cursor-pointer"
-                    onClick={onEdit}
-                  >
-                    수정
-                  </span>
-                  <span 
-                    className="text-[14px] font-normal text-text-muted underline cursor-pointer"
-                    onClick={onDelete}
-                  >
-                    삭제
-                  </span>
-                </>
+                isEditing ? (
+                  <>
+                    <span
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      onClick={onEditCancel}
+                    >
+                      취소
+                    </span>
+                    <span
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      onClick={onDelete}
+                    >
+                      삭제
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      onClick={onEdit}
+                    >
+                      수정
+                    </span>
+                    <span
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      onClick={onDelete}
+                    >
+                      삭제
+                    </span>
+                  </>
+                )
               ) : (
-                <span 
+                <span
                   className="text-[14px] font-normal text-text-muted underline cursor-pointer"
                   onClick={onReport}
                 >
@@ -107,18 +129,40 @@ const ReplyItem = ({
         </div>
 
         {/* 내용 */}
-        <div className="flex items-start gap-[8px]">
-          {isSecret && canViewSecret && (
-            <Lock className="w-[24px] h-[24px] text-info shrink-0" />
-          )}
-          {isDeleted ? (
-            <p className="text-[16px] font-normal text-secondary">탈퇴한 사용자의 댓글</p>
-          ) : isSecret && !canViewSecret ? (
-            <p className="text-[16px] font-normal text-secondary">비밀 댓글입니다.</p>
-          ) : (
-            <div>{renderContent()}</div>
-          )}
-        </div>
+        {isEditing ? (
+          <div className="flex border border-border rounded-[8px] overflow-hidden">
+            <input
+              type="text"
+              value={editContent}
+              onChange={onEditChange}
+              autoFocus
+              placeholder={isSecret ? '비밀 대댓글 수정하기' : '대댓글 수정하기'}
+              className="flex-1 px-[16px] h-[50px] text-[16px] font-normal text-text placeholder:text-secondary outline-none"
+            />
+            <button
+              onClick={onEditSubmit}
+              className="w-[50px] h-[50px] bg-secondary-light flex items-center justify-center shrink-0"
+            >
+              <Send className="w-[26px] h-[26px] text-bg" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-start gap-[8px]">
+            {isSecret && canViewSecret && (
+              <Lock className="w-[24px] h-[24px] text-info shrink-0" />
+            )}
+            {isDeleted ? (
+              <p className="text-[16px] font-normal text-secondary">탈퇴한 사용자의 댓글</p>
+            ) : isSecret && !canViewSecret ? (
+              <div className="flex items-center gap-[8px]">
+                <Lock className="w-[24px] h-[24px] text-info" />
+                <p className="text-[16px] font-normal text-secondary">비밀 댓글입니다.</p>
+              </div>
+            ) : (
+              <div>{renderContent()}</div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
