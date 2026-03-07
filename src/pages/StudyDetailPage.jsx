@@ -133,6 +133,7 @@ function StudyDetailPage() {
           <hr className="border-border my-3xl" />
 
           <LeaderProfile
+            userId={study.leader?.id}
             profileImage={study.leader?.profile_image ?? ''}
             nickname={study.leader?.nickname ?? ''}
             location={study.leader?.location?.name ?? ''}
