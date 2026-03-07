@@ -1,23 +1,18 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-  Navigate,
-} from 'react-router-dom';
-import useAuthStore from './stores/authStore';
-import GNB from './shared/components/Header/GNB';
-import GNBLogin from './shared/components/Header/GNBLogin';
-import Footer from './shared/components/Footer/Footer';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import SearchPage from './pages/SearchPage';
-import StudyDetailPage from './pages/StudyDetailPage';
-import StudyFormPage from './pages/StudyFormPage';
-import ProfilePage from './pages/ProfilePage';
-import ProfileCreatePage from './pages/ProfileCreatePage';
-import PasswordResetPage from './pages/PasswordResetPage';
-import NotFoundPage from './pages/404Page';
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom'
+import useAuthStore from './stores/authStore'
+import GNB from './shared/components/Header/GNB'
+import GNBLogin from './shared/components/Header/GNBLogin'
+import Footer from './shared/components/Footer/Footer'
+import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
+import SearchPage from './pages/SearchPage'
+import StudyDetailPage from './pages/StudyDetailPage'
+import StudyFormPage from './pages/StudyFormPage'
+import ProfilePage from './pages/ProfilePage'
+import ProfileCreatePage from './pages/ProfileCreatePage'
+import PasswordResetPage from './pages/PasswordResetPage'
+import NotFoundPage from './pages/404Page'
 
 // 로그인/회원가입 전용 (GNBLogin)
 function AuthLayout() {
@@ -84,7 +79,6 @@ const router = createBrowserRouter([
       { path: '/profile/:userId', element: <ProfilePage /> },
       { path: '/profile/create', element: <ProfileCreatePage /> },
       { path: '/password-reset', element: <PasswordResetPage /> },
-      { path: '/studyform', element: <StudyFormPage /> }, //실험용 페이지
     ],
   },
   { path: '*', element: <NotFoundPage /> },
