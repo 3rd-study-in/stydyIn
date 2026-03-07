@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import TagSize from '../../../atoms/Tag/TagSize';
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 import { Share, Heart, HeartFill } from '../../../atoms/Icon/Common';
+import { CATEGORIES } from '../../../constants/categories';
 
 /**
  * 상세페이지 배너 콘텐츠
@@ -14,17 +16,29 @@ const DetailBarTopContent = ({
   onLike,
   onShare,
 }) => {
+  const navigate = useNavigate();
 
   return (
     <>
       {/* 카테고리 태그 + 지역 태그 */}
       <div className="flex items-start justify-between">
         <div className="flex gap-[6px]">
-          {categories.map((cat, idx) => (
-            <TagSize key={idx} size="M" variant="gray">
-              {cat}
-            </TagSize>
-          ))}
+          {categories.map((cat, idx) => {
+            const matched = CATEGORIES.find((c) => c.label === cat);
+            const href = matched
+              ? `/search?subject=${matched.id}`
+              : `/search?search=${encodeURIComponent(cat)}`;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => navigate(href)}
+                className="cursor-pointer bg-transparent border-0 p-0 hover:opacity-75 transition-opacity"
+              >
+                <TagSize size="M" variant="gray">{cat}</TagSize>
+              </button>
+            );
+          })}
         </div>
         {/* 우측 지역 태그 */}
         {location && (
@@ -45,7 +59,13 @@ const DetailBarTopContent = ({
         {hashtags.length > 0 && (
           <div className="flex flex-wrap gap-xxs text-lg font-bold text-info max-w-[460px]">
             {hashtags.map((tag, idx) => (
-              <span key={idx}>{tag}</span>
+              <span
+                key={idx}
+                className="cursor-pointer hover:underline"
+                onClick={() => navigate(`/search?search=${encodeURIComponent(tag.replace('#', ''))}`)}
+              >
+                {tag}
+              </span>
             ))}
           </div>
         )}

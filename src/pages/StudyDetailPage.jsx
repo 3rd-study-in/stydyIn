@@ -46,6 +46,10 @@ function StudyDetailPage() {
   };
 
   const handleLike = () => {
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
     setIsLiked((prev) => !prev);
   };
 
