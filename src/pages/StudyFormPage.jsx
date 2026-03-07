@@ -7,7 +7,6 @@ import {
   getSubjects,
   getDifficulties,
 } from '../features/study/api';
-import useAuthStore from '../stores/authStore';
 import useImageUpload from '../features/file/hooks/useImageUpload';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import InputBox from '../atoms/Input/InputBox';
@@ -37,8 +36,6 @@ const chipInactive = 'bg-white text-text border-border hover:bg-bg-muted';
 function StudyForm({ studyId, initialData }) {
   const isEdit = Boolean(studyId);
   const navigate = useNavigate();
-  const accessToken = useAuthStore((s) => s.accessToken);
-
   const { form, setField, toggleDay, isLoading, error, handleSubmit } =
     useStudyForm({
       mode: isEdit ? 'edit' : 'create',
@@ -61,12 +58,10 @@ function StudyForm({ studyId, initialData }) {
 
   useEffect(() => {
     getSubjects()
-      .then((r) => r.json())
-      .then(setSubjects)
+      .then((r) => setSubjects(r.data))
       .catch(() => {});
     getDifficulties()
-      .then((r) => r.json())
-      .then(setDifficulties)
+      .then((r) => setDifficulties(r.data))
       .catch(() => {});
   }, []);
 
@@ -97,7 +92,7 @@ function StudyForm({ studyId, initialData }) {
   };
 
   const onDelete = async () => {
-    await deleteStudy(studyId, accessToken);
+    await deleteStudy(studyId);
     navigate('/');
   };
 

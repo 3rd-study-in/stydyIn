@@ -69,13 +69,13 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/search', element: <SearchPage /> },
+      { path: '/study/:studyId', element: <StudyDetailPage /> },
     ],
   },
   {
     element: <PrivateLayout />,
     children: [
       { path: '/study/create', element: <StudyCreatePage /> },
-      { path: '/study/:studyId', element: <StudyDetailPage /> },
       { path: '/study/:studyId/edit', element: <StudyEditPage /> },
       { path: '/profile/:userId', element: <ProfilePage /> },
       { path: '/profile/create', element: <ProfileCreatePage /> },

@@ -27,18 +27,20 @@ const Logo = () => (
 );
 
 const NavLinks = () => {
-  const { search } = useLocation();
-  const currentType = new URLSearchParams(search).get('type');
+  const { pathname, search } = useLocation();
+  const currentTab = new URLSearchParams(search).get('tab');
 
-  const linkClass = (type) =>
+  const isActive = (tab) => pathname === '/' && currentTab === tab;
+
+  const linkClass = (tab) =>
     `flex items-center h-full border-b-4 transition-all ${
-      currentType === type ? 'border-primary' : 'border-transparent hover:border-primary'
+      isActive(tab) ? 'border-primary' : 'border-transparent hover:border-primary'
     }`;
 
   return (
     <nav className="flex items-center gap-x-8 text-lg text-text font-regular h-full">
-      <Link to="/search?type=local" className={linkClass('local')}>내 지역</Link>
-      <Link to="/search?type=online" className={linkClass('online')}>온라인</Link>
+      <Link to="/?tab=local" className={linkClass('local')}>내 지역</Link>
+      <Link to="/?tab=online" className={linkClass('online')}>온라인</Link>
     </nav>
   );
 };
@@ -57,7 +59,7 @@ const PROFILE_MENU = [
   { value: 'logout', label: '로그아웃' },
 ];
 
-function LoggedInActions({ profileSrc }) {
+function LoggedInActions() {
   // wooseok: 알림 store + 30초 폴링
   const hasUnread = useNotificationStore((s) => s.hasUnread);
   const fetchNotifications = useNotificationStore((s) => s.fetchNotifications);
@@ -67,6 +69,10 @@ function LoggedInActions({ profileSrc }) {
     const interval = setInterval(fetchNotifications, 30_000);
     return () => clearInterval(interval);
   }, [fetchNotifications]);
+
+  const navigate = useNavigate();
+  const userId = useAuthStore((s) => s.userId);
+  const profileSrc = useAuthStore((s) => s.user?.profile_img ?? '');
 
   // dev: 드롭다운 / 모달 상태
   const { isOpen, toggle, close, containerRef } = useDisclosure();
@@ -81,6 +87,7 @@ function LoggedInActions({ profileSrc }) {
   const handleSelect = (option) => {
     close();
     if (option.value === 'logout') setIsLogoutModalOpen(true);
+    else if (option.value === 'mypage') navigate(`/profile/${userId}`);
   };
 
   const handleLogoutConfirm = () => {
@@ -118,7 +125,12 @@ function LoggedInActions({ profileSrc }) {
           {isOpen && (
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-xs w-[160px] bg-bg border border-border rounded-[10px] shadow-[0px_5px_15px_rgba(71,73,77,0.1)] py-xxxs z-50">
               <div className="px-xs py-xxxs">
-                <FlexibleButton variant="blue" size="S" className="w-full">
+                <FlexibleButton
+                  variant="blue"
+                  size="S"
+                  className="w-full"
+                  onClick={() => { navigate('/study/create'); close(); }}
+                >
                   스터디 만들기
                 </FlexibleButton>
               </div>
@@ -148,7 +160,7 @@ function LoggedInActions({ profileSrc }) {
   );
 }
 
-const GNB = ({ profileSrc = '' }) => {
+const GNB = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
@@ -172,7 +184,7 @@ const GNB = ({ profileSrc = '' }) => {
           onKeyDown={handleSearchKeyDown}
         />
         {isLoggedIn ? (
-          <LoggedInActions profileSrc={profileSrc} />
+          <LoggedInActions />
         ) : (
           <LoggedOutButtons />
         )}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useAuthStore from '../stores/authStore'
 import { CATEGORIES } from '../constants/categories'
 import { getStudyList } from '../features/study/api'
@@ -17,15 +17,9 @@ const PAGE_SIZE = 6
 
 const TABS = [
     { id: 'latest', label: '최신 스터디' },
-    { id: 'recruiting', label: '모집 중 스터디' },
-    { id: 'in_progress', label: '진행 중 스터디' },
+    { id: 'local', label: '내 지역 스터디' },
+    { id: 'online', label: '온라인 스터디' },
 ]
-
-const TAB_STATUS_MAP = {
-    latest: null,
-    recruiting: 1,
-    in_progress: 3,
-}
 
 const STATUS_MAP = {
     '모집 중': 'recruiting',
@@ -36,10 +30,12 @@ const STATUS_MAP = {
 
 export default function HomePage() {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const isLoggedIn = useAuthStore((s) => s.isLoggedIn)
     const userId = useAuthStore((s) => s.userId)
+    const authUser = useAuthStore((s) => s.user)
 
-    const [activeTab, setActiveTab] = useState('latest')
+    const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'latest')
     const [currentPage, setCurrentPage] = useState(1)
     const [studies, setStudies] = useState([])
     const [totalCount, setTotalCount] = useState(0)
@@ -52,8 +48,8 @@ export default function HomePage() {
     useEffect(() => {
         setLoading(true)
         const params = { page: currentPage, limit: PAGE_SIZE }
-        const statusId = TAB_STATUS_MAP[activeTab]
-        if (statusId) params.study_status = statusId
+        if (activeTab === 'local') params.is_offline = 1
+        else if (activeTab === 'online') params.is_offline = 0
 
         getStudyList(params)
             .then((res) => {
@@ -132,7 +128,7 @@ export default function HomePage() {
                             </div>
                         ) : studies.length > 0 ? (
                             <>
-                                <div className="grid grid-cols-3 gap-xl">
+                                <div className={`grid gap-xl ${activeTab === 'latest' ? 'grid-cols-3' : 'grid-cols-4'}`}>
                                     {studies.map((study) => (
                                         <StudyListCard
                                             key={study.id}
@@ -184,8 +180,8 @@ export default function HomePage() {
                 <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
                     <MainProfileCard
                         hasUser={isLoggedIn}
-                        profileImage={isLoggedIn ? profile?.profile_img ?? undefined : undefined}
-                        nickname={isLoggedIn ? profile?.nickname : undefined}
+                        profileImage={isLoggedIn ? (authUser?.profile_img ?? profile?.profile_img) : undefined}
+                        nickname={isLoggedIn ? (authUser?.nickname ?? profile?.nickname) : undefined}
                         onButtonClick={() => navigate(isLoggedIn ? '/study/create' : '/login')}
                     />
 
