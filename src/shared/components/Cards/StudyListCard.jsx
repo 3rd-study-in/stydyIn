@@ -78,7 +78,7 @@ function StudyListCard({
       {/* 좋아요 버튼 */}
       <button
         onClick={handleLike}
-        className="absolute right-4 top-[286px] w-8 h-8 rounded-full bg-white flex items-center justify-center"
+        className="absolute right-4 top-[286px] w-8 h-8 rounded-full bg-white flex items-center justify-center cursor-pointer"
         style={{ filter: 'drop-shadow(2px 2px 6px rgba(0,0,0,0.1))' }}
         aria-label={isLiked ? '좋아요 취소' : '좋아요'}
       >
