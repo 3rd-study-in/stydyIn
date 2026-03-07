@@ -8,8 +8,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import SearchPage from './pages/SearchPage'
 import StudyDetailPage from './pages/StudyDetailPage'
-import StudyCreatePage from './pages/StudyCreatePage'
-import StudyEditPage from './pages/StudyEditPage'
+import StudyFormPage from './pages/StudyFormPage'
 import ProfilePage from './pages/ProfilePage'
 import ProfileCreatePage from './pages/ProfileCreatePage'
 import PasswordResetPage from './pages/PasswordResetPage'
@@ -75,8 +74,8 @@ const router = createBrowserRouter([
   {
     element: <PrivateLayout />,
     children: [
-      { path: '/study/create', element: <StudyCreatePage /> },
-      { path: '/study/:studyId/edit', element: <StudyEditPage /> },
+      { path: '/study/create', element: <StudyFormPage /> },
+      { path: '/study/:studyId/edit', element: <StudyFormPage /> },
       { path: '/profile/:userId', element: <ProfilePage /> },
       { path: '/profile/create', element: <ProfileCreatePage /> },
       { path: '/password-reset', element: <PasswordResetPage /> },
