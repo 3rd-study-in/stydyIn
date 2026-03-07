@@ -16,7 +16,7 @@ const SearchBar = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col w-[400px] max-w-full"
+      className="relative flex flex-col w-full"
     >
       <div className="relative flex w-full h-[44px]">
         <input
