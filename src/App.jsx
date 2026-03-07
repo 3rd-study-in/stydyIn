@@ -24,7 +24,7 @@ function AuthLayout() {
       </main>
       <Footer />
     </>
-  )
+  );
 }
 
 // 공개 페이지 (GNB - 내부에서 로그인 여부 자동 처리)
@@ -37,13 +37,13 @@ function GeneralLayout() {
       </main>
       <Footer />
     </>
-  )
+  );
 }
 
-// 인증 필요 페이지
+// // 인증 필요 페이지
 function PrivateLayout() {
-  const isLoggedIn = useAuthStore((s) => s.isLoggedIn)
-  if (!isLoggedIn) return <Navigate to="/login" replace />
+  const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
   return (
     <>
       <GNB />
@@ -52,7 +52,7 @@ function PrivateLayout() {
       </main>
       <Footer />
     </>
-  )
+  );
 }
 
 const router = createBrowserRouter([
@@ -82,8 +82,8 @@ const router = createBrowserRouter([
     ],
   },
   { path: '*', element: <NotFoundPage /> },
-])
+]);
 
 export default function App() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
