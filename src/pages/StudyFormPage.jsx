@@ -13,6 +13,7 @@ import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import { Location } from '../atoms/Icon/Common';
 import InputBox from '../atoms/Input/InputBox';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
+import StudyFormSideCard from '../shared/components/Cards/StudyFormSideCard';
 
 const DAYS = [
   { id: 1, name: '월' },
@@ -47,7 +48,8 @@ function StudyForm({ studyId, initialData }) {
 
   const { upload, isUploading, uploadError } = useImageUpload();
   const { detectRegion, consent, isDetecting, geoError } = useGeoLocation();
-  const { generateStudy, isGenerating, aiError, hasGenerated } = useAiStudyGenerate();
+  const { generateStudy, isGenerating, aiError, hasGenerated } =
+    useAiStudyGenerate();
   const [subjects, setSubjects] = useState([]);
   const [difficulties, setDifficulties] = useState([]);
   const [detectedRegion, setDetectedRegion] = useState(
@@ -112,7 +114,11 @@ function StudyForm({ studyId, initialData }) {
 
   const handleAiGenerate = async () => {
     if (!hasGenerated && hasAnyContent()) {
-      if (!window.confirm('기존에 입력된 내용이 AI 생성 내용으로 덮어씌워집니다. 계속하시겠습니까?'))
+      if (
+        !window.confirm(
+          '기존에 입력된 내용이 AI 생성 내용으로 덮어씌워집니다. 계속하시겠습니까?',
+        )
+      )
         return;
     }
     const result = await generateStudy(form.title);
@@ -131,36 +137,6 @@ function StudyForm({ studyId, initialData }) {
 
   return (
     <div>
-      {/* 서브 헤더 */}
-      <nav className="sticky top-[80px] z-40 bg-bg border-b border-border">
-        <div className="relative max-w-[1190px] mx-auto px-5 h-[60px] flex items-center">
-          <div className="absolute right-5 flex gap-2">
-            {isEdit && (
-              <FlexibleButton
-                variant="lightgray"
-                size="M"
-                width="80px"
-                height="40px"
-                onClick={() => setShowDeleteConfirm(true)}
-              >
-                삭제
-              </FlexibleButton>
-            )}
-            <FlexibleButton
-              variant="blue"
-              size="M"
-              width="160px"
-              height="40px"
-              onClick={onSubmit}
-              disabled={isLoading}
-              className="flex items-center justify-center text-base"
-            >
-              {isEdit ? '저장하기' : '스터디 만들기'}
-            </FlexibleButton>
-          </div>
-        </div>
-      </nav>
-
       {/* 삭제 확인 모달 */}
       {isEdit && showDeleteConfirm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -235,20 +211,6 @@ function StudyForm({ studyId, initialData }) {
                 maxLength={50}
                 width="100%"
               />
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={handleAiGenerate}
-                disabled={!form.title || isGenerating}
-                className="px-4 h-9 rounded-md text-sm font-medium border transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-primary text-white border-primary hover:bg-primary-dark"
-              >
-                {isGenerating ? 'AI 생성 중...' : hasGenerated ? '다시 생성' : 'AI로 내용 채우기'}
-              </button>
-              {aiError && (
-                <span className="text-sm text-error">{aiError}</span>
-              )}
             </div>
 
             <hr className="border-border -mx-[30px]" />
@@ -337,218 +299,244 @@ function StudyForm({ studyId, initialData }) {
           </div>
         </div>
 
-        {/* 스터디 소개 */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-bold text-text mb-4">스터디 소개</h2>
-          <textarea
-            value={form.study_info}
-            onChange={(e) => setField('study_info')(e.target.value)}
-            placeholder="스터디 소개를 입력해 주세요."
-            maxLength={1000}
-            rows={6}
-            className={textareaCls}
-          />
-          <p className="text-right text-sm text-text-disabled mt-1">
-            {form.study_info.length}/1000
-          </p>
-        </section>
-
-        {/* 스터디 일정 */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-bold text-text mb-4">스터디 일정</h2>
-          <textarea
-            value={scheduleText}
-            onChange={(e) => setScheduleText(e.target.value)}
-            placeholder="스터디 일정을 입력해 주세요."
-            maxLength={500}
-            rows={6}
-            className={textareaCls}
-          />
-          <p className="text-right text-sm text-text-disabled mt-1">
-            {scheduleText.length}/500
-          </p>
-        </section>
-
-        {/* 상세 일정 */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-bold text-text mb-6">상세 일정</h2>
-          <div className="flex flex-col gap-6">
-            {/* 요일 */}
-            <div className="flex items-center gap-4">
-              <label className="w-[120px] text-sm text-text shrink-0">
-                스터디 요일
-              </label>
-              <div className="flex gap-2">
-                {DAYS.map((day) => {
-                  const selected = form.study_day.some((d) => d.id === day.id);
-                  return (
-                    <button
-                      key={day.id}
-                      type="button"
-                      onClick={() => toggleDay(day)}
-                      className={`w-[36px] h-[36px] rounded-full text-sm font-medium transition-colors ${selected ? chipActive : chipInactive}`}
-                    >
-                      {day.name}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* 시작일 */}
-            <div className="flex items-center gap-4">
-              <label className="w-[120px] text-sm font-bold text-text shrink-0">
-                스터디 시작일 <span className="text-error">*</span>
-              </label>
-              <input
-                type="date"
-                value={form.start_date}
-                onChange={(e) => setField('start_date')(e.target.value)}
-                className={inputCls}
+        {/* 본문 + 사이드바 */}
+        <div className="flex gap-6xl items-start">
+          {/* 본문 - 840px */}
+          <div className="w-[840px]">
+            {/* 스터디 소개 */}
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-text mb-4">스터디 소개</h2>
+              <textarea
+                value={form.study_info}
+                onChange={(e) => setField('study_info')(e.target.value)}
+                placeholder="스터디 소개를 입력해 주세요."
+                maxLength={1000}
+                rows={6}
+                className={textareaCls}
               />
-            </div>
+              <p className="text-right text-sm text-text-disabled mt-1">
+                {form.study_info.length}/1000
+              </p>
+            </section>
 
-            {/* 기간 */}
-            <div className="flex items-center gap-4">
-              <label className="w-[120px] text-sm font-bold text-text shrink-0">
-                스터디 기간 <span className="text-error">*</span>
-              </label>
-              <select
-                value={form.term}
-                onChange={(e) => setField('term')(e.target.value)}
-                className={`w-[160px] ${inputCls}`}
-              >
-                <option value="">선택</option>
-                {TERM_OPTIONS.map((w) => (
-                  <option key={w} value={w}>
-                    {w}주
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* 스터디 일정 */}
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-text mb-4">스터디 일정</h2>
+              <textarea
+                value={scheduleText}
+                onChange={(e) => setScheduleText(e.target.value)}
+                placeholder="스터디 일정을 입력해 주세요."
+                maxLength={500}
+                rows={6}
+                className={textareaCls}
+              />
+              <p className="text-right text-sm text-text-disabled mt-1">
+                {scheduleText.length}/500
+              </p>
+            </section>
 
-            {/* 시간 */}
-            <div className="flex items-center gap-4">
-              <label className="w-[120px] text-sm font-bold text-text shrink-0">
-                스터디 시간 <span className="text-error">*</span>
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="time"
-                  value={form.start_time}
-                  onChange={(e) => setField('start_time')(e.target.value)}
-                  className={inputCls}
-                />
-                <span className="text-text">~</span>
-                <input
-                  type="time"
-                  value={form.end_time}
-                  onChange={(e) => setField('end_time')(e.target.value)}
-                  className={inputCls}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 스터디 태그 설정 */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-bold text-text mb-6">
-            스터디 태그 설정
-          </h2>
-          <div className="flex flex-col gap-6">
-            {/* 주제 */}
-            <div className="flex items-start gap-4">
-              <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-                스터디 주제 <span className="text-error">*</span>
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {subjects.map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() =>
-                      setField('subject')(form.subject?.id === s.id ? null : s)
-                    }
-                    className={`${chipBase} ${form.subject?.id === s.id ? chipActive : chipInactive}`}
-                  >
-                    {s.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 난이도 */}
-            <div className="flex items-start gap-4">
-              <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-                스터디 난이도 <span className="text-error">*</span>
-              </label>
-              <div className="flex gap-2">
-                {difficulties.map((d) => (
-                  <button
-                    key={d.id}
-                    type="button"
-                    onClick={() =>
-                      setField('difficulty')(
-                        form.difficulty?.id === d.id ? null : d,
-                      )
-                    }
-                    className={`${chipBase} ${form.difficulty?.id === d.id ? chipActive : chipInactive}`}
-                  >
-                    {d.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 검색 태그 */}
-            <div className="flex items-start gap-4">
-              <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
-                검색 태그 <span className="text-error">*</span>
-              </label>
-              <div className="flex-1">
-                {form.search_tag.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {form.search_tag.map((t, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center gap-1 px-3 h-[32px] bg-bg-muted rounded-full text-sm text-text"
-                      >
-                        {t.name}
+            {/* 상세 일정 */}
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-text mb-6">상세 일정</h2>
+              <div className="flex flex-col gap-6">
+                {/* 요일 */}
+                <div className="flex items-center gap-4">
+                  <label className="w-[120px] text-sm text-text shrink-0">
+                    스터디 요일
+                  </label>
+                  <div className="flex gap-2">
+                    {DAYS.map((day) => {
+                      const selected = form.study_day.some(
+                        (d) => d.id === day.id,
+                      );
+                      return (
                         <button
+                          key={day.id}
                           type="button"
-                          onClick={() => removeTag(i)}
-                          className="text-text-disabled hover:text-text ml-1"
+                          onClick={() => toggleDay(day)}
+                          className={`w-[36px] h-[36px] rounded-full text-sm font-medium transition-colors ${selected ? chipActive : chipInactive}`}
                         >
-                          ×
+                          {day.name}
                         </button>
-                      </span>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 시작일 */}
+                <div className="flex items-center gap-4">
+                  <label className="w-[120px] text-sm font-bold text-text shrink-0">
+                    스터디 시작일 <span className="text-error">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={form.start_date}
+                    onChange={(e) => setField('start_date')(e.target.value)}
+                    className={inputCls}
+                  />
+                </div>
+
+                {/* 기간 */}
+                <div className="flex items-center gap-4">
+                  <label className="w-[120px] text-sm font-bold text-text shrink-0">
+                    스터디 기간 <span className="text-error">*</span>
+                  </label>
+                  <select
+                    value={form.term}
+                    onChange={(e) => setField('term')(e.target.value)}
+                    className={`w-[160px] ${inputCls}`}
+                  >
+                    <option value="">선택</option>
+                    {TERM_OPTIONS.map((w) => (
+                      <option key={w} value={w}>
+                        {w}주
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* 시간 */}
+                <div className="flex items-center gap-4">
+                  <label className="w-[120px] text-sm font-bold text-text shrink-0">
+                    스터디 시간 <span className="text-error">*</span>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="time"
+                      value={form.start_time}
+                      onChange={(e) => setField('start_time')(e.target.value)}
+                      className={inputCls}
+                    />
+                    <span className="text-text">~</span>
+                    <input
+                      type="time"
+                      value={form.end_time}
+                      onChange={(e) => setField('end_time')(e.target.value)}
+                      className={inputCls}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 스터디 태그 설정 */}
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold text-text mb-6">
+                스터디 태그 설정
+              </h2>
+              <div className="flex flex-col gap-6">
+                {/* 주제 */}
+                <div className="flex items-start gap-4">
+                  <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
+                    스터디 주제 <span className="text-error">*</span>
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {subjects.map((s) => (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() =>
+                          setField('subject')(
+                            form.subject?.id === s.id ? null : s,
+                          )
+                        }
+                        className={`${chipBase} ${form.subject?.id === s.id ? chipActive : chipInactive}`}
+                      >
+                        {s.name}
+                      </button>
                     ))}
                   </div>
-                )}
-                <input
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagKeyDown}
-                  placeholder={
-                    form.search_tag.length >= 5
-                      ? '최대 5개까지 입력 가능합니다.'
-                      : '태그 입력 후 Enter (최대 5개)'
-                  }
-                  disabled={form.search_tag.length >= 5}
-                  className="w-full h-[50px] px-4 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info disabled:bg-bg-muted"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+                </div>
 
-        {uploadError && (
-          <p className="text-error text-sm text-center mb-4">{uploadError}</p>
-        )}
-        {error && (
-          <p className="text-error text-sm text-center mb-4">{error}</p>
-        )}
+                {/* 난이도 */}
+                <div className="flex items-start gap-4">
+                  <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
+                    스터디 난이도 <span className="text-error">*</span>
+                  </label>
+                  <div className="flex gap-2">
+                    {difficulties.map((d) => (
+                      <button
+                        key={d.id}
+                        type="button"
+                        onClick={() =>
+                          setField('difficulty')(
+                            form.difficulty?.id === d.id ? null : d,
+                          )
+                        }
+                        className={`${chipBase} ${form.difficulty?.id === d.id ? chipActive : chipInactive}`}
+                      >
+                        {d.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 검색 태그 */}
+                <div className="flex items-start gap-4">
+                  <label className="w-[120px] text-sm font-bold text-text shrink-0 pt-1">
+                    검색 태그 <span className="text-error">*</span>
+                  </label>
+                  <div className="flex-1">
+                    {form.search_tag.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {form.search_tag.map((t, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 px-3 h-[32px] bg-bg-muted rounded-full text-sm text-text"
+                          >
+                            {t.name}
+                            <button
+                              type="button"
+                              onClick={() => removeTag(i)}
+                              className="text-text-disabled hover:text-text ml-1"
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <input
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyDown={handleTagKeyDown}
+                      placeholder={
+                        form.search_tag.length >= 5
+                          ? '최대 5개까지 입력 가능합니다.'
+                          : '태그 입력 후 Enter (최대 5개)'
+                      }
+                      disabled={form.search_tag.length >= 5}
+                      className="w-full h-[50px] px-4 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info disabled:bg-bg-muted"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {uploadError && (
+              <p className="text-error text-sm text-center mb-4">
+                {uploadError}
+              </p>
+            )}
+            {error && (
+              <p className="text-error text-sm text-center mb-4">{error}</p>
+            )}
+          </div>
+
+          {/* 사이드바 */}
+          <div className="shrink-0 sticky top-[100px]">
+            <StudyFormSideCard
+              isEdit={isEdit}
+              title={form.title}
+              isSubmitting={isLoading}
+              isGenerating={isGenerating}
+              hasGenerated={hasGenerated}
+              aiError={aiError}
+              onSubmit={onSubmit}
+              onAiGenerate={handleAiGenerate}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
