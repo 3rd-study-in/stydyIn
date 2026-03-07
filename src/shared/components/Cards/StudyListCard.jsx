@@ -53,7 +53,7 @@ function StudyListCard({
   return (
     <div
       onClick={onClick}
-      className={`relative w-[280px] h-[480px] bg-white border border-border rounded-md overflow-hidden font-sans ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className}`}
+      className={`relative w-[280px] h-[480px] bg-white border border-border rounded-md overflow-hidden font-sans ${onClick ? 'cursor-pointer hover:border-[#c6cacf]' : ''} ${className}`}
     >
       {/* 헤더 — 상태(사이렌 + 텍스트) + 위치 TagSize */}
       <div className="absolute top-0 left-0 w-full h-[52px] px-4 flex items-center justify-between">
@@ -64,7 +64,11 @@ function StudyListCard({
           </span>
         </div>
         {location && (
-          <TagSize size="S" variant="lightgray">
+          <TagSize
+            size="S"
+            variant="lightgray"
+            className="hover:bg-bg-muted cursor-default"
+          >
             {location}
           </TagSize>
         )}
@@ -82,13 +86,11 @@ function StudyListCard({
         style={{ filter: 'drop-shadow(2px 2px 6px rgba(0,0,0,0.1))' }}
         aria-label={isLiked ? '좋아요 취소' : '좋아요'}
       >
-        <Icon
-          name={isLiked ? 'HeartFill' : 'Heart'}
-          size={20}
-          color={
-            isLiked ? 'var(--color-accent-dark)' : 'var(--color-secondary)'
-          }
-        />
+        {isLiked ? (
+          <Icon name="HeartFill" size={20} className="text-accent-dark" />
+        ) : (
+          <Icon name="Heart" size={20} className="text-accent-dark" />
+        )}
       </button>
 
       {/* 콘텐츠 */}
