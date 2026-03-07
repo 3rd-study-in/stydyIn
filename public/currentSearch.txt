@@ -1,0 +1,200 @@
+/* Frame 76 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 400px;
+height: 128px;
+left: 969px;
+top: 148px;
+
+/* White-Mode/W-Gray-Lv2 */
+border: 1px solid #D9DBE0;
+filter: drop-shadow(0px 5px 15px rgba(71, 73, 77, 0.1));
+border-radius: 10px;
+
+
+/* Rectangle 180 */
+
+position: absolute;
+width: 400px;
+height: 160px;
+left: 0px;
+top: 0px;
+
+/* White-Mode/W-Background */
+background: #FFFFFF;
+box-shadow: 0px 5px 15px rgba(71, 73, 77, 0.1);
+
+
+/* select-options */
+
+position: absolute;
+width: 400px;
+height: 40px;
+left: 0px;
+top: 4px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 200px;
+height: 40px;
+left: 0px;
+top: 0px;
+
+background: #FFFFFF;
+
+
+/* Rectangle 7 */
+
+position: absolute;
+height: 30px;
+left: 8px;
+right: 8px;
+top: 5px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+border-radius: 8px;
+
+
+/* 채팅방 알림 끄기 */
+
+position: absolute;
+width: 52px;
+height: 20px;
+left: 18px;
+top: 10px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* select-options */
+
+position: absolute;
+width: 400px;
+height: 40px;
+left: 0px;
+top: 44px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 200px;
+height: 40px;
+left: 0px;
+top: 0px;
+
+background: #FFFFFF;
+
+
+/* Rectangle 7 */
+
+position: absolute;
+visibility: hidden;
+height: 30px;
+left: 8px;
+right: 8px;
+top: 5px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+border-radius: 8px;
+
+
+/* 채팅방 알림 끄기 */
+
+position: absolute;
+width: 116px;
+height: 20px;
+left: 18px;
+top: 10px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+
+
+
+/* select-options */
+
+position: absolute;
+width: 400px;
+height: 40px;
+left: 0px;
+top: 84px;
+
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 200px;
+height: 40px;
+left: 0px;
+top: 0px;
+
+background: #FFFFFF;
+
+
+/* Rectangle 7 */
+
+position: absolute;
+visibility: hidden;
+height: 30px;
+left: 8px;
+right: 8px;
+top: 5px;
+
+/* White-Mode/W-Gray-Lv1 */
+background: #F3F5FA;
+border-radius: 8px;
+
+
+/* 채팅방 알림 끄기 */
+
+position: absolute;
+width: 148px;
+height: 20px;
+left: 18px;
+top: 10px;
+
+/* 14p_R */
+font-family: 'Spoqa Han Sans Neo';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+/* White-Mode/W-Surface */
+color: #121314;
+

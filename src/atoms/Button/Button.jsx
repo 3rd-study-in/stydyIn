@@ -31,13 +31,6 @@ const Button = ({
     disabled: 'bg-secondary-light text-text-disabled',
   };
 
-  // const sizeStyles = {
-  //   // w-[...] 대신 min-w-[...]와 px-[...]를 조합합니다.
-  //   L: 'min-w-[250px] h-[50px] px-8 text-lg font-medium leading-[24px]',
-  //   M: 'min-w-[100px] h-[40px] px-6 text-base font-medium leading-normal', // 기존 160px에서 최소너비를 줄임
-  //   S: 'min-w-[80px] h-[30px] px-4 text-sm font-regular leading-normal',
-  // };
-
   // Button.jsx 내부 sizeStyles 수정
   const sizeStyles = {
     // L 사이즈: 피그마의 font-weight: 500 반영
