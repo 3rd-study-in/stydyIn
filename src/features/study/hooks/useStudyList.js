@@ -19,18 +19,13 @@ function useStudyList(params = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await getStudyList(params);
-      const data = await res.json();
-      if (res.ok) {
-        setStudies(data.results ?? []);
-        setCount(data.count ?? 0);
-        setNext(data.next ?? null);
-        setPrevious(data.previous ?? null);
-      } else {
-        setError(data.detail ?? '스터디 목록을 불러오지 못했습니다.');
-      }
-    } catch {
-      setError('서버 연결 오류');
+      const { data } = await getStudyList(params);
+      setStudies(data.results ?? []);
+      setCount(data.count ?? 0);
+      setNext(data.next ?? null);
+      setPrevious(data.previous ?? null);
+    } catch (err) {
+      setError(err.response?.data?.detail ?? '스터디 목록을 불러오지 못했습니다.');
     } finally {
       setIsLoading(false);
     }

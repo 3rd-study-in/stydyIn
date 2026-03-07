@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useAuthStore from '../stores/authStore'
 import { CATEGORIES } from '../constants/categories'
 import { getStudyList } from '../features/study/api'
@@ -17,14 +17,13 @@ const PAGE_SIZE = 6
 
 const TABS = [
     { id: 'latest', label: '최신 스터디' },
-    { id: 'recruiting', label: '모집 중 스터디' },
-    { id: 'in_progress', label: '진행 중 스터디' },
+    { id: 'recruiting', label: '모집 중' },
+    { id: 'in_progress', label: '진행 중' },
 ]
 
-const TAB_STATUS_MAP = {
-    latest: null,
-    recruiting: 1,
-    in_progress: 3,
+const STUDY_STATUS_FILTER = {
+    recruiting: '모집 중',
+    in_progress: '진행 중',
 }
 
 const STATUS_MAP = {
@@ -36,10 +35,12 @@ const STATUS_MAP = {
 
 export default function HomePage() {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const isLoggedIn = useAuthStore((s) => s.isLoggedIn)
     const userId = useAuthStore((s) => s.userId)
+    const authUser = useAuthStore((s) => s.user)
 
-    const [activeTab, setActiveTab] = useState('latest')
+    const activeTab = searchParams.get('tab') ?? 'latest'
     const [currentPage, setCurrentPage] = useState(1)
     const [studies, setStudies] = useState([])
     const [totalCount, setTotalCount] = useState(0)
@@ -48,12 +49,18 @@ export default function HomePage() {
     const [profile, setProfile] = useState(null)
     const [participatingStudies, setParticipatingStudies] = useState([])
 
+    // activeTab 변경 시 currentPage 리셋
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [activeTab])
+
     // 스터디 목록 fetch
     useEffect(() => {
         setLoading(true)
         const params = { page: currentPage, limit: PAGE_SIZE }
-        const statusId = TAB_STATUS_MAP[activeTab]
-        if (statusId) params.study_status = statusId
+        if (activeTab === 'local') params.is_offline = 1
+        else if (activeTab === 'online') params.is_offline = 0
+        else if (STUDY_STATUS_FILTER[activeTab]) params.study_status = STUDY_STATUS_FILTER[activeTab]
 
         getStudyList(params)
             .then((res) => {
@@ -79,6 +86,7 @@ export default function HomePage() {
     }, [isLoggedIn, userId])
 
     const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
+    const isFullWidth = activeTab === 'local' || activeTab === 'online'
 
     function handlePageChange(page) {
         setCurrentPage(page)
@@ -86,27 +94,28 @@ export default function HomePage() {
     }
 
     function handleTabChange(tabId) {
-        setActiveTab(tabId)
-        setCurrentPage(1)
+        navigate(`/?tab=${tabId}`)
     }
 
     return (
         <div className="flex justify-center w-full py-5xl ">
             <div className="flex gap-xl w-full max-w-max-width-lg min-w-max-width-lg ">
                 <div className="flex-1 min-w-0 flex flex-col gap-5xl">
-                    <BannerSlider />
-                    <div className="flex justify-around">
-                        {CATEGORIES.map(({ id, icon, label }) => (
-                            <button
-                                key={label}
-                                type="button"
-                                onClick={() => navigate(`/search?subject=${id}`)}
-                                className="cursor-pointer hover:opacity-70 transition-opacity bg-transparent border-0 p-0"
-                            >
-                                <CategoryIcon icon={icon} label={label} />
-                            </button>
-                        ))}
-                    </div>
+                    {!isFullWidth && <BannerSlider />}
+                    {!isFullWidth && (
+                        <div className="flex justify-around">
+                            {CATEGORIES.map(({ id, icon, label }) => (
+                                <button
+                                    key={label}
+                                    type="button"
+                                    onClick={() => navigate(`/search?subject=${id}`)}
+                                    className="cursor-pointer hover:opacity-70 transition-opacity bg-transparent border-0 p-0"
+                                >
+                                    <CategoryIcon icon={icon} label={label} />
+                                </button>
+                            ))}
+                        </div>
+                    )}
                     <section>
                         <h2 className="text-2xl font-bold text-text mb-xl">스터디 둘러보기</h2>
                         <div className="flex gap-xs mb-xl">
@@ -132,7 +141,7 @@ export default function HomePage() {
                             </div>
                         ) : studies.length > 0 ? (
                             <>
-                                <div className="grid grid-cols-3 gap-xl">
+                                <div className={`grid gap-xl ${activeTab === 'latest' ? 'grid-cols-3' : 'grid-cols-4'}`}>
                                     {studies.map((study) => (
                                         <StudyListCard
                                             key={study.id}
@@ -144,6 +153,7 @@ export default function HomePage() {
                                             currentCount={study.participant_count}
                                             isLiked={study.user_liked}
                                             onClick={() => navigate(`/study/${study.id}`)}
+                                            onLike={() => { if (!isLoggedIn) navigate('/login') }}
                                         >
                                             {study.thumbnail ? (
                                                 <img
@@ -181,16 +191,18 @@ export default function HomePage() {
                 </div>
 
                 {/* ────────── 사이드바 ────────── */}
-                <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
-                    <MainProfileCard
-                        hasUser={isLoggedIn}
-                        profileImage={isLoggedIn ? profile?.profile_img ?? undefined : undefined}
-                        nickname={isLoggedIn ? profile?.nickname : undefined}
-                        onButtonClick={() => navigate(isLoggedIn ? '/study/create' : '/login')}
-                    />
+                {!isFullWidth && (
+                    <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
+                        <MainProfileCard
+                            hasUser={isLoggedIn}
+                            profileImage={isLoggedIn ? (authUser?.profile_img ?? profile?.profile_img) : undefined}
+                            nickname={isLoggedIn ? (authUser?.nickname ?? profile?.nickname) : undefined}
+                            onButtonClick={() => navigate(isLoggedIn ? '/study/create' : '/login')}
+                        />
 
-                    {isLoggedIn && <StudySideList studies={participatingStudies} />}
-                </aside>
+                        {isLoggedIn && <StudySideList studies={participatingStudies} />}
+                    </aside>
+                )}
 
             </div>
         </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import StudyListSideCard from '../../../atoms/Card/StudyListSideCard';
 import StudyListMainCard from '../../../atoms/Card/StudyListMainCard';
 
@@ -23,6 +24,7 @@ const STATUS_NAME_MAP = {
  * [{ id, title, thumbnail, study_status: { name }, d_day?, ... }]
  */
 function StudySideList({ studies = [], className = '' }) {
+  const navigate = useNavigate();
   return (
     <div className={`flex flex-col items-start gap-5 w-[290px] ${className}`}>
       {/* 섹션 제목 */}
@@ -39,13 +41,18 @@ function StudySideList({ studies = [], className = '' }) {
           </div>
         ) : (
           studies.map((study) => (
-            <StudyListMainCard
+            <div
               key={study.id}
-              status={STATUS_NAME_MAP[study.study_status?.name]}
-              dDay={study.d_day}
-              title={study.title}
-              thumbnailSrc={study.thumbnail}
-            />
+              className="cursor-pointer"
+              onClick={() => navigate(`/study/${study.id}`)}
+            >
+              <StudyListMainCard
+                status={STATUS_NAME_MAP[study.study_status?.name]}
+                dDay={study.d_day}
+                title={study.title}
+                thumbnailSrc={study.thumbnail}
+              />
+            </div>
           ))
         )}
       </StudyListSideCard>

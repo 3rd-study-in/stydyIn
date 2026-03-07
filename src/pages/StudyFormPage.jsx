@@ -7,9 +7,9 @@ import {
   getSubjects,
   getDifficulties,
 } from '../features/study/api';
-import useAuthStore from '../stores/authStore';
 import useImageUpload from '../features/file/hooks/useImageUpload';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
+import { Location } from '../atoms/Icon/Common';
 import InputBox from '../atoms/Input/InputBox';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
 
@@ -37,8 +37,6 @@ const chipInactive = 'bg-white text-text border-border hover:bg-bg-muted';
 function StudyForm({ studyId, initialData }) {
   const isEdit = Boolean(studyId);
   const navigate = useNavigate();
-  const accessToken = useAuthStore((s) => s.accessToken);
-
   const { form, setField, toggleDay, isLoading, error, handleSubmit } =
     useStudyForm({
       mode: isEdit ? 'edit' : 'create',
@@ -53,7 +51,9 @@ function StudyForm({ studyId, initialData }) {
   const [detectedRegion, setDetectedRegion] = useState(
     initialData?.study_location ?? null,
   );
-  const [scheduleText, setScheduleText] = useState(initialData?.schedule_text ?? '');
+  const [scheduleText, setScheduleText] = useState(
+    initialData?.schedule_text ?? '',
+  );
   const [tagInput, setTagInput] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -61,12 +61,10 @@ function StudyForm({ studyId, initialData }) {
 
   useEffect(() => {
     getSubjects()
-      .then((r) => r.json())
-      .then(setSubjects)
+      .then((r) => setSubjects(r.data))
       .catch(() => {});
     getDifficulties()
-      .then((r) => r.json())
-      .then(setDifficulties)
+      .then((r) => setDifficulties(r.data))
       .catch(() => {});
   }, []);
 
@@ -97,7 +95,7 @@ function StudyForm({ studyId, initialData }) {
   };
 
   const onDelete = async () => {
-    await deleteStudy(studyId, accessToken);
+    await deleteStudy(studyId);
     navigate('/');
   };
 
@@ -248,30 +246,31 @@ function StudyForm({ studyId, initialData }) {
                   />
                   <span className="text-sm text-text">온라인</span>
                 </label>
+                {form.is_offline && (
+                  <p className="text-sm flex items-center gap-1">
+                    {isDetecting ? (
+                      <span className="text-text-muted">위치 감지 중...</span>
+                    ) : geoError ? (
+                      <span className="text-error">{geoError}</span>
+                    ) : detectedRegion ? (
+                      <>
+                        <Location className="w-[20px] h-[20px] text-primary" />
+                        <span className="font-medium text-primary">
+                          {detectedRegion.detailLocation ??
+                            detectedRegion.location}
+                        </span>
+                        <span className="text-text">
+                          에서 스터디원을 모집합니다.
+                        </span>
+                      </>
+                    ) : !consent ? (
+                      <span className="text-text">
+                        프로필에서 위치 정보 공개에 동의해주세요.
+                      </span>
+                    ) : null}
+                  </p>
+                )}
               </div>
-              {form.is_offline && (
-                <p className="mt-2 text-sm flex items-center gap-1">
-                  {isDetecting ? (
-                    <span className="text-text-muted">위치 감지 중...</span>
-                  ) : geoError ? (
-                    <span className="text-error">{geoError}</span>
-                  ) : detectedRegion ? (
-                    <>
-                      <span>📍</span>
-                      <span className="font-medium text-info">
-                        {detectedRegion.location}
-                      </span>
-                      <span className="text-text-muted">
-                        에서 스터디원을 모집합니다.
-                      </span>
-                    </>
-                  ) : !consent ? (
-                    <span className="text-text-muted">
-                      프로필에서 위치 정보 공개에 동의해주세요.
-                    </span>
-                  ) : null}
-                </p>
-              )}
             </div>
 
             {/* 모집 인원 */}

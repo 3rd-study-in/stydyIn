@@ -1,104 +1,83 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainNoticeCardBox from '../../../atoms/Card/MainNoticeCardBox';
 import MainNoticeItem from '../../../atoms/NotificationItem/MainNoticeItem';
+import useNotificationStore from '../../../stores/notificationStore';
 
-const SAMPLE_NOTICES = [
-  {
-    id: 1,
-    text: '[크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 댓글이 달렸어요.',
-    time: '3분 전',
-    isRead: false,
-  },
-  {
-    id: 2,
-    text: '[크롬 확장 프로그램 함께 구현 해보실 분 찾습니다.] 스터디에 새로운 유저가 참가했어요.',
-    time: '30분 전',
-    isRead: false,
-  },
-  {
-    id: 3,
-    text: '관심있는 [자바스크립트 공부 인증 스터디] 스터디가 곧 모집이 마감됩니다.',
-    time: '30분 전',
-    isRead: false,
-  },
-  {
-    id: 4,
-    text: '축하드립니다! <은잔디> 등급으로 승급하셨습니다. 🎉',
-    time: '2022.04.01',
-    isRead: true,
-  },
-  {
-    id: 5,
-    text: '관심있는 [춤추면서 파이썬 공부] 스터디가 곧 모집이 마감됩니다.',
-    time: '2022.03.16',
-    isRead: true,
-  },
-];
+function formatTime(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return '방금';
+  if (minutes < 60) return `${minutes}분 전`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}시간 전`;
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+}
 
-/**
- * 메인 알림 리스트 카드 (main-notice-list.png 전체 컴포넌트)
- * MainNoticeCard(컨테이너) + MainNoticeItem(아이템) 조합
- *
- * @param {Array}    [notices]       알림 데이터 배열 (기본값: 샘플 데이터)
- *   - id: number
- *   - text: string
- *   - time: string
- *   - isRead: boolean
- * @param {function} [onMoreClick]   "알림 더보기" 클릭 핸들러
- */
-// 아이템 1개당 높이(80px) + 아래 여백(8px) = 88px, 헤더 60px, 하단(버튼+패딩) 48px
 const ITEM_SLOT = 88;
 const HEADER_H = 60;
 const FOOTER_H = 48;
 
-function MainNoticeCard({ notices = SAMPLE_NOTICES, onMoreClick }) {
-  const [items, setItems] = useState(notices);
+function MainNoticeCard({ onMoreClick }) {
+  const notifications = useNotificationStore((s) => s.notifications);
+  const markAllRead = useNotificationStore((s) => s.markAllRead);
+  const deleteOne = useNotificationStore((s) => s.deleteOne);
+
   const [removingIds, setRemovingIds] = useState([]);
 
-  const activeCount = items.length - removingIds.length;
-  const unreadCount = items.filter((n) => !n.isRead && !removingIds.includes(n.id)).length;
-  const boxHeight = HEADER_H + activeCount * ITEM_SLOT + FOOTER_H;
+  useEffect(() => {
+    markAllRead();
+  }, [markAllRead]);
+
+  const activeCount = notifications.length - removingIds.length;
+  const unreadCount = notifications.filter(
+    (n) => !n.checked && !removingIds.includes(n.notification_id)
+  ).length;
+  const boxHeight = HEADER_H + Math.max(activeCount, 1) * ITEM_SLOT + FOOTER_H;
 
   const handleClose = (id) => {
     setRemovingIds((prev) => [...prev, id]);
     setTimeout(() => {
-      setItems((prev) => prev.filter((n) => n.id !== id));
+      deleteOne(id);
       setRemovingIds((prev) => prev.filter((rid) => rid !== id));
     }, 300);
   };
 
   return (
     <MainNoticeCardBox height={boxHeight}>
-      {/* 헤더 타이틀 */}
       <h2 className="absolute top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-base font-bold text-black leading-6">
         확인하지 않은 알림 <span className="text-primary">{unreadCount}개</span>
       </h2>
 
-      {/* 알림 아이템 목록 */}
-      <ul className="absolute top-[60px] left-5 flex flex-col w-[318px]">
-        {items.map((notice) => (
-          <div
-            key={notice.id}
-            className="overflow-hidden"
-            style={{
-              height: removingIds.includes(notice.id) ? 0 : ITEM_SLOT,
-              opacity: removingIds.includes(notice.id) ? 0 : 1,
-              transition: 'height 0.3s ease, opacity 0.2s ease',
-            }}
-          >
-            <div className="pb-2">
-              <MainNoticeItem
-                text={notice.text}
-                time={notice.time}
-                isRead={notice.isRead}
-                onClose={() => handleClose(notice.id)}
-              />
+      {notifications.length === 0 ? (
+        <p className="absolute top-[60px] left-0 right-0 text-center text-sm text-text-muted py-6">
+          알림이 없습니다.
+        </p>
+      ) : (
+        <ul className="absolute top-[60px] left-5 flex flex-col w-[318px]">
+          {notifications.map((notice) => (
+            <div
+              key={notice.notification_id}
+              className="overflow-hidden"
+              style={{
+                height: removingIds.includes(notice.notification_id) ? 0 : ITEM_SLOT,
+                opacity: removingIds.includes(notice.notification_id) ? 0 : 1,
+                transition: 'height 0.3s ease, opacity 0.2s ease',
+              }}
+            >
+              <div className="pb-2">
+                <MainNoticeItem
+                  text={notice.content}
+                  time={formatTime(notice.created)}
+                  isRead={notice.checked}
+                  onClose={() => handleClose(notice.notification_id)}
+                />
+              </div>
             </div>
-          </div>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      )}
 
-      {/* 알림 더보기 */}
       <button
         type="button"
         onClick={onMoreClick}

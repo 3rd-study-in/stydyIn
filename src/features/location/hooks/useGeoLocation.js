@@ -1,28 +1,6 @@
 import { useState } from 'react';
 import { getRegions } from '../../auth/api';
 
-// 카카오 지도 coord2RegionCode 응답의 시/도명 → 백엔드 지역명 매핑
-const KAKAO_REGION_MAP = {
-  '서울특별시': '서울',
-  '경기도': '경기',
-  '인천광역시': '인천',
-  '부산광역시': '부산',
-  '대구광역시': '대구',
-  '광주광역시': '광주',
-  '대전광역시': '대전',
-  '울산광역시': '울산',
-  '세종특별자치시': '세종',
-  '강원특별자치도': '강원',
-  '강원도': '강원',
-  '충청북도': '충북',
-  '충청남도': '충남',
-  '전북특별자치도': '전북',
-  '전라북도': '전북',
-  '전라남도': '전남',
-  '경상북도': '경북',
-  '경상남도': '경남',
-  '제주특별자치도': '제주',
-};
 
 function useGeoLocation() {
   const [isDetecting, setIsDetecting] = useState(false);
@@ -55,38 +33,49 @@ function useGeoLocation() {
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
+          if (!window.kakao?.maps?.load) {
+            setIsDetecting(false);
+            setGeoError('카카오 지도 서비스를 불러올 수 없습니다. 페이지를 새로고침해 주세요.');
+            reject(new Error('KAKAO_NOT_LOADED'));
+            return;
+          }
           const { latitude: lat, longitude: lng } = pos.coords;
-          const geocoder = new window.kakao.maps.services.Geocoder();
 
-          geocoder.coord2RegionCode(lng, lat, async (result, status) => {
-            if (status !== window.kakao.maps.services.Status.OK) {
-              setIsDetecting(false);
-              setGeoError('위치를 지역으로 변환하는데 실패했습니다.');
-              reject(new Error('GEOCODE_FAILED'));
-              return;
-            }
+          window.kakao.maps.load(() => {
+            const geocoder = new window.kakao.maps.services.Geocoder();
 
-            const area =
-              result.find((r) => r.region_type === 'H') ?? result[0];
-            const shortName =
-              KAKAO_REGION_MAP[area?.region_1depth_name] ??
-              area?.region_1depth_name;
-
-            try {
-              const regions = await getRegions().then((r) => r.data);
-              const matched = regions.find((r) => r.location === shortName);
-              setIsDetecting(false);
-              if (matched) {
-                resolve(matched);
-              } else {
-                setGeoError('현재 위치의 지역을 찾을 수 없습니다.');
-                reject(new Error('NO_MATCH'));
+            geocoder.coord2RegionCode(lng, lat, async (result, status) => {
+              if (status !== window.kakao.maps.services.Status.OK) {
+                setIsDetecting(false);
+                setGeoError('위치를 지역으로 변환하는데 실패했습니다.');
+                reject(new Error('GEOCODE_FAILED'));
+                return;
               }
-            } catch {
-              setIsDetecting(false);
-              setGeoError('지역 정보를 가져오는데 실패했습니다.');
-              reject(new Error('REGIONS_FETCH_FAILED'));
-            }
+
+              const area =
+                result.find((r) => r.region_type === 'H') ?? result[0];
+              const fullName = area?.region_1depth_name;
+
+              try {
+                const regions = await getRegions().then((r) => r.data);
+                const matched = regions.find((r) => r.location === fullName);
+                setIsDetecting(false);
+                if (matched) {
+                  const detailLocation =
+                    area?.region_3depth_name ||
+                    area?.region_2depth_name ||
+                    shortName;
+                  resolve({ ...matched, detailLocation });
+                } else {
+                  setGeoError('현재 위치의 지역을 찾을 수 없습니다.');
+                  reject(new Error('NO_MATCH'));
+                }
+              } catch {
+                setIsDetecting(false);
+                setGeoError('지역 정보를 가져오는데 실패했습니다.');
+                reject(new Error('REGIONS_FETCH_FAILED'));
+              }
+            });
           });
         },
         () => {

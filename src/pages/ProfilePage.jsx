@@ -435,35 +435,30 @@ function ProfilePage() {
   }, [userId]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <GNB />
+    <main className="flex flex-row gap-[30px] w-[1190px] max-w-[1560px] mx-auto mt-[40px] pb-10">
+      <MypageSideNav activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <main className="flex flex-row gap-[30px] w-[1190px] max-w-[1560px] mx-auto pt-[200px] pb-10">
-        <MypageSideNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <section className="w-[990px] border border-border rounded-xl">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <span className="text-text-muted text-sm">불러오는 중...</span>
+          </div>
+        ) : (
+          <>
+            {activeTab === 'profile' && profile && (
+              <ProfileTab
+                profile={profile}
+                userId={userId}
+                onProfileUpdated={setProfile}
+              />
+            )}
+            {activeTab === 'study' && <StudyTab />}
+            {activeTab === 'notification' && <NotificationTab />}
+          </>
+        )}
+      </section>
+    </main>
 
-        <section className="w-[990px] border border-border rounded-xl">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <span className="text-text-muted text-sm">불러오는 중...</span>
-            </div>
-          ) : (
-            <>
-              {activeTab === 'profile' && profile && (
-                <ProfileTab
-                  profile={profile}
-                  userId={userId}
-                  onProfileUpdated={setProfile}
-                />
-              )}
-              {activeTab === 'study' && <StudyTab />}
-              {activeTab === 'notification' && <NotificationTab />}
-            </>
-          )}
-        </section>
-      </main>
-
-      <Footer />
-    </div>
   );
 }
 
