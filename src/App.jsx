@@ -14,6 +14,7 @@ import ProfilePage from './pages/ProfilePage'
 import ProfileCreatePage from './pages/ProfileCreatePage'
 import PasswordResetPage from './pages/PasswordResetPage'
 import NotFoundPage from './pages/404Page'
+import StudyFormPage from './pages/StudyFormPage'
 
 // 로그인/회원가입 전용 (GNBLogin)
 function AuthLayout() {
@@ -80,6 +81,7 @@ const router = createBrowserRouter([
       { path: '/profile/:userId', element: <ProfilePage /> },
       { path: '/profile/create', element: <ProfileCreatePage /> },
       { path: '/password-reset', element: <PasswordResetPage /> },
+      { path: '/studyform', element: <StudyFormPage /> }, //실험용 페이지
     ],
   },
   { path: '*', element: <NotFoundPage /> },

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import useStudyForm from '../features/study/hooks/useStudyForm';
+import useAiStudyGenerate from '../features/ai/hooks/useAiStudyGenerate';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import {
   deleteStudy,
@@ -45,6 +46,7 @@ function StudyForm({ studyId, initialData }) {
 
   const { upload, isUploading, uploadError } = useImageUpload();
   const { detectRegion, consent, isDetecting, geoError } = useGeoLocation();
+  const { generateStudy, isGenerating, aiError, hasGenerated } = useAiStudyGenerate();
   const [subjects, setSubjects] = useState([]);
   const [difficulties, setDifficulties] = useState([]);
   const [detectedRegion, setDetectedRegion] = useState(
@@ -94,6 +96,34 @@ function StudyForm({ studyId, initialData }) {
   const onDelete = async () => {
     await deleteStudy(studyId);
     navigate('/');
+  };
+
+  const hasAnyContent = () =>
+    !!form.study_info ||
+    !!scheduleText ||
+    form.study_day.length > 0 ||
+    !!form.term ||
+    !!form.subject ||
+    !!form.difficulty ||
+    form.search_tag.length > 0;
+
+  const handleAiGenerate = async () => {
+    if (!hasGenerated && hasAnyContent()) {
+      if (!window.confirm('기존에 입력된 내용이 AI 생성 내용으로 덮어씌워집니다. 계속하시겠습니까?'))
+        return;
+    }
+    const result = await generateStudy(form.title);
+    if (!result.ok) return;
+    const { data } = result;
+    setField('study_info')(data.study_info);
+    setScheduleText(data.schedule_text);
+    setField('study_day')(data.study_day);
+    setField('term')(String(data.term));
+    setField('start_time')(data.start_time);
+    setField('end_time')(data.end_time);
+    setField('subject')(data.subject);
+    setField('difficulty')(data.difficulty);
+    setField('search_tag')(data.search_tag);
   };
 
   return (
@@ -202,6 +232,20 @@ function StudyForm({ studyId, initialData }) {
                 maxLength={50}
                 width="100%"
               />
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleAiGenerate}
+                disabled={!form.title || isGenerating}
+                className="px-4 h-9 rounded-md text-sm font-medium border transition-colors disabled:opacity-40 disabled:cursor-not-allowed bg-primary text-white border-primary hover:bg-primary-dark"
+              >
+                {isGenerating ? 'AI 생성 중...' : hasGenerated ? '다시 생성' : 'AI로 내용 채우기'}
+              </button>
+              {aiError && (
+                <span className="text-sm text-error">{aiError}</span>
+              )}
             </div>
 
             <hr className="border-border -mx-[30px]" />
