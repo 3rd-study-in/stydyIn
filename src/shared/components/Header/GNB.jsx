@@ -11,6 +11,8 @@ import useAuthStore from '../../../stores/authStore';
 import { useDisclosure } from '../../hooks/useDisclosure';
 import MainNoticeCard from '../Cards/MainNoticeCard';
 import LogoutConfirmModal from '../Modal/LogoutConfirmModal';
+import Modal from '../../../atoms/Modal/Modal';
+import Image from '../../../atoms/Images/Common/Image';
 
 const GNBWrapper = ({ children }) => (
   <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
@@ -34,13 +36,19 @@ const NavLinks = () => {
 
   const linkClass = (tab) =>
     `flex items-center h-full border-b-4 transition-all ${
-      isActive(tab) ? 'border-primary' : 'border-transparent hover:border-primary'
+      isActive(tab)
+        ? 'border-primary'
+        : 'border-transparent hover:border-primary'
     }`;
 
   return (
     <nav className="flex items-center gap-x-8 text-lg text-text font-regular h-full">
-      <Link to="/?tab=local" className={linkClass('local')}>내 지역</Link>
-      <Link to="/?tab=online" className={linkClass('online')}>온라인</Link>
+      <Link to="/?tab=local" className={linkClass('local')}>
+        내 지역
+      </Link>
+      <Link to="/?tab=online" className={linkClass('online')}>
+        온라인
+      </Link>
     </nav>
   );
 };
@@ -83,6 +91,8 @@ function LoggedInActions() {
     containerRef: noticeRef,
   } = useDisclosure();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [hasChatBadge, setHasChatBadge] = useState(true);
 
   const handleSelect = (option) => {
     close();
@@ -98,10 +108,18 @@ function LoggedInActions() {
   return (
     <>
       <div className="flex items-center gap-x-xl">
-        {/* 채팅 아이콘 — TODO: 채팅 store 연결 시 show 값 교체 */}
-        <Badge show={true}>
-          <Icon name="Chatting" size={30} className="cursor-pointer" />
-        </Badge>
+        {/* 채팅 아이콘 */}
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setHasChatBadge(false);
+            setIsChatModalOpen(true);
+          }}
+        >
+          <Badge show={hasChatBadge}>
+            <Icon name="Chatting" size={30} />
+          </Badge>
+        </div>
 
         {/* 알림 아이콘 — hasUnread일 때 빨간 점, 클릭 시 패널 */}
         <div ref={noticeRef} className="relative cursor-pointer">
@@ -129,13 +147,16 @@ function LoggedInActions() {
                   variant="blue"
                   size="S"
                   className="w-full"
-                  onClick={() => { navigate('/study/create'); close(); }}
+                  onClick={() => {
+                    navigate('/study/create');
+                    close();
+                  }}
                 >
                   스터디 만들기
                 </FlexibleButton>
               </div>
               {PROFILE_MENU.map((option) => (
-                <button
+                <Button
                   key={option.value}
                   type="button"
                   onClick={() => handleSelect(option)}
@@ -144,12 +165,34 @@ function LoggedInActions() {
                   <span className="flex-1 h-[30px] flex items-center px-xs text-sm text-text rounded-lg hover:bg-bg-muted transition-colors">
                     {option.label}
                   </span>
-                </button>
+                </Button>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      <Modal
+        isOpen={isChatModalOpen}
+        onClose={() => setIsChatModalOpen(false)}
+        className="bg-bg rounded-2xl px-xl py-lg flex flex-col items-center gap-y-md shadow-lg min-w-[280px]"
+      >
+        <Image
+          name="NotFound"
+          alt="준비중"
+          className="w-[100px] h-[100px] rounded-full object-cover"
+        />
+        <p className="text-text text-base font-medium">
+          채팅 기능은 준비중입니다.
+        </p>
+        <Button
+          variant="blue"
+          size="M"
+          onClick={() => setIsChatModalOpen(false)}
+        >
+          확인
+        </Button>
+      </Modal>
 
       <LogoutConfirmModal
         isOpen={isLogoutModalOpen}
@@ -160,15 +203,43 @@ function LoggedInActions() {
   );
 }
 
+const RECENT_SEARCHES_KEY = 'recentSearches';
+const MAX_RECENT_SEARCHES = 5;
+
 const GNB = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY)) ?? [];
+    } catch {
+      return [];
+    }
+  });
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
+
+  const saveSearch = (term) => {
+    const trimmed = term.trim();
+    if (!trimmed) return;
+    const updated = [
+      trimmed,
+      ...recentSearches.filter((s) => s !== trimmed),
+    ].slice(0, MAX_RECENT_SEARCHES);
+    setRecentSearches(updated);
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+  };
 
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter' && searchValue.trim()) {
+      saveSearch(searchValue);
       navigate(`/search?search=${encodeURIComponent(searchValue.trim())}`);
     }
+  };
+
+  const handleSelectRecent = (term) => {
+    setSearchValue(term);
+    saveSearch(term);
+    navigate(`/search?search=${encodeURIComponent(term)}`);
   };
 
   return (
@@ -182,12 +253,10 @@ const GNB = () => {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={handleSearchKeyDown}
+          recentSearches={recentSearches}
+          onSelectRecent={handleSelectRecent}
         />
-        {isLoggedIn ? (
-          <LoggedInActions />
-        ) : (
-          <LoggedOutButtons />
-        )}
+        {isLoggedIn ? <LoggedInActions /> : <LoggedOutButtons />}
       </div>
     </GNBWrapper>
   );

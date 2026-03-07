@@ -10,7 +10,7 @@ const Logo = () => (
 const GNBLogin = () => {
   return (
     <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
-      <div className="flex items-center justify-center w-full max-w-[1190px]">
+      <div className="flex items-center justify-center w-full max-w-[1190px] max-md:px-4">
         <Logo />
       </div>
     </header>
