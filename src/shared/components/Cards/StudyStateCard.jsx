@@ -110,7 +110,7 @@ function StudyStateCard({
                 key={day}
                 className={`w-[30px] h-[30px] rounded-full flex items-center justify-center text-base font-regular ${
                   isSelected
-                    ? 'bg-primary-dark text-white'
+                    ? 'bg-primary-dark text-secondary'
                     : 'bg-bg-muted text-secondary'
                 }`}
               >

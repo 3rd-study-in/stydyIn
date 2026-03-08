@@ -22,6 +22,7 @@ import { REGION_OPTIONS } from '../constants/regions';
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags';
 import useUserData from '../features/profile/hooks/useUserData';
 import { getProfile, saveProfile } from '../features/profile/api';
+import { MEDIA_URL } from '../constants/api';
 import { uploadImage } from '../features/file/api';
 import {
   getMyStudies,
@@ -109,7 +110,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
               className="relative w-[130px] h-[130px] rounded-full overflow-hidden border border-border"
             >
               <img
-                src={previewUrl ?? profile.profile_img}
+                src={previewUrl ?? (profile.profile_img ? (profile.profile_img.startsWith('http') ? profile.profile_img : `${MEDIA_URL}${profile.profile_img}`) : undefined)}
                 alt="프로필"
                 className="w-full h-full object-cover"
               />
@@ -272,7 +273,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
 
       <MypageProfileCard
         hasUser={profile.is_associate_member}
-        profileImage={profile.profile_img}
+        profileImage={profile.profile_img ? (profile.profile_img.startsWith('http') ? profile.profile_img : `${MEDIA_URL}${profile.profile_img}`) : undefined}
         nickname={profile.nickname}
       >
         {profile.introduction}

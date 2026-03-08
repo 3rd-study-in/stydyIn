@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
 import { CATEGORIES } from '../constants/categories';
+import { MEDIA_URL } from '../constants/api';
 import { getStudyList } from '../features/study/api';
 import { getMyParticipatingStudies } from '../features/study/api';
 import { getProfile } from '../features/profile/api';
+import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import BannerSlider from '../shared/components/Banner/BannerSlider';
 import MainProfileCard from '../shared/components/Cards/MainProfileCard';
 import StudySideList from '../shared/components/Cards/StudySideList';
@@ -38,7 +40,6 @@ export default function HomePage() {
   const [searchParams] = useSearchParams();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const userId = useAuthStore((s) => s.userId);
-  const authUser = useAuthStore((s) => s.user);
 
   const activeTab = searchParams.get('tab') ?? 'latest';
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,6 +48,20 @@ export default function HomePage() {
 
   const [profile, setProfile] = useState(null);
   const [participatingStudies, setParticipatingStudies] = useState([]);
+
+  const { detectRegion, consent, setConsent, isDetecting, geoError } =
+    useGeoLocation();
+  const [detectedRegion, setDetectedRegion] = useState(null);
+
+  // local 탭 진입 시 consent가 있으면 자동 감지
+  useEffect(() => {
+    if (activeTab !== 'local' || detectedRegion || isDetecting || !consent)
+      return;
+    detectRegion()
+      .then((region) => setDetectedRegion(region))
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, consent]);
 
   // activeTab 변경 시 리셋
   useEffect(() => {
@@ -76,10 +91,16 @@ export default function HomePage() {
       .finally(() => setLoading(false));
   }, [activeTab]);
 
-  // 클라이언트 페이지네이션
-  const totalCount = allStudies.length;
+  // 클라이언트 페이지네이션 (local 탭은 감지된 지역으로 필터링)
+  const visibleStudies =
+    activeTab === 'local' && detectedRegion
+      ? allStudies.filter(
+          (s) => s.study_location?.location === detectedRegion.location,
+        )
+      : allStudies;
+  const totalCount = visibleStudies.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const studies = allStudies.slice(
+  const studies = visibleStudies.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE,
   );
@@ -93,7 +114,10 @@ export default function HomePage() {
     ])
       .then(([profileData, studyData]) => {
         setProfile(profileData);
-        setParticipatingStudies(Array.isArray(studyData) ? studyData : []);
+        const studies = Array.isArray(studyData)
+          ? studyData
+          : (studyData?.results ?? []);
+        setParticipatingStudies(studies);
       })
       .catch(() => {});
   }, [isLoggedIn, userId]);
@@ -130,26 +154,56 @@ export default function HomePage() {
           )}
           <section>
             <h2 className="text-2xl font-bold text-text mb-xl">
-              스터디 둘러보기
+              {activeTab === 'local'
+                ? '내 지역 스터디'
+                : activeTab === 'online'
+                  ? '온라인 스터디'
+                  : '스터디 둘러보기'}
             </h2>
-            <div className="flex gap-xs mb-xl">
-              {TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => handleTabChange(tab.id)}
-                  className={
-                    activeTab === tab.id
-                      ? 'px-xl py-xs rounded-xl bg-primary text-white text-sm font-medium'
-                      : 'px-xl py-xs rounded-xl border border-border text-text-muted text-sm font-medium hover:border-primary hover:text-primary transition-colors'
-                  }
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+            {!isFullWidth && (
+              <div className="flex gap-xs mb-xl">
+                {TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => handleTabChange(tab.id)}
+                    className={
+                      activeTab === tab.id
+                        ? 'px-xl py-xs rounded-xl bg-primary text-white text-sm font-medium'
+                        : 'px-xl py-xs rounded-xl border border-border text-text-muted text-sm font-medium hover:border-primary hover:text-primary transition-colors'
+                    }
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            )}
 
-            {loading ? (
+            {activeTab === 'local' && !detectedRegion ? (
+              <div className="py-5xl flex flex-col items-center gap-xl">
+                {isDetecting ? (
+                  <span className="text-text-muted text-sm">
+                    위치 감지 중...
+                  </span>
+                ) : (
+                  <>
+                    <p className="text-base text-text">
+                      내 지역 스터디를 확인하려면 인증이 필요해요.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setConsent(true)}
+                      className="px-5xl py-md bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary-dark transition-colors"
+                    >
+                      내 지역 인증하기
+                    </button>
+                    {geoError && (
+                      <p className="text-sm text-error">{geoError}</p>
+                    )}
+                  </>
+                )}
+              </div>
+            ) : loading ? (
               <div className="py-5xl flex justify-center">
                 <span className="text-text-muted text-sm">불러오는 중...</span>
               </div>
@@ -179,9 +233,17 @@ export default function HomePage() {
                     >
                       {study.thumbnail ? (
                         <img
-                          src={study.thumbnail}
+                          src={
+                            study.thumbnail.startsWith('http')
+                              ? study.thumbnail
+                              : `${MEDIA_URL}${study.thumbnail}`
+                          }
                           alt={study.title}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            console.log('img failed:', e.currentTarget.src);
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full bg-bg-muted" />
@@ -217,16 +279,12 @@ export default function HomePage() {
           <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
             <MainProfileCard
               hasUser={isLoggedIn}
-              profileImage={
-                isLoggedIn
-                  ? (authUser?.profile_img ?? profile?.profile_img)
-                  : undefined
-              }
-              nickname={
-                isLoggedIn
-                  ? (authUser?.nickname ?? profile?.nickname)
-                  : undefined
-              }
+              profileImage={(() => {
+                const img = isLoggedIn ? profile?.profile_img : undefined;
+                if (!img) return undefined;
+                return img.startsWith('http') ? img : `${MEDIA_URL}${img}`;
+              })()}
+              nickname={isLoggedIn ? profile?.nickname : undefined}
               onButtonClick={() =>
                 navigate(isLoggedIn ? '/study/create' : '/login')
               }

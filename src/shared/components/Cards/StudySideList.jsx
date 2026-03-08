@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import StudyListSideCard from '../../../atoms/Card/StudyListSideCard';
 import StudyListMainCard from '../../../atoms/Card/StudyListMainCard';
+import { MEDIA_URL } from '../../../constants/api';
 
 // API study_status.name → StudyListMainCard status prop
 const STATUS_NAME_MAP = {
@@ -50,7 +51,13 @@ function StudySideList({ studies = [], className = '' }) {
                 status={STATUS_NAME_MAP[study.study_status?.name]}
                 dDay={study.d_day}
                 title={study.title}
-                thumbnailSrc={study.thumbnail}
+                thumbnailSrc={
+                  study.thumbnail
+                    ? study.thumbnail.startsWith('http')
+                      ? study.thumbnail
+                      : `${MEDIA_URL}${study.thumbnail}`
+                    : undefined
+                }
               />
             </div>
           ))
