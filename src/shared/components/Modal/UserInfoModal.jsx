@@ -5,7 +5,7 @@ import UserProfileDefault from '../UserProfile/UserProfileDefault';
 import GithubContributions from '../GithubContributions/GithubContributions';
 import InterestTags from '../InterestTags/InterestTags';
 import { getProfile } from '../../../features/profile/api';
-import { BASE_URL } from '../../../constants/api';
+import { MEDIA_URL } from '../../../constants/api';
 
 /**
  * 사용자 정보 시트 모달 (userinfomodal.png 기반)
@@ -52,9 +52,9 @@ function UserInfoModal({
     fetchProfile();
   }, [isOpen, userId]);
 
-  // profile_img가 '/media/...' 같은 상대경로로 오므로 BASE_URL을 앞에 붙임
+  // profile_img가 '/media/...' 같은 상대경로로 오므로 MEDIA_URL을 앞에 붙임
   const profileImage = profileData?.profile_img
-    ? `${BASE_URL}${profileData.profile_img}`
+    ? `${MEDIA_URL}${profileData.profile_img}`
     : null;
 
   const nickname = profileData?.nickname ?? '';

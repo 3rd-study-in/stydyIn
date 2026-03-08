@@ -43,7 +43,7 @@ function StudyListMainCard({
       {/* 상단 헤더 — 썸네일 + 상태 + 제목 */}
       <div className="flex items-start gap-[10px] px-3 pt-3 pb-3">
         {/* 썸네일 */}
-        <div className="w-[66px] h-[66px] bg-bg-muted border-[0.5px] border-border rounded-lg shrink-0">
+        <div className="w-[66px] h-[66px] bg-bg-muted border-[0.5px] border-border rounded-lg shrink-0 overflow-hidden">
           {thumbnailSrc && (
             <img src={thumbnailSrc} alt="썸네일" className="w-full h-full object-cover" />
           )}

@@ -66,10 +66,10 @@ function StudyForm({ studyId, initialData }) {
   useEffect(() => {
     getSubjects()
       .then((r) => setSubjects(r.data))
-      .catch(() => { });
+      .catch(() => {});
     getDifficulties()
       .then((r) => setDifficulties(r.data))
-      .catch(() => { });
+      .catch(() => {});
   }, []);
 
   const handleThumbnailChange = async (e) => {
@@ -341,10 +341,10 @@ function StudyForm({ studyId, initialData }) {
               <div className="flex flex-col gap-6">
                 {/* 요일 */}
                 <div className="flex items-center gap-4">
-                  <label className="w-[120px] text-sm text-text shrink-0">
+                  <label className="w-[120px] text-sm text-text font-bold shrink-0">
                     스터디 요일
                   </label>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ">
                     {DAYS.map((day) => {
                       const selected = form.study_day.some(
                         (d) => d.id === day.id,
@@ -354,7 +354,7 @@ function StudyForm({ studyId, initialData }) {
                           key={day.id}
                           type="button"
                           onClick={() => toggleDay(day)}
-                          className={`w-[36px] h-[36px] rounded-full text-sm font-medium transition-colors ${selected ? chipActive : chipInactive}`}
+                          className={`w-[36px] h-[36px] text-secondary rounded-full text-sm border-border border font-medium transition-colors ${selected ? chipActive : chipInactive}`}
                         >
                           {day.name}
                         </button>
@@ -524,7 +524,7 @@ function StudyForm({ studyId, initialData }) {
           </div>
 
           {/* 사이드바 */}
-          <div className="shrink-0 sticky top-[100px]">
+          <div className="shrink-0 sticky top-10">
             <StudyFormSideCard
               isEdit={isEdit}
               title={form.title}

@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { MEDIA_URL } from '../constants/api';
 import { useState } from 'react';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import useStudyParticipate from '../features/study/hooks/useStudyParticipate';
@@ -94,7 +95,15 @@ function StudyDetailPage() {
   return (
     <div className="max-w-max-width-lg mx-auto px-5 py-10">
       {/* 배너 */}
-      <DetailBarTopContainer image={study.thumbnail}>
+      <DetailBarTopContainer
+        image={
+          study.thumbnail
+            ? study.thumbnail.startsWith('http')
+              ? study.thumbnail
+              : `${MEDIA_URL}${study.thumbnail}`
+            : undefined
+        }
+      >
         <DetailBarTopContent
           categories={categories}
           title={study.title}
@@ -109,7 +118,7 @@ function StudyDetailPage() {
       {/* 본문 + 사이드바 */}
       <div className="flex gap-6xl mt-10 items-start">
         {/* 본문 */}
-        <div className="flex-1 min-w-0 flex flex-col">
+        <div className="w-[840px] shrink-0 flex flex-col">
           <section>
             <h2 className="text-[30px] font-bold text-text mb-3xl">
               스터디 소개
@@ -134,10 +143,14 @@ function StudyDetailPage() {
 
           <LeaderProfile
             userId={study.leader?.id}
-            profileImage={study.leader?.profile_image ?? ''}
-            nickname={study.leader?.nickname ?? ''}
-            location={study.leader?.location?.name ?? ''}
-            introduction={study.leader?.introduction ?? ''}
+            profileImage={(() => {
+              const img = study.leader?.profile?.profile_img;
+              if (!img) return undefined;
+              return img.startsWith('http') ? img : `${MEDIA_URL}${img}`;
+            })()}
+            nickname={study.leader?.profile?.nickname ?? ''}
+            location={study.leader?.profile?.preferred_region?.location ?? ''}
+            introduction={study.leader?.profile?.introduction ?? ''}
           />
 
           <hr className="border-border my-3xl" />

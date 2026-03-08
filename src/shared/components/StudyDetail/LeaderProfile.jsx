@@ -8,7 +8,7 @@ import UserInfoModal from '../Modal/UserInfoModal';
  */
 const LeaderProfile = ({
   userId,
-  profileImage = '',
+  profileImage,
   nickname = '',
   location = '',
   introduction = '',
@@ -18,9 +18,7 @@ const LeaderProfile = ({
   return (
     <div className="w-full max-w-[840px]">
       {/* 타이틀 */}
-      <h2 className="text-[30px] font-bold text-text">
-        그룹장 소개
-      </h2>
+      <h2 className="text-[30px] font-bold text-text">그룹장 소개</h2>
 
       {/* 프로필 영역 */}
       <div className="mt-[30px] flex gap-[30px]">
@@ -30,11 +28,13 @@ const LeaderProfile = ({
           onClick={() => setIsModalOpen(true)}
           className="w-[130px] h-[130px] shrink-0 rounded-full overflow-hidden bg-bg-muted cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <img
-            src={profileImage}
-            alt="그룹장 프로필"
-            className="w-full h-full object-cover"
-          />
+          {profileImage && (
+            <img
+              src={profileImage}
+              alt="그룹장 프로필"
+              className="w-full h-full object-cover"
+            />
+          )}
         </button>
 
         {/* 우측 콘텐츠 */}
