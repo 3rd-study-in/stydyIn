@@ -10,7 +10,6 @@ function InterestTags({ tags }) {
 
   return (
     <section>
-      안녕
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => (
           // tag.name을 출력하고, 고유 값인 tag.id를 key로 사용합니다.
