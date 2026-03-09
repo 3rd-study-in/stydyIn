@@ -28,8 +28,40 @@ export default function SearchPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterParams, setFilterParams] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('searchFilterParams');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [filterSelected, setFilterSelected] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('searchFilterSelected');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
 
   const activeCategory = CATEGORIES.find((c) => String(c.id) === subjectId);
+
+  const handleFilterApply = (params, selected) => {
+    setFilterParams(params);
+    setFilterSelected(selected);
+    sessionStorage.setItem('searchFilterParams', JSON.stringify(params));
+    sessionStorage.setItem('searchFilterSelected', JSON.stringify(selected));
+    setCurrentPage(1);
+  };
+
+  const handleFilterReset = () => {
+    setFilterParams({});
+    setFilterSelected({});
+    sessionStorage.removeItem('searchFilterParams');
+    sessionStorage.removeItem('searchFilterSelected');
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -38,10 +70,11 @@ export default function SearchPage() {
   useEffect(() => {
     setLoading(true);
     const params = { page: currentPage, limit: PAGE_SIZE };
-    if (subjectId) params.subject = subjectId;
     if (searchQuery) params.search = searchQuery;
-    if (typeParam === 'local') params.is_offline = 1;
-    if (typeParam === 'online') params.is_offline = 0;
+    if (subjectId && filterParams.subject === undefined) params.subject = subjectId;
+    if (typeParam === 'local' && filterParams.is_offline === undefined) params.is_offline = 1;
+    if (typeParam === 'online' && filterParams.is_offline === undefined) params.is_offline = 0;
+    Object.assign(params, filterParams);
 
     getStudyList(params)
       .then((res) => {
@@ -50,7 +83,7 @@ export default function SearchPage() {
       })
       .catch(() => setStudies([]))
       .finally(() => setLoading(false));
-  }, [subjectId, searchQuery, typeParam, currentPage]);
+  }, [subjectId, searchQuery, typeParam, currentPage, filterParams]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
@@ -70,7 +103,7 @@ export default function SearchPage() {
       )}
 
       {/* 필터 */}
-      <SearchFilter />
+      <SearchFilter onApply={handleFilterApply} onReset={handleFilterReset} initialSelected={filterSelected} />
 
       {/* 활성 필터 chip */}
       {(activeCategory || searchQuery) && (
