@@ -17,7 +17,6 @@ import NoContents from '../shared/components/NoContents/NoContents';
 import NotificationItem from '../atoms/NotificationItem/NotificationItem';
 
 import useNotificationStore from '../stores/notificationStore';
-import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import { REGION_OPTIONS } from '../constants/regions';
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags';
 import useUserData from '../features/profile/hooks/useUserData';
@@ -43,7 +42,6 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   const [isEditing, setIsEditing] = useState(false);
   const { form, handleField, selectedTags, toggleTag, removeTag } =
     useUserData(profile);
-  const { consent, setConsent } = useGeoLocation();
   const [profileImage, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [saveError, setSaveError] = useState('');
@@ -257,22 +255,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   // 뷰 모드
   return (
     <div className="flex flex-col items-center gap-[30px] p-[40px] w-full">
-      <div className="flex justify-between items-center w-full">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-text-muted">위치 공유</span>
-          <button
-            type="button"
-            onClick={() => setConsent(!consent)}
-            className={`relative w-10 h-5 rounded-full transition-colors ${consent ? 'bg-primary' : 'bg-border'}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${consent ? 'translate-x-5' : 'translate-x-0'}`}
-            />
-          </button>
-          <span className="text-xs text-text-muted">
-            {consent ? '동의' : '미동의'}
-          </span>
-        </div>
+      <div className="flex justify-end w-full">
         <Button variant="white" size="S" onClick={() => setIsEditing(true)}>
           수정하기
         </Button>
