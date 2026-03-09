@@ -13,6 +13,8 @@ import MainNoticeCard from '../Cards/MainNoticeCard';
 import LogoutConfirmModal from '../Modal/LogoutConfirmModal';
 import Modal from '../../../atoms/Modal/Modal';
 import Image from '../../../atoms/Images/Common/Image';
+import { getProfile } from '../../../features/profile/api';
+import { MEDIA_URL } from '../../../constants/api';
 
 const GNBWrapper = ({ children }) => (
   <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
@@ -80,7 +82,19 @@ function LoggedInActions() {
 
   const navigate = useNavigate();
   const userId = useAuthStore((s) => s.userId);
-  const profileSrc = useAuthStore((s) => s.user?.profile_img ?? '');
+  const [profileSrc, setProfileSrc] = useState('');
+
+  useEffect(() => {
+    if (!userId) return;
+    getProfile(userId)
+      .then((res) => {
+        const img = res.data.profile_img;
+        if (img) {
+          setProfileSrc(img.startsWith('http') ? img : `${MEDIA_URL}${img}`);
+        }
+      })
+      .catch(() => {});
+  }, [userId]);
 
   // dev: 드롭다운 / 모달 상태
   const { isOpen, toggle, close, containerRef } = useDisclosure();
