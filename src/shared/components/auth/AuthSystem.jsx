@@ -53,11 +53,11 @@ const AuthSystem = ({ initialView = 'login' }) => {
   } = useSignup({ onSuccess: () => setView('complete') });
 
   return (
-    <div className="flex flex-col items-center min-h-screen mt-25 bg-bg">
+    <div className="flex flex-col items-center min-h-screen bg-bg">
       <div className="w-[322px] flex flex-col font-sans text-text">
         {view === 'complete' ? (
-          <div className="flex flex-col items-center justify-center min-h-screen gap-xl text-center">
-            <div>
+          <div className="flex flex-col items-center mt-[120px] min-h-screen gap-xl text-center">
+            <div className="mt-[120px]">
               <Icon name="CheckFill" color="var(--color-primary)" size={60} />
             </div>
             <h2 className="text-3xl font-bold">회원가입 완료!</h2>
@@ -79,7 +79,9 @@ const AuthSystem = ({ initialView = 'login' }) => {
           </div>
         ) : view === 'signup' ? (
           <>
-            <h2 className="text-3xl font-bold text-center mb-5xl">회원가입</h2>
+            <h2 className="text-3xl font-bold text-center mt-[40px] mb-5xl">
+              회원가입
+            </h2>
             <form
               onSubmit={handleRegister}
               noValidate
@@ -113,12 +115,13 @@ const AuthSystem = ({ initialView = 'login' }) => {
                       isEmailAuthLoading
                     }
                     className={`shrink-0 transition-colors
-                        ${signupEmailError ||
-                        !signupEmail.includes('@') ||
-                        isEmailAuthLoading
-                        ? 'bg-secondary-light cursor-not-allowed opacity-70'
-                        : 'cursor-pointer hover:bg-primary-dark'
-                      }`}
+                        ${
+                          signupEmailError ||
+                          !signupEmail.includes('@') ||
+                          isEmailAuthLoading
+                            ? 'bg-secondary-light cursor-not-allowed opacity-70'
+                            : 'cursor-pointer hover:bg-primary-dark'
+                        }`}
                   >
                     {isEmailAuthLoading ? '인증' : '인증'}
                   </FlexibleButton>
@@ -143,7 +146,6 @@ const AuthSystem = ({ initialView = 'login' }) => {
                         <br />
                         <span className="font-bold text-base">인증코드</span>를
                         입력해 주세요 :)
-                        <p>인증코드는 123456 입니다</p>
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -163,10 +165,11 @@ const AuthSystem = ({ initialView = 'login' }) => {
                         disabled={
                           verificationCode.length === 0 || isVerifyLoading
                         }
-                        className={`shrink-0 transition-colors ${verificationCode.length === 0 || isVerifyLoading
-                          ? 'cursor-not-allowed opacity-70'
-                          : 'cursor-pointer'
-                          }`}
+                        className={`shrink-0 transition-colors ${
+                          verificationCode.length === 0 || isVerifyLoading
+                            ? 'cursor-not-allowed opacity-70'
+                            : 'cursor-pointer'
+                        }`}
                       >
                         {isVerifyLoading ? '확인' : '확인'}
                       </FlexibleButton>
@@ -259,7 +262,9 @@ const AuthSystem = ({ initialView = 'login' }) => {
                     const value = e.target.value;
                     setSignupPassword(value);
                     if (value && value.length < 8) {
-                      setSignupPwError('비밀번호는 8자 이상, 숫자+영문이어야 합니다.');
+                      setSignupPwError(
+                        '비밀번호는 8자 이상, 숫자+영문이어야 합니다.',
+                      );
                     } else {
                       setSignupPwError('');
                     }
@@ -320,8 +325,8 @@ const AuthSystem = ({ initialView = 'login' }) => {
         ) : (
           <>
             <div className="text-left mb-6">
-              <h1 className="text-2xl font-bold leading-snug whitespace-pre-wrap">
-                {'SNS계정으로 간편하게\n회원가입/로그인 하세요! :)'}
+              <h1 className="text-2xl font-bold mt-[100px] leading-snug whitespace-pre-wrap">
+                {'계정으로 간편하게\n회원가입/로그인 하세요! :)'}
               </h1>
             </div>
             <Image
