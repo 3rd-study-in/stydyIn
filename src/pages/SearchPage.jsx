@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CATEGORIES } from '../constants/categories';
 import { getStudyList } from '../features/study/api';
+import { MEDIA_URL } from '../constants/api';
 import StudyListCard from '../shared/components/Cards/StudyListCard';
 import SearchFilter from '../shared/components/SearchFilter/SearchFilter';
 import NoContents from '../shared/components/NoContents/NoContents';
@@ -120,7 +121,7 @@ export default function SearchPage() {
               >
                 {study.thumbnail ? (
                   <img
-                    src={study.thumbnail}
+                    src={study.thumbnail.startsWith('http') ? study.thumbnail : `${MEDIA_URL}${study.thumbnail}`}
                     alt={study.title}
                     className="w-full h-full object-cover"
                   />

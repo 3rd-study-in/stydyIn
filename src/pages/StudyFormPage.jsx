@@ -10,6 +10,7 @@ import {
 } from '../features/study/api';
 import useImageUpload from '../features/file/hooks/useImageUpload';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
+import { MEDIA_URL } from '../constants/api';
 import { Location } from '../atoms/Icon/Common';
 import InputBox from '../atoms/Input/InputBox';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
@@ -39,7 +40,7 @@ const chipInactive = 'bg-white text-text border-border hover:bg-bg-muted';
 function StudyForm({ studyId, initialData }) {
   const isEdit = Boolean(studyId);
   const navigate = useNavigate();
-  const { form, setField, toggleDay, isLoading, error, handleSubmit } =
+  const { form, setField, toggleDay, isValid, isLoading, error, handleSubmit } =
     useStudyForm({
       mode: isEdit ? 'edit' : 'create',
       studyPk: studyId,
@@ -178,13 +179,19 @@ function StudyForm({ studyId, initialData }) {
               <p className="text-sm text-text-disabled">업로드 중...</p>
             ) : form.thumbnail ? (
               <img
-                src={form.thumbnail}
+                src={
+                  form.thumbnail.startsWith('http')
+                    ? form.thumbnail
+                    : `${MEDIA_URL}${form.thumbnail}`
+                }
                 alt="썸네일"
                 className="h-full w-full object-cover"
               />
             ) : (
               <div className="text-center text-text-disabled text-sm select-none">
-                <p>대표 이미지 삽입</p>
+                <p>
+                  대표 이미지 삽입 <span className="text-error">*</span>
+                </p>
                 <p className="mt-1 text-xs">(권장 사이즈 1200*1200px)</p>
               </div>
             )}
@@ -521,6 +528,22 @@ function StudyForm({ studyId, initialData }) {
             {error && (
               <p className="text-error text-sm text-center mb-4">{error}</p>
             )}
+
+            {/* 삭제하기 버튼 (수정 모드만) */}
+            {isEdit && (
+              <div className="mt-10 pt-10 border-t border-border flex justify-end">
+                <FlexibleButton
+                  variant="lightgray"
+                  size="M"
+                  width="160px"
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  <span className="text-error font-medium">
+                    스터디 삭제하기
+                  </span>
+                </FlexibleButton>
+              </div>
+            )}
           </div>
 
           {/* 사이드바 */}
@@ -528,6 +551,7 @@ function StudyForm({ studyId, initialData }) {
             <StudyFormSideCard
               isEdit={isEdit}
               title={form.title}
+              isValid={isValid}
               isSubmitting={isLoading}
               isGenerating={isGenerating}
               hasGenerated={hasGenerated}
