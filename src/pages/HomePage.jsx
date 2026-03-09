@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
 import { CATEGORIES } from '../constants/categories';
 import { MEDIA_URL } from '../constants/api';
@@ -19,20 +19,22 @@ const PAGE_SIZE = 6;
 
 const TABS = [
   { id: 'latest', label: '최신 스터디' },
-  { id: 'recruiting', label: '모집 중' },
-  { id: 'in_progress', label: '진행 중' },
+  { id: 'recruiting', label: '모집 중 스터디' },
+  { id: 'in_progress', label: '진행 중 스터디' },
+  // { id: 'closed', label: '종료' }
 ];
 
 const STUDY_STATUS_FILTER = {
   recruiting: '모집 중',
   in_progress: '진행 중',
+  // closed: '종료'
 };
 
 const STATUS_MAP = {
   '모집 중': 'recruiting',
   '진행 중': 'in_progress',
-  '모집 완료': 'completed',
-  종료: 'closed',
+  '완료': 'completed',
+  // 종료: 'closed',
 };
 
 export default function HomePage() {
@@ -41,6 +43,7 @@ export default function HomePage() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const userId = useAuthStore((s) => s.userId);
 
+  const location = useLocation();
   const activeTab = searchParams.get('tab') ?? 'latest';
   const [currentPage, setCurrentPage] = useState(1);
   const [allStudies, setAllStudies] = useState([]);
@@ -59,20 +62,16 @@ export default function HomePage() {
       return;
     detectRegion()
       .then((region) => setDetectedRegion(region))
-      .catch(() => {});
+      .catch(() => { });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, consent]);
 
-  // activeTab 변경 시 리셋
+  // 탭 변경 또는 페이지 재진입 시 리셋 + 스터디 목록 fetch
   useEffect(() => {
     setCurrentPage(1);
     setAllStudies([]);
-  }, [activeTab]);
-
-  // 스터디 목록 fetch (탭 변경 시에만)
-  useEffect(() => {
     setLoading(true);
-    const params = {};
+    const params = { page_size: 100 };
     if (activeTab === 'local') params.is_offline = 1;
     else if (activeTab === 'online') params.is_offline = 0;
 
@@ -89,14 +88,14 @@ export default function HomePage() {
       })
       .catch(() => setAllStudies([]))
       .finally(() => setLoading(false));
-  }, [activeTab]);
+  }, [activeTab, location.key]);
 
   // 클라이언트 페이지네이션 (local 탭은 감지된 지역으로 필터링)
   const visibleStudies =
     activeTab === 'local' && detectedRegion
       ? allStudies.filter(
-          (s) => s.study_location?.location === detectedRegion.location,
-        )
+        (s) => s.study_location?.location === detectedRegion.location,
+      )
       : allStudies;
   const totalCount = visibleStudies.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
@@ -119,7 +118,7 @@ export default function HomePage() {
           : (studyData?.results ?? []);
         setParticipatingStudies(studies);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [isLoggedIn, userId]);
 
   const isFullWidth = activeTab === 'local' || activeTab === 'online';
