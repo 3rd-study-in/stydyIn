@@ -61,7 +61,6 @@ function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
     !!form.title &&
     !!form.thumbnail &&
     form.recruitment >= 3 &&
-    form.study_day.length > 0 &&
     !!form.start_date &&
     !!form.term &&
     !!form.start_time &&
@@ -81,6 +80,7 @@ function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
       recruitment: Number(form.recruitment),
       term: Number(form.term),
     };
+    if (!body.study_location) delete body.study_location;
 
     try {
       const { data } =
@@ -90,7 +90,7 @@ function useStudyForm({ mode = 'create', studyPk, initialData } = {}) {
       return { ok: true, data };
     } catch (err) {
       const data = err.response?.data;
-      const message = data?.validationError ?? data?.detail ?? '스터디 저장에 실패했습니다.';
+const message = data?.validationError ?? data?.detail ?? '스터디 저장에 실패했습니다.';
       setError(message);
       return { ok: false, message };
     } finally {

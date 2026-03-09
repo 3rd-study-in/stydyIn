@@ -18,6 +18,7 @@ import Icon from '../../../atoms/Icon/Common/Icon';
 function StudyFormSideCard({
   isEdit = false,
   title = '',
+  isValid = false,
   isSubmitting = false,
   isGenerating = false,
   hasGenerated = false,
@@ -76,7 +77,7 @@ function StudyFormSideCard({
           size="L"
           width="100%"
           onClick={onSubmit}
-          disabled={isSubmitting}
+          disabled={!isValid || isSubmitting}
         >
           <span className="text-lg font-medium">
             {isEdit ? '저장하기' : '스터디 만들기'}

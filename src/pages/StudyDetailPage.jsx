@@ -9,6 +9,9 @@ import DetailBarTopContent from '../shared/components/StudyDetail/DetailBarTopCo
 import StudyStateCard from '../shared/components/Cards/StudyStateCard';
 import LeaderProfile from '../shared/components/StudyDetail/LeaderProfile';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
+import Modal from '../atoms/Modal/Modal';
+import Image from '../atoms/Images/Common/Image';
+import Button from '../atoms/Button/Button';
 
 const STATUS_NAME_MAP = {
   '모집 중': 'recruiting',
@@ -34,10 +37,11 @@ function StudyDetailPage() {
   const { handleJoin, handleLeave } = useStudyParticipate(studyId, {
     onSuccess: refetch,
   });
-  const email = useAuthStore((s) => s.email);
+  const userId = useAuthStore((s) => s.userId);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const handleShare = () => {
     navigator.clipboard
@@ -72,9 +76,9 @@ function StudyDetailPage() {
 
   if (!study || !cardProps) return null;
 
-  const isOwner = study.leader?.email === email;
+  const isOwner = study.leader?.id === userId;
   const isParticipant = (study.participants ?? []).some(
-    (p) => p.email === email,
+    (p) => p.id === userId,
   );
   const dDay = calcDDay(study.start_date);
   const hashtags = (study.search_tag ?? []).map((t) => `#${t.name}`);
@@ -94,6 +98,21 @@ function StudyDetailPage() {
 
   return (
     <div className="max-w-max-width-lg mx-auto px-5 py-10">
+      <Modal
+        isOpen={isChatModalOpen}
+        onClose={() => setIsChatModalOpen(false)}
+        className="bg-bg rounded-2xl px-xl py-lg flex flex-col items-center gap-y-md shadow-lg min-w-[280px]"
+      >
+        <Image
+          name="NotFound"
+          alt="준비중"
+          className="w-[100px] h-[100px] rounded-full object-cover"
+        />
+        <p className="text-text text-base font-medium">채팅 기능은 준비중입니다.</p>
+        <Button variant="blue" size="M" onClick={() => setIsChatModalOpen(false)}>
+          확인
+        </Button>
+      </Modal>
       {/* 배너 */}
       <DetailBarTopContainer
         image={
@@ -191,8 +210,10 @@ function StudyDetailPage() {
             status={status}
             dDay={dDay}
             isOwner={isOwner}
+            isParticipant={isParticipant}
             isLiked={isLiked}
             onParticipate={handleParticipateClick}
+            onChatRoom={() => setIsChatModalOpen(true)}
             onEdit={() => navigate(`/study/${studyId}/edit`)}
             onShare={handleShare}
             onLike={handleLike}

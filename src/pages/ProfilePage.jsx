@@ -110,7 +110,14 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
               className="relative w-[130px] h-[130px] rounded-full overflow-hidden border border-border"
             >
               <img
-                src={previewUrl ?? (profile.profile_img ? (profile.profile_img.startsWith('http') ? profile.profile_img : `${MEDIA_URL}${profile.profile_img}`) : undefined)}
+                src={
+                  previewUrl ??
+                  (profile.profile_img
+                    ? profile.profile_img.startsWith('http')
+                      ? profile.profile_img
+                      : `${MEDIA_URL}${profile.profile_img}`
+                    : undefined)
+                }
                 alt="프로필"
                 className="w-full h-full object-cover"
               />
@@ -273,7 +280,13 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
 
       <MypageProfileCard
         hasUser={profile.is_associate_member}
-        profileImage={profile.profile_img ? (profile.profile_img.startsWith('http') ? profile.profile_img : `${MEDIA_URL}${profile.profile_img}`) : undefined}
+        profileImage={
+          profile.profile_img
+            ? profile.profile_img.startsWith('http')
+              ? profile.profile_img
+              : `${MEDIA_URL}${profile.profile_img}`
+            : undefined
+        }
         nickname={profile.nickname}
       >
         {profile.introduction}
@@ -367,7 +380,11 @@ function StudyTab() {
             >
               {study.thumbnail ? (
                 <img
-                  src={study.thumbnail}
+                  src={
+                    study.thumbnail.startsWith('http')
+                      ? study.thumbnail
+                      : `${MEDIA_URL}${study.thumbnail}`
+                  }
                   alt={study.title}
                   className="w-full h-full object-cover"
                 />
@@ -459,7 +476,6 @@ function ProfilePage() {
         )}
       </section>
     </main>
-
   );
 }
 

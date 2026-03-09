@@ -46,6 +46,8 @@ function StudyStateCard({
   onLike,
   isLiked = false,
   isOwner = false,
+  isParticipant = false,
+  onChatRoom,
   className = '',
 }) {
   const STATUS_CONFIG = {
@@ -110,7 +112,7 @@ function StudyStateCard({
                 key={day}
                 className={`w-[30px] h-[30px] rounded-full flex items-center justify-center text-base font-regular ${
                   isSelected
-                    ? 'bg-primary-dark text-secondary'
+                    ? 'bg-primary-dark text-white'
                     : 'bg-bg-muted text-secondary'
                 }`}
               >
@@ -159,62 +161,53 @@ function StudyStateCard({
         </div>
 
         <div className="flex flex-col gap-sm">
-          {/* 참여하기 버튼 */}
+          {/* 참여하기 / 채팅방 가기 버튼 */}
           <FlexibleButton
             variant="blue"
             size="L"
             width="100%"
-            onClick={canParticipate ? onParticipate : undefined}
-            disabled={!canParticipate}
+            onClick={
+              isParticipant
+                ? onChatRoom
+                : canParticipate
+                  ? onParticipate
+                  : undefined
+            }
+            disabled={!isParticipant && !canParticipate}
             className="transition-transform"
           >
-            <span className="text-lg font-medium">참여하기</span>
+            <span className="text-lg font-medium">
+              {isParticipant ? '채팅방 가기' : '참여하기'}
+            </span>
           </FlexibleButton>
+
+          {/* 수정하기 버튼 (스터디장만) */}
+          {isOwner && (
+            <FlexibleButton
+              variant="white"
+              size="L"
+              width="100%"
+              onClick={onEdit}
+              className="border-secondary-light transition-transform cursor-pointer"
+            >
+              <span className="text-lg font-medium">스터디 수정하기</span>
+            </FlexibleButton>
+          )}
 
           {/* 하단 버튼 행 */}
           <div className="flex w-full gap-2">
-            {isOwner ? (
-              <FlexibleButton
-                variant="white"
-                size="L"
-                width="100%"
-                onClick={onEdit}
-                className="flex-1 border-secondary-light transition-transform cursor-pointer"
-              >
-                <span className="text-lg font-medium">수정</span>
-              </FlexibleButton>
-            ) : (
-              <FlexibleButton
-                variant="white"
-                size="L"
-                width="200px"
-                onClick={handleShareLink}
-                className="flex-1 border-secondary-light transition-transform cursor-pointer"
-              >
-                <span className="flex items-center justify-center gap-xs">
-                  <Icon name="Share" size={20} />
-                  <span className="text-lg font-medium">공유하기</span>
-                </span>
-              </FlexibleButton>
-            )}
-
-            {isOwner && (
-              <FlexibleButton
-                variant="white"
-                size="L"
-                width="50px"
-                onClick={handleShareLink}
-                className="border-secondary-light cursor-pointer transition-transform px-0! shrink-0"
-              >
-                <div className="flex items-center justify-center w-full h-full">
-                  <Icon
-                    name="Share"
-                    size={20}
-                    className="text-secondary-dark"
-                  />
-                </div>
-              </FlexibleButton>
-            )}
+            <FlexibleButton
+              variant="white"
+              size="L"
+              width="200px"
+              onClick={handleShareLink}
+              className="flex-1 border-secondary-light transition-transform cursor-pointer"
+            >
+              <span className="flex items-center justify-center gap-xs">
+                <Icon name="Share" size={20} />
+                <span className="text-lg font-medium">공유하기</span>
+              </span>
+            </FlexibleButton>
 
             <FlexibleButton
               variant="white"
