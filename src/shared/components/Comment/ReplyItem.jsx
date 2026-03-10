@@ -22,18 +22,16 @@ const ReplyItem = ({
   onEdit,
   onDelete,
   onReport,
+  onReply,
 }) => {
   // 멘션 파싱
   const renderContent = () => {
-    if (mention) {
-      return (
-        <>
-          <span className="text-[16px] font-medium text-primary">@{mention}</span>
-          <span className="text-[16px] font-normal text-text ml-[8px]">{content}</span>
-        </>
-      );
-    }
-    return <span className="text-[16px] font-normal text-text">{content}</span>;
+    const parts = content.split(/(@\S+)/g);
+    return parts.map((part, i) =>
+      part.startsWith('@')
+        ? <span key={i} className="text-[16px] font-medium text-primary">{part}</span>
+        : <span key={i} className="text-[16px] font-normal text-text">{part}</span>
+    );
   };
 
   const displayNickname = isDeleted
@@ -71,7 +69,7 @@ const ReplyItem = ({
                   <Crown className="w-[20px] h-[20px] text-accent" />
                 )}
                 {isMine && !isDeleted && (
-                  <span className="px-[8px] py-[4px] text-[12px] font-normal text-primary border border-primary rounded-[4px]">
+                  <span className="w-[50px] h-[24px] px-[8px] text-[12px] font-normal text-primary border border-primary rounded-[4px] flex items-center justify-center whitespace-nowrap shrink-0">
                     내댓글
                   </span>
                 )}

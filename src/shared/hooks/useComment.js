@@ -28,7 +28,10 @@ const useComment = (studyPk) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/study/${studyPk}/comment/`);
+      const token = getToken();
+      const res = await fetch(`${API_BASE_URL}/study/${studyPk}/comment/`, {
+        headers: token ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } : {},
+      });
       if (!res.ok) throw new Error('댓글을 불러올 수 없습니다.');
       const data = await res.json();
       setComments(data);
