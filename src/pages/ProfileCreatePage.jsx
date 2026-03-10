@@ -47,6 +47,7 @@ export default function ProfileCreatePage() {
   const [phoneError, setPhoneError] = useState('');
   const [connectedGithub, setConnectedGithub] = useState('');
   const [nicknameStatus, setNicknameStatus] = useState('idle'); // 'idle' | 'checking' | 'available' | 'taken'
+  const [nicknameTouched, setNicknameTouched] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -57,26 +58,16 @@ export default function ProfileCreatePage() {
     setNicknameStatus('checking');
     const timer = setTimeout(async () => {
       try {
-        const res = await checkNicknameAvailability(form.nickname.trim());
-        const data = res?.data;
-        // 응답 본문에 available/is_available 필드가 있는 경우 처리
-        if (data?.available === false || data?.is_available === false) {
-          setNicknameStatus('taken');
-        } else {
-          setNicknameStatus('available');
-        }
+        // 200: {"data": "사용 가능한 닉네임입니다."}
+        await checkNicknameAvailability(form.nickname.trim());
+        setNicknameStatus('available');
       } catch (err) {
         const status = err.response?.status;
-        const data = err.response?.data;
-        if (
-          status === 409 ||
-          status === 400 ||
-          data?.available === false ||
-          data?.is_available === false
-        ) {
+        if (status === 409) {
+          // 이미 존재하는 닉네임
           setNicknameStatus('taken');
         } else {
-          // 네트워크 오류 등 — 판별 불가 상태로 복귀
+          // 400(빈 값 등) 또는 네트워크 오류 — 판별 불가
           setNicknameStatus('idle');
         }
       }
@@ -197,38 +188,45 @@ export default function ProfileCreatePage() {
         </div>
 
         {/* 닉네임 */}
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col mt-xl items-center gap-1">
           <div className="relative w-full max-w-80">
             <input
               type="text"
               value={form.nickname}
               onChange={(e) => handleField('nickname')(e.target.value)}
-              placeholder="닉네임을 입력하세요"
-              className={`w-full border-b-2 outline-none text-base text-text text-center pb-2 placeholder:text-text-disabled bg-transparent ${
-                nicknameStatus === 'taken'
+              onBlur={() => setNicknameTouched(true)}
+              placeholder="별명을 입력해 주세요."
+              className={`w-full border-b-2 outline-none text-regular text-lg text-text text-center pb-1 placeholder:text-secondary bg-transparent ${
+                nicknameTouched && !form.nickname.trim()
                   ? 'border-error'
-                  : nicknameStatus === 'available'
-                    ? 'border-primary'
-                    : 'border-border focus:border-info'
+                  : nicknameStatus === 'taken'
+                    ? 'border-error'
+                    : nicknameStatus === 'available'
+                      ? 'border-primary'
+                      : 'border-border focus:border-info'
               }`}
             />
-            <span className="absolute right-0 bottom-1.5">
+            <span className="absolute right-0 pb-1 bottom-1.5">
               <Icon
-                name="CheckFill"
-                size={18}
+                name={nicknameStatus === 'available' ? 'CheckFill' : 'Check'}
+                size={20}
                 color={
                   nicknameStatus === 'available'
                     ? 'var(--color-primary)'
-                    : '#d1d5db'
+                    : 'var(--color-secondary-light)'
                 }
               />
             </span>
           </div>
-          {nicknameStatus === 'taken' && (
-            <p className="text-xs text-error">
-              * 이미 존재하는 별명입니다. 다른 별명을 입력해주세요.
+          {nicknameTouched && !form.nickname.trim() ? (
+            <p className="text-sm pt-xxs text-error">
+              *별명은 필수 입력 항목입니다.
             </p>
-          )}
+          ) : nicknameStatus === 'taken' ? (
+            <p className="text-sm pt-xxs text-error">
+              *이미 존재하는 별명입니다. 다른 별명을 입력해주세요.
+            </p>
+          ) : null}
         </div>
 
         {/* 소개 */}
@@ -376,7 +374,11 @@ export default function ProfileCreatePage() {
               type="button"
               onClick={() => setConnectedGithub(form.github.trim())}
               disabled={!form.github.trim()}
-              className="h-10 px-5 w-30 border border-border rounded-md text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${
+                form.github.trim()
+                  ? 'bg-primary border-primary'
+                  : 'bg-secondary-light border-border'
+              }`}
             >
               잔디 연동
             </button>
