@@ -25,31 +25,16 @@ const MONTH_NAMES = [
 
 const DAY_LABEL = { 1: 'M', 3: 'W', 5: 'F' };
 const LABEL_W = 22;
+const CELL = 13;
+const GAP = 2;
+const STEP = CELL + GAP;
 
 function GitHubContributions({ username }) {
   const [weeks, setWeeks] = useState([]);
   const [months, setMonths] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [cell, setCell] = useState(10);
-  const [gap, setGap] = useState(2);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (!containerRef.current || weeks.length === 0) return;
-    const compute = () => {
-      const totalW = containerRef.current.clientWidth - 16;
-      const gridW = totalW - LABEL_W - 4;
-      const step = Math.floor(gridW / weeks.length);
-      const newGap = Math.max(1, Math.round(step * 0.17));
-      setCell(Math.max(6, step - newGap));
-      setGap(newGap);
-    };
-    compute();
-    const observer = new ResizeObserver(compute);
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [weeks]);
 
   useEffect(() => {
     if (!username) {
@@ -87,39 +72,92 @@ function GitHubContributions({ username }) {
           while (week.length < 7) week.push(null);
           weeksArr.push(week);
         }
+
+        const seen = new Set();
+        const monthArr = [];
+        weeksArr.forEach((w, wi) => {
+          for (const day of w) {
+            if (!day) continue;
+            const d = new Date(day.date + 'T00:00:00');
+            const m = d.getMonth();
+            if (d.getDate() <= 7 && !seen.has(m)) {
+              seen.add(m);
+              monthArr.push({ label: MONTH_NAMES[m], x: wi * STEP });
+              break;
+            }
+          }
+        });
+
         setWeeks(weeksArr);
+        setMonths(monthArr);
       })
       .catch(() => setError('GitHub 사용자를 찾을 수 없습니다.'))
       .finally(() => setLoading(false));
   }, [username]);
 
-  useEffect(() => {
-    if (weeks.length === 0) return;
-    const step = cell + gap;
-    const seen = new Set();
-    const monthArr = [];
-    weeks.forEach((w, wi) => {
-      for (const day of w) {
-        if (!day) continue;
-        const d = new Date(day.date + 'T00:00:00');
-        const m = d.getMonth();
-        if (d.getDate() <= 7 && !seen.has(m)) {
-          seen.add(m);
-          monthArr.push({ label: MONTH_NAMES[m], x: wi * step });
-          break;
-        }
-      }
-    });
-    setMonths(monthArr);
-  }, [cell, gap, weeks]);
-
   const baseClass =
-    'w-full min-h-40 border border-border rounded-md bg-white p-2 box-border overflow-hidden flex items-center justify-center';
+    'w-full min-h-40 border border-border rounded-md bg-white p-2 box-border flex items-center justify-center';
 
   if (loading) {
+    const SKELETON_WEEKS = 26;
     return (
-      <div ref={containerRef} className={baseClass}>
-        <span className="text-sm text-secondary">잔디를 불러오는 중...</span>
+      <div className="w-full min-h-40 border border-border rounded-md bg-white p-2 box-border overflow-x-auto">
+        <div style={{ width: LABEL_W + 4 + SKELETON_WEEKS * STEP }}>
+          {/* 월 레이블 skeleton */}
+          <div className="flex gap-6 mb-1" style={{ marginLeft: LABEL_W + 4 }}>
+            {Array.from({ length: 6 }, (_, i) => (
+              <div key={i} className="skeleton h-2.5 w-6" />
+            ))}
+          </div>
+
+          {/* 요일 + 셀 그리드 skeleton */}
+          <div className="flex gap-1">
+            <div
+              className="shrink-0 flex flex-col"
+              style={{ width: LABEL_W, gap: GAP }}
+            >
+              {Array.from({ length: 7 }, (_, i) => (
+                <div
+                  key={i}
+                  style={{ width: 10, height: CELL }}
+                  className={i % 2 === 1 ? 'skeleton' : ''}
+                />
+              ))}
+            </div>
+            <div className="flex" style={{ gap: GAP }}>
+              {Array.from({ length: SKELETON_WEEKS }, (_, wi) => (
+                <div key={wi} className="flex flex-col" style={{ gap: GAP }}>
+                  {Array.from({ length: 7 }, (_, di) => (
+                    <div
+                      key={di}
+                      className="skeleton"
+                      style={{ width: CELL, height: CELL, borderRadius: 2 }}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 푸터 skeleton */}
+          <div
+            className="flex justify-between items-center mt-2.5"
+            style={{ marginLeft: LABEL_W + 4 }}
+          >
+            <div className="skeleton h-2.5 w-48" />
+            <div className="flex items-center gap-1">
+              <div className="skeleton h-2.5 w-6" />
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="skeleton"
+                  style={{ width: CELL, height: CELL, borderRadius: 2 }}
+                />
+              ))}
+              <div className="skeleton h-2.5 w-6" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -134,20 +172,16 @@ function GitHubContributions({ username }) {
 
   if (!username) {
     return (
-      <div
-        ref={containerRef}
-        className="w-full min-h-40 border border-border rounded-md bg-white box-border"
-      />
+      <div className="w-full min-h-40 border border-border rounded-md bg-bg-muted box-border" />
     );
   }
 
-  const step = cell + gap;
-  const gridW = weeks.length * step;
+  const gridW = weeks.length * STEP;
 
   return (
     <div
       ref={containerRef}
-      className="w-full min-h-40 border border-border rounded-md bg-white p-2 box-border overflow-hidden flex"
+      className="w-full min-h-40 border border-border rounded-md bg-white p-2 box-border overflow-x-auto"
     >
       <div style={{ width: LABEL_W + 4 + gridW }}>
         {/* 월 레이블 */}
@@ -170,16 +204,16 @@ function GitHubContributions({ username }) {
               <div
                 key={dow}
                 className="flex items-center justify-end pr-1 text-[9px] text-secondary leading-none"
-                style={{ height: cell, marginBottom: dow < 6 ? gap : 0 }}
+                style={{ height: CELL, marginBottom: dow < 6 ? GAP : 0 }}
               >
                 {DAY_LABEL[dow] ?? ''}
               </div>
             ))}
           </div>
 
-          <div className="flex" style={{ gap }}>
+          <div className="flex" style={{ gap: GAP }}>
             {weeks.map((week, wi) => (
-              <div key={wi} className="flex flex-col" style={{ gap }}>
+              <div key={wi} className="flex flex-col" style={{ gap: GAP }}>
                 {week.map((day, di) => (
                   <div
                     key={di}
@@ -189,9 +223,9 @@ function GitHubContributions({ username }) {
                         : undefined
                     }
                     style={{
-                      width: cell,
-                      height: cell,
-                      borderRadius: Math.max(1, Math.floor(cell * 0.2)),
+                      width: CELL,
+                      height: CELL,
+                      borderRadius: 2,
                       backgroundColor: day
                         ? (COLORS[day.level] ?? COLORS[0])
                         : 'transparent',
@@ -227,9 +261,9 @@ function GitHubContributions({ username }) {
               <div
                 key={level}
                 style={{
-                  width: cell,
-                  height: cell,
-                  borderRadius: Math.max(1, Math.floor(cell * 0.2)),
+                  width: CELL,
+                  height: CELL,
+                  borderRadius: 2,
                   backgroundColor: COLORS[level],
                 }}
               />

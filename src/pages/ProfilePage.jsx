@@ -7,20 +7,25 @@ import MypageSideNav from '../shared/components/MypageSideNav';
 import MypageProfileCard from '../atoms/Card/MypageProfileCard';
 import MypageProfileInfoBox from '../atoms/Card/MypageProfileInfoBox';
 import Button from '../atoms/Button/Button';
-import EditProfileInputBox from '../atoms/Input/EditProfileInputBox';
-import InputBox from '../atoms/Input/InputBox';
-import { TagSize, TagM2 } from '../atoms/Tag';
-import Dropdown from '../atoms/DropdownSelect/Dropdown';
+import Icon from '../atoms/Icon/Common/Icon';
+import { TagSize } from '../atoms/Tag';
 import UserProfileLPlaceholder from '../shared/components/UserProfile/UserProfileLPlaceholder';
 import StudyListCard from '../shared/components/Cards/StudyListCard';
 import NoContents from '../shared/components/NoContents/NoContents';
 import NotificationItem from '../atoms/NotificationItem/NotificationItem';
+import TagInputField from '../shared/components/TagInputField/TagInputField';
+import GitHubContributions from '../shared/components/GitHub/GitHubContributions';
 
 import useNotificationStore from '../stores/notificationStore';
-import { REGION_OPTIONS } from '../constants/regions';
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags';
 import useUserData from '../features/profile/hooks/useUserData';
-import { getProfile, saveProfile } from '../features/profile/api';
+import useGeoLocation from '../features/location/hooks/useGeoLocation';
+import {
+  getProfile,
+  saveProfile,
+  checkNicknameAvailability,
+  checkPhoneAvailability,
+} from '../features/profile/api';
 import { MEDIA_URL } from '../constants/api';
 import { uploadImage } from '../features/file/api';
 import {
@@ -28,6 +33,9 @@ import {
   getMyParticipatingStudies,
   getLikedStudies,
 } from '../features/study/api';
+
+const inputClass =
+  'h-10 px-3 border border-border rounded-md text-sm text-text w-[282px] placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white';
 
 const STUDY_STATUS_MAP = {
   '모집 중': 'recruiting',
@@ -48,11 +56,107 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef(null);
 
+  // 닉네임 중복 확인
+  const [nicknameStatus, setNicknameStatus] = useState('idle');
+  const [nicknameTouched, setNicknameTouched] = useState(false);
+  const originalNickname = profile?.nickname ?? '';
+
+  useEffect(() => {
+    if (!isEditing) return;
+    if (!form.nickname.trim()) {
+      setNicknameStatus('idle');
+      return;
+    }
+    // 원래 닉네임과 동일하면 체크 불필요
+    if (form.nickname.trim() === originalNickname) {
+      setNicknameStatus('available');
+      return;
+    }
+    setNicknameStatus('checking');
+    const timer = setTimeout(async () => {
+      try {
+        await checkNicknameAvailability(form.nickname.trim());
+        setNicknameStatus('available');
+      } catch (err) {
+        const status = err.response?.status;
+        if (status === 409) {
+          setNicknameStatus('taken');
+        } else {
+          setNicknameStatus('idle');
+        }
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [form.nickname, isEditing]);
+
+  // 전화번호 인증
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isPhoneChecking, setIsPhoneChecking] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
+
+  const handlePhoneVerify = async () => {
+    setPhoneError('');
+    setIsPhoneChecking(true);
+    try {
+      await checkPhoneAvailability(form.phone);
+      setIsPhoneVerified(true);
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 409 || status === 400) {
+        setPhoneError('이미 사용 중인 전화번호입니다.');
+      } else {
+        setIsPhoneVerified(true);
+      }
+    } finally {
+      setIsPhoneChecking(false);
+    }
+  };
+
+  // 선호 지역
+  const [regionLabel, setRegionLabel] = useState(
+    profile?.preferred_region?.location ?? '',
+  );
+  const { detectRegion, setConsent, consent, isDetecting } = useGeoLocation();
+
+  const handleDetectRegion = async () => {
+    setConsent(true);
+    try {
+      const region = await detectRegion();
+      handleField('region')(region.id);
+      setRegionLabel(region.location);
+    } catch {
+      // geoError는 훅 내부에서 세팅됨
+    }
+  };
+
+  // GitHub 잔디
+  const [connectedGithub, setConnectedGithub] = useState('');
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setProfileImage(file);
     setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const enterEditMode = () => {
+    setIsEditing(true);
+    setNicknameStatus('available'); // 현재 닉네임은 사용 가능 상태로 시작
+    setNicknameTouched(false);
+    // 전화번호가 원래 값과 동일하면 인증 완료 상태로 시작
+    setIsPhoneVerified(true);
+    setPhoneError('');
+    setConnectedGithub(profile?.github_username ?? '');
+  };
+
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setSaveError('');
+    setNicknameStatus('idle');
+    setNicknameTouched(false);
+    setIsPhoneVerified(false);
+    setPhoneError('');
+    setConnectedGithub('');
   };
 
   const handleSave = async () => {
@@ -92,20 +196,20 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   // 수정 모드
   if (isEditing) {
     return (
-      <div className="flex flex-col gap-[30px] p-[40px] w-full">
+      <div className="flex flex-col gap-6 p-[40px] w-full">
         {/* 프로필 이미지 */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageChange}
+        />
         <div className="flex justify-center">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
           {previewUrl || profile.profile_img ? (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="relative w-[130px] h-[130px] rounded-full overflow-hidden border border-border"
+              className="relative w-32.5 h-32.5 rounded-full overflow-hidden border border-border cursor-pointer"
             >
               <img
                 src={
@@ -127,116 +231,222 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
           )}
         </div>
 
-        {/* 입력 필드 */}
-        <div className="flex flex-col gap-5">
-          <EditProfileInputBox
-            label="닉네임"
-            required
-            labelWidth="52px"
-            value={form.nickname}
-            onChange={handleField('nickname')}
-            placeholder="닉네임을 입력하세요"
+        {/* 닉네임 */}
+        <div className="flex flex-col items-center gap-1">
+          <div className="relative w-full max-w-80">
+            <input
+              type="text"
+              value={form.nickname}
+              onChange={(e) => handleField('nickname')(e.target.value)}
+              onBlur={() => setNicknameTouched(true)}
+              placeholder="별명을 입력해 주세요."
+              className={`w-full border-b-2 outline-none text-lg text-text text-center pb-1 placeholder:text-secondary bg-transparent ${
+                nicknameTouched && !form.nickname.trim()
+                  ? 'border-error'
+                  : nicknameStatus === 'taken'
+                    ? 'border-error'
+                    : nicknameStatus === 'available'
+                      ? 'border-primary'
+                      : 'border-border focus:border-info'
+              }`}
+            />
+            <span className="absolute right-0 pb-1 bottom-1.5">
+              <Icon
+                name={nicknameStatus === 'available' ? 'CheckFill' : 'Check'}
+                size={20}
+                color={
+                  nicknameStatus === 'available'
+                    ? 'var(--color-primary)'
+                    : 'var(--color-secondary-light)'
+                }
+              />
+            </span>
+          </div>
+          {nicknameTouched && !form.nickname.trim() ? (
+            <p className="text-sm text-error">*별명은 필수 입력 항목입니다.</p>
+          ) : nicknameStatus === 'taken' ? (
+            <p className="text-sm text-error">
+              *이미 존재하는 별명입니다. 다른 별명을 입력해주세요.
+            </p>
+          ) : null}
+        </div>
+
+        {/* 소개 */}
+        <div className="items-center flex flex-col">
+          <textarea
+            value={form.introduction}
+            onChange={(e) => handleField('introduction')(e.target.value)}
+            placeholder="소개를 입력해 주세요."
+            maxLength={80}
+            rows={3}
+            className="w-150 h-18 border border-border rounded-md p-4 text-sm text-text placeholder:text-text-disabled outline-none focus:border-info resize-none"
           />
-          <EditProfileInputBox
-            label="이름"
-            required
-            labelWidth="52px"
+          <p className="w-150 text-right text-xs mt-md text-text-muted">
+            {form.introduction?.length ?? 0}/80
+          </p>
+        </div>
+
+        <hr className="border-border" />
+
+        {/* 이메일 */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text font-bold w-24 shrink-0">
+            이메일(ID)
+          </span>
+          <span className="flex-1 h-10 flex items-center text-sm text-secondary-dark">
+            {profile.email}
+          </span>
+        </div>
+
+        {/* 이름 */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text font-bold w-24 shrink-0">
+            이름 <span className="text-error">*</span>
+          </span>
+          <input
+            type="text"
             value={form.name}
-            onChange={handleField('name')}
+            onChange={(e) => handleField('name')(e.target.value)}
             placeholder="이름을 입력하세요"
+            className={inputClass}
           />
-          <EditProfileInputBox
-            label="전화번호"
-            required
-            labelWidth="52px"
-            value={form.phone}
-            onChange={handleField('phone')}
-            placeholder="010-0000-0000"
-          />
-          <EditProfileInputBox
-            label="GitHub"
-            labelWidth="52px"
-            value={form.github}
-            onChange={handleField('github')}
-            placeholder="GitHub 사용자명"
-          />
+        </div>
 
-          {/* 선호 지역 */}
-          <div className="flex items-center gap-[64px]">
-            <span
-              className="text-sm text-text shrink-0"
-              style={{ minWidth: '52px' }}
-            >
-              선호 지역
+        {/* 전화번호 */}
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-text font-bold w-24 shrink-0">
+              전화번호 <span className="text-error">*</span>
             </span>
-            <Dropdown
-              options={REGION_OPTIONS}
-              value={form.region}
-              onChange={handleField('region')}
-              placeholder="지역을 선택하세요"
-              width="282px"
+            <input
+              type="text"
+              value={form.phone}
+              onChange={(e) => {
+                handleField('phone')(e.target.value);
+                setIsPhoneVerified(false);
+                setPhoneError('');
+              }}
+              disabled={isPhoneVerified}
+              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white disabled:bg-bg-muted disabled:text-text-muted disabled:cursor-not-allowed"
             />
-          </div>
-
-          {/* 소개글 */}
-          <div className="flex items-start gap-[64px]">
-            <span
-              className="text-sm text-text shrink-0 pt-2"
-              style={{ minWidth: '52px' }}
+            <button
+              type="button"
+              onClick={handlePhoneVerify}
+              disabled={
+                !form.phone.trim() || isPhoneVerified || isPhoneChecking
+              }
+              className="h-10 px-5 w-30 border border-border rounded-md text-sm text-white bg-secondary-light disabled:cursor-not-allowed shrink-0"
             >
-              소개
-            </span>
-            <InputBox
-              value={form.introduction}
-              onChange={handleField('introduction')}
-              placeholder="자기소개를 입력하세요"
-              maxLength={200}
-              width="600px"
-            />
+              {isPhoneChecking
+                ? '확인 중...'
+                : isPhoneVerified
+                  ? '인증완료'
+                  : '인증'}
+            </button>
           </div>
+          {phoneError && (
+            <p className="text-xs text-error ml-28">{phoneError}</p>
+          )}
+        </div>
 
-          {/* 관심 태그 선택 */}
-          <div className="flex flex-col gap-3">
-            <span className="text-sm font-bold text-text">관심 태그</span>
-            <div className="flex flex-wrap gap-2">
-              {ALL_TAGS.map((tag) => {
-                const selected = selectedTags.some((t) => t.id === tag.id);
-                return (
-                  <TagSize
-                    key={tag.id}
-                    size="M"
-                    variant={selected ? 'blue' : 'lightgray'}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag.name}
-                  </TagSize>
-                );
-              })}
-            </div>
-            {selectedTags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-1">
-                {selectedTags.map((tag) => (
-                  <TagM2 key={tag.id} onRemove={() => removeTag(tag.id)}>
-                    {tag.name}
-                  </TagM2>
-                ))}
-              </div>
-            )}
+        {/* 선호 지역 */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text font-bold w-24 shrink-0">
+            내 지역
+          </span>
+          <input
+            type="text"
+            readOnly
+            value={regionLabel}
+            className="w-71 h-10 px-3 border border-border rounded-md text-sm text-text bg-bg-muted cursor-default outline-none"
+          />
+          <button
+            type="button"
+            onClick={handleDetectRegion}
+            disabled={isDetecting}
+            className="h-10 px-5 w-30 border border-border rounded-md text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+          >
+            {isDetecting ? '인증 중...' : '인증'}
+          </button>
+        </div>
+        <div className="flex items-center gap-2 ml-28">
+          <span className="text-sm text-text-muted">위치 공유</span>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="radio"
+              name="locationConsent"
+              checked={consent === true}
+              onChange={() => setConsent(true)}
+              className="accent-primary"
+            />
+            <span className="text-sm text-text">동의</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="radio"
+              name="locationConsent"
+              checked={consent === false}
+              onChange={() => setConsent(false)}
+              className="accent-primary"
+            />
+            <span className="text-sm text-text">미동의</span>
+          </label>
+        </div>
+
+        {/* GitHub */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-text font-bold w-24 shrink-0">
+              GitHub
+              <br />
+              User Name
+            </span>
+            <input
+              type="text"
+              value={form.github}
+              onChange={(e) => {
+                handleField('github')(e.target.value);
+                setConnectedGithub('');
+              }}
+              placeholder="GitHub 사용자명"
+              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white"
+            />
+            <button
+              type="button"
+              onClick={() => setConnectedGithub(form.github.trim())}
+              disabled={!form.github.trim()}
+              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${
+                form.github.trim()
+                  ? 'bg-primary border-primary'
+                  : 'bg-secondary-light border-border'
+              }`}
+            >
+              잔디 연동
+            </button>
           </div>
+          <div className="ml-26">
+            <GitHubContributions username={connectedGithub} />
+          </div>
+        </div>
+
+        {/* 관심 태그 */}
+        <div>
+          <span className="text-sm font-bold text-text block mb-3">
+            관심 분야 태그
+          </span>
+          <TagInputField
+            options={ALL_TAGS}
+            selectedTags={selectedTags}
+            onAdd={toggleTag}
+            onRemove={removeTag}
+          />
         </div>
 
         {saveError && <p className="text-sm text-error">{saveError}</p>}
 
         {/* 버튼 */}
         <div className="flex gap-3 justify-end">
-          <Button
-            variant="white"
-            size="M"
-            onClick={() => {
-              setIsEditing(false);
-              setSaveError('');
-            }}
-          >
+          <Button variant="white" size="M" onClick={cancelEdit}>
             취소
           </Button>
           <Button
@@ -256,7 +466,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   return (
     <div className="flex flex-col items-center gap-[30px] p-[40px] w-full">
       <div className="flex justify-end w-full">
-        <Button variant="white" size="S" onClick={() => setIsEditing(true)}>
+        <Button variant="white" size="S" onClick={enterEditMode}>
           수정하기
         </Button>
       </div>
@@ -318,7 +528,6 @@ function StudyTab() {
 
   return (
     <div className="flex flex-col px-[55px] w-full">
-      {/* 탭 필터 */}
       <div className="flex gap-[14px] my-[30px]">
         {STUDY_TABS.map(({ key, label }) => (
           <TagSize

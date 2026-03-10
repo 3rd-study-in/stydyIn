@@ -10,4 +10,4 @@ export const checkPhoneAvailability = (phone) =>
   axiosInstance.get(`/accounts/phones/check/?phone=${encodeURIComponent(phone)}`)
 
 export const checkNicknameAvailability = (nickname) =>
-  axiosInstance.get(`/accounts/nicknames/check/?nickname=${encodeURIComponent(nickname)}`)
+  axiosInstance.get(`/accounts/nicknames/?nickname=${encodeURIComponent(nickname)}`)
