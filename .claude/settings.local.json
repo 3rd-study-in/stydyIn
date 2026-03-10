@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh issue list --state closed --limit 100)",
+      "Bash(grep -E \"\\\\.\\(jsx|js|css\\)$\")",
+      "Bash(/tmp/structure.txt:*)",
+      "Read(//tmp/**)",
+      "Bash(xargs grep -l \"createStudy\\\\|getStudyList\")"
+    ]
+  }
+}
