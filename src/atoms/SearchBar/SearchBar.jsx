@@ -7,6 +7,7 @@ const SearchBar = ({
   placeholder = '어떤 스터디를 찾고 계신가요?',
   recentSearches = [],
   onSelectRecent,
+  onFocus,
   ...rest
 }) => {
   const { isOpen, open, close, containerRef } = useDisclosure();
@@ -25,7 +26,7 @@ const SearchBar = ({
           onChange={onChange}
           placeholder={placeholder}
           className="w-full h-full pl-5 pr-12 py-3 rounded-full border-2 border-border bg-bg text-base font-regular text-text-muted placeholder:text-text-disabled focus:outline-none focus:border-primary"
-          onFocus={open}
+          onFocus={(e) => { open(); onFocus?.(e); }}
           {...rest}
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">

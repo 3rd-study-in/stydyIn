@@ -293,6 +293,7 @@ const GNB = () => {
             onKeyDown={handleSearchKeyDown}
             recentSearches={recentSearches}
             onSelectRecent={handleSelectRecent}
+            onFocus={() => navigate('/search')}
           />
         </div>
 
