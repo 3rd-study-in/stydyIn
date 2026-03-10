@@ -94,7 +94,7 @@ function StudyListCard({
       </button>
 
       {/* 콘텐츠 */}
-      <div className="absolute top-[332px] left-0 w-full h-[148px] px-4 py-3 flex flex-col justify-between">
+      <div className="absolute top-[332px] left-0 w-full h-[148px] px-4 py-3 flex flex-col justify-start ">
         {/* 태그 */}
         <div className="flex items-center gap-2">
           {category && (
@@ -110,17 +110,19 @@ function StudyListCard({
         </div>
 
         {/* 제목 */}
-        <p className="text-lg font-bold text-text leading-snug line-clamp-2">
+        <p className="text-lg font-bold text-text pt-md leading-snug line-clamp-2">
           {title}
         </p>
 
         {/* 참가자 수 */}
         {currentCount !== undefined && (
-          <div className="flex items-center gap-1 text-sm text-text-muted">
+          <div className="flex items-center mt-2 gap-1 text-sm text-secondary">
             <Icon name="People" size={18} color="var(--color-secondary)" />
             <span>
               현재{' '}
-              <strong className="font-bold text-text">{currentCount}명</strong>
+              <strong className="font-bold text-primary">
+                {currentCount}명
+              </strong>
               이 신청했어요.
             </span>
           </div>

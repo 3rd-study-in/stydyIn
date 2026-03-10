@@ -39,17 +39,17 @@ function NoContents({
   className = '',
 }) {
   return (
-    <div className={`w-full h-full flex flex-col items-center justify-center gap-5 ${className}`}>
+    <div
+      className={`w-full h-full flex flex-col items-center justify-center gap-5 ${className}`}
+    >
       {/* 텍스트 영역 */}
-      <div className="flex flex-col items-center gap-[10px]">
-        <p className="text-lg font-bold text-text text-center font-['Spoqa_Han_Sans_Neo']">
-          {keyword && (
-            <span className="text-error">{keyword}</span>
-          )}
+      <div className="flex flex-col items-center gap-sm">
+        <p className="text-lg font-bold text-secondary-dark text-center font-['Spoqa_Han_Sans_Neo']">
+          {keyword && <span className="text-error">{keyword}</span>}
           {title}
         </p>
         {description && (
-          <p className="text-base font-normal text-text-muted text-center font-['Spoqa_Han_Sans_Neo']">
+          <p className="text-base font-regular text-secondary-dark text-center font-['Spoqa_Han_Sans_Neo']">
             {description}
           </p>
         )}

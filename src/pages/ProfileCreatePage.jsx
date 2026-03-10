@@ -1,14 +1,20 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/authStore';
 import useUserData from '../features/profile/hooks/useUserData';
-import { saveProfile } from '../features/profile/api';
+import {
+  saveProfile,
+  checkPhoneAvailability,
+  checkNicknameAvailability,
+} from '../features/profile/api';
 import { uploadImage } from '../features/file/api';
 import TagInputField from '../shared/components/TagInputField/TagInputField';
 import UserProfileLPlaceholder from '../shared/components/UserProfile/UserProfileLPlaceholder';
 import Button from '../atoms/Button/Button';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import { ALL_TAGS } from '../constants/tags';
+import GitHubContributions from '../shared/components/GitHub/GitHubContributions';
+import Icon from '../atoms/Icon/Common/Icon';
 
 const EMPTY_PROFILE = {
   nickname: '',
@@ -21,20 +27,81 @@ const EMPTY_PROFILE = {
 };
 
 const inputClass =
-  'flex-1 h-10 px-3 border border-border rounded-lg text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white';
+  'h-10 px-3 border border-border rounded-md text-sm text-text w-[282px] placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white';
 
 export default function ProfileCreatePage() {
   const navigate = useNavigate();
   const userId = useAuthStore((s) => s.userId);
+  const email = useAuthStore((s) => s.email);
   const { form, handleField, selectedTags, toggleTag, removeTag } =
     useUserData(EMPTY_PROFILE);
-  const { detectRegion, setConsent, consent, isDetecting, geoError } = useGeoLocation();
+  const { detectRegion, setConsent, consent, isDetecting, geoError } =
+    useGeoLocation();
   const [profileImage, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [regionLabel, setRegionLabel] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isPhoneChecking, setIsPhoneChecking] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
+  const [connectedGithub, setConnectedGithub] = useState('');
+  const [nicknameStatus, setNicknameStatus] = useState('idle'); // 'idle' | 'checking' | 'available' | 'taken'
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (!form.nickname.trim()) {
+      setNicknameStatus('idle');
+      return;
+    }
+    setNicknameStatus('checking');
+    const timer = setTimeout(async () => {
+      try {
+        const res = await checkNicknameAvailability(form.nickname.trim());
+        const data = res?.data;
+        // 응답 본문에 available/is_available 필드가 있는 경우 처리
+        if (data?.available === false || data?.is_available === false) {
+          setNicknameStatus('taken');
+        } else {
+          setNicknameStatus('available');
+        }
+      } catch (err) {
+        const status = err.response?.status;
+        const data = err.response?.data;
+        if (
+          status === 409 ||
+          status === 400 ||
+          data?.available === false ||
+          data?.is_available === false
+        ) {
+          setNicknameStatus('taken');
+        } else {
+          // 네트워크 오류 등 — 판별 불가 상태로 복귀
+          setNicknameStatus('idle');
+        }
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [form.nickname]);
+
+  const handlePhoneVerify = async () => {
+    setPhoneError('');
+    setIsPhoneChecking(true);
+    try {
+      await checkPhoneAvailability(form.phone);
+      setIsPhoneVerified(true);
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 409 || status === 400) {
+        setPhoneError('이미 사용 중인 전화번호입니다.');
+      } else {
+        // 체크 엔드포인트 없는 경우 등 — 일단 통과
+        setIsPhoneVerified(true);
+      }
+    } finally {
+      setIsPhoneChecking(false);
+    }
+  };
 
   const isValid = form.name.trim() && form.nickname.trim() && form.phone.trim();
 
@@ -130,14 +197,38 @@ export default function ProfileCreatePage() {
         </div>
 
         {/* 닉네임 */}
-        <div className="flex justify-center">
-          <input
-            type="text"
-            value={form.nickname}
-            onChange={(e) => handleField('nickname')(e.target.value)}
-            placeholder="닉네임을 입력하세요"
-            className="w-full max-w-80 border-b-2 border-border focus:border-info outline-none text-base text-text text-center pb-2 placeholder:text-text-disabled bg-transparent"
-          />
+        <div className="flex flex-col items-center gap-1">
+          <div className="relative w-full max-w-80">
+            <input
+              type="text"
+              value={form.nickname}
+              onChange={(e) => handleField('nickname')(e.target.value)}
+              placeholder="닉네임을 입력하세요"
+              className={`w-full border-b-2 outline-none text-base text-text text-center pb-2 placeholder:text-text-disabled bg-transparent ${
+                nicknameStatus === 'taken'
+                  ? 'border-error'
+                  : nicknameStatus === 'available'
+                    ? 'border-primary'
+                    : 'border-border focus:border-info'
+              }`}
+            />
+            <span className="absolute right-0 bottom-1.5">
+              <Icon
+                name="CheckFill"
+                size={18}
+                color={
+                  nicknameStatus === 'available'
+                    ? 'var(--color-primary)'
+                    : '#d1d5db'
+                }
+              />
+            </span>
+          </div>
+          {nicknameStatus === 'taken' && (
+            <p className="text-xs text-error">
+              * 이미 존재하는 별명입니다. 다른 별명을 입력해주세요.
+            </p>
+          )}
         </div>
 
         {/* 소개 */}
@@ -148,18 +239,28 @@ export default function ProfileCreatePage() {
             placeholder="소개를 입력해 주세요."
             maxLength={80}
             rows={3}
-            className="w-[600px] border border-border rounded-lg px-3 py-2 text-sm text-text placeholder:text-text-disabled outline-none focus:border-info resize-none"
+            className="w-[600px] h-[72px] border border-border rounded-md p-4 text-sm text-text placeholder:text-text-disabled outline-none focus:border-info resize-none"
           />
-          <p className="text-right text-xs text-text-muted">
+          <p className="w-150 text-right text-xs mt-md text-text-muted">
             {form.introduction?.length ?? 0}/80
           </p>
         </div>
 
         <hr className="border-border" />
 
+        {/* 이메일 */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text font-bold w-24 shrink-0">
+            이메일(ID)
+          </span>
+          <span className="flex-1 h-10 flex items-center text-sm text-secondary-dark">
+            {email}
+          </span>
+        </div>
+
         {/* 이름 */}
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-text w-24 shrink-0">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text font-bold w-24 shrink-0">
             이름 <span className="text-error">*</span>
           </span>
           <input
@@ -172,68 +273,118 @@ export default function ProfileCreatePage() {
         </div>
 
         {/* 전화번호 */}
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-text w-24 shrink-0">
-            전화번호 <span className="text-error">*</span>
-          </span>
-          <input
-            type="text"
-            value={form.phone}
-            onChange={(e) => handleField('phone')(e.target.value)}
-            placeholder="010-0000-0000"
-            className={inputClass}
-          />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-text font-bold w-24 shrink-0">
+              전화번호 <span className="text-error">*</span>
+            </span>
+            <input
+              type="text"
+              value={form.phone}
+              onChange={(e) => {
+                handleField('phone')(e.target.value);
+                setIsPhoneVerified(false);
+                setPhoneError('');
+              }}
+              disabled={isPhoneVerified}
+              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white disabled:bg-bg-muted disabled:text-text-muted disabled:cursor-not-allowed"
+            />
+            <button
+              type="button"
+              onClick={handlePhoneVerify}
+              disabled={
+                !form.phone.trim() || isPhoneVerified || isPhoneChecking
+              }
+              className="h-10 px-5 w-30 border border-border rounded-md text-sm text-white bg-secondary-light disabled:cursor-not-allowed shrink-0"
+            >
+              {isPhoneChecking
+                ? '확인 중...'
+                : isPhoneVerified
+                  ? '인증완료'
+                  : '인증'}
+            </button>
+          </div>
+          {phoneError && (
+            <p className="text-xs text-error ml-28">{phoneError}</p>
+          )}
         </div>
 
         {/* 내 지역 */}
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-text w-24 shrink-0">내 지역</span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text font-bold w-24 shrink-0">
+            내 지역 <span className="text-error">*</span>
+          </span>
           <input
             type="text"
             readOnly
             value={regionLabel}
-            placeholder="인증 버튼을 눌러 위치를 감지하세요"
-            className="flex-1 h-10 px-3 border border-border rounded-lg text-sm text-text placeholder:text-text-disabled bg-bg-muted cursor-default outline-none"
+            className="w-[282px] h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled bg-bg-muted cursor-default outline-none"
           />
           <button
             type="button"
             onClick={handleDetectRegion}
             disabled={isDetecting}
-            className="h-10 px-5 border border-border rounded-lg text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="h-10 px-5 w-[120px] border border-border rounded-md text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
-            {isDetecting ? '감지 중...' : '인증'}
+            {isDetecting ? '인증' : '인증'}
           </button>
         </div>
         <div className="flex items-center gap-2 ml-28">
           <span className="text-sm text-text-muted">위치 공유</span>
-          <button
-            type="button"
-            onClick={() => setConsent(!consent)}
-            className={`relative w-10 h-5 rounded-full transition-colors ${consent ? 'bg-primary' : 'bg-border'}`}
-          >
-            <span
-              className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${consent ? 'translate-x-5' : 'translate-x-0'}`}
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="radio"
+              name="locationConsent"
+              checked={consent === true}
+              onChange={() => setConsent(true)}
+              className="accent-primary"
             />
-          </button>
-          <span className="text-xs text-text-muted">{consent ? '동의' : '미동의'}</span>
+            <span className="text-sm text-text">동의</span>
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer">
+            <input
+              type="radio"
+              name="locationConsent"
+              checked={consent === false}
+              onChange={() => setConsent(false)}
+              className="accent-primary"
+            />
+            <span className="text-sm text-text">미동의</span>
+          </label>
         </div>
-        {geoError && (
+        {/* {geoError && (
           <p className="text-xs text-error -mt-3 ml-28">{geoError}</p>
-        )}
+        )} */}
 
         {/* GitHub */}
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-text w-24 shrink-0">GitHub</span>
-          <input
-            type="text"
-            value={form.github}
-            onChange={(e) => handleField('github')(e.target.value)}
-            placeholder="GitHub 사용자명"
-            className={inputClass}
-          />
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-text font-bold w-24 shrink-0">
+              GitHub <br />
+              User Name <span className="text-error">*</span>
+            </span>
+            <input
+              type="text"
+              value={form.github}
+              onChange={(e) => {
+                handleField('github')(e.target.value);
+                setConnectedGithub('');
+              }}
+              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white"
+            />
+            <button
+              type="button"
+              onClick={() => setConnectedGithub(form.github.trim())}
+              disabled={!form.github.trim()}
+              className="h-10 px-5 w-30 border border-border rounded-md text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            >
+              잔디 연동
+            </button>
+          </div>
+          <div className="ml-26">
+            <GitHubContributions username={connectedGithub} />
+          </div>
         </div>
-
-        <hr className="border-border" />
 
         {/* 관심 태그 */}
         <div>
@@ -249,17 +400,17 @@ export default function ProfileCreatePage() {
         </div>
 
         {submitError && <p className="text-sm text-error">{submitError}</p>}
+      </div>
 
-        <div className="flex justify-end">
-          <Button
-            variant="blue"
-            size="M"
-            disabled={!isValid || isLoading}
-            onClick={handleSubmit}
-          >
-            시작하기
-          </Button>
-        </div>
+      <div className="flex mt-[40px] justify-center">
+        <Button
+          variant="blue"
+          size="L"
+          disabled={!isValid || isLoading}
+          onClick={handleSubmit}
+        >
+          시작하기
+        </Button>
       </div>
     </div>
   );

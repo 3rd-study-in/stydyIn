@@ -8,7 +8,7 @@ import { BannerStudy } from '../../../atoms/Images/Common';
 const DetailBarTopContainer = ({ image = BannerStudy, children }) => {
   return (
     <div className="flex h-[390px] w-[1190px] overflow-hidden rounded-lg border border-border bg-bg shadow-sm">
-      <div className="h-[390px] w-[390px] shrink-0 border-r border-border bg-bg-muted">
+      <div className="h-[390px] w-[390px] shrink-0 border-r border-border  bg-bg-muted">
         <img
           src={image}
           alt="Study Thumbnail"
