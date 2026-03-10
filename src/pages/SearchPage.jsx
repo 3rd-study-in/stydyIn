@@ -10,16 +10,16 @@ import Pagination from '../shared/components/Pagination/Pagination';
 
 const PAGE_SIZE = 9;
 
-const STATUS_MAP = {
-  '모집 중': 'recruiting',
-  '진행 중': 'in_progress',
-  '모집 완료': 'completed',
-  종료: 'closed',
+const STATUS_ID_MAP = {
+  1: 'recruiting',
+  2: 'completed',
+  3: 'in_progress',
+  4: 'closed',
 };
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const subjectId = searchParams.get('subject');
   const searchQuery = searchParams.get('search');
   const typeParam = searchParams.get('type'); // 'local' | 'online' | null
@@ -28,8 +28,43 @@ export default function SearchPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterParams, setFilterParams] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('searchFilterParams');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [filterSelected, setFilterSelected] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('searchFilterSelected');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
 
   const activeCategory = CATEGORIES.find((c) => String(c.id) === subjectId);
+
+  const handleFilterApply = (params, selected) => {
+    setFilterParams(params);
+    setFilterSelected(selected);
+    sessionStorage.setItem('searchFilterParams', JSON.stringify(params));
+    sessionStorage.setItem('searchFilterSelected', JSON.stringify(selected));
+    setCurrentPage(1);
+  };
+
+  const handleFilterReset = () => {
+    setFilterParams({});
+    setFilterSelected({});
+    sessionStorage.removeItem('searchFilterParams');
+    sessionStorage.removeItem('searchFilterSelected');
+    setCurrentPage(1);
+    const next = new URLSearchParams(searchParams);
+    next.delete('search');
+    setSearchParams(next);
+  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -38,10 +73,14 @@ export default function SearchPage() {
   useEffect(() => {
     setLoading(true);
     const params = { page: currentPage, limit: PAGE_SIZE };
-    if (subjectId) params.subject = subjectId;
     if (searchQuery) params.search = searchQuery;
-    if (typeParam === 'local') params.is_offline = 1;
-    if (typeParam === 'online') params.is_offline = 0;
+    if (subjectId && filterParams.subject === undefined)
+      params.subject = subjectId;
+    if (typeParam === 'local' && filterParams.is_offline === undefined)
+      params.is_offline = 1;
+    if (typeParam === 'online' && filterParams.is_offline === undefined)
+      params.is_offline = 0;
+    Object.assign(params, filterParams);
 
     getStudyList(params)
       .then((res) => {
@@ -50,7 +89,7 @@ export default function SearchPage() {
       })
       .catch(() => setStudies([]))
       .finally(() => setLoading(false));
-  }, [subjectId, searchQuery, typeParam, currentPage]);
+  }, [subjectId, searchQuery, typeParam, currentPage, filterParams]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
@@ -70,7 +109,11 @@ export default function SearchPage() {
       )}
 
       {/* 필터 */}
-      <SearchFilter />
+      <SearchFilter
+        onApply={handleFilterApply}
+        onReset={handleFilterReset}
+        initialSelected={filterSelected}
+      />
 
       {/* 활성 필터 chip */}
       {(activeCategory || searchQuery) && (
@@ -105,31 +148,37 @@ export default function SearchPage() {
       ) : studies.length > 0 ? (
         <>
           <div className="grid grid-cols-4 gap-xl">
-            {studies.map((study) => (
-              <StudyListCard
-                key={study.id}
-                status={STATUS_MAP[study.study_status?.name] ?? 'recruiting'}
-                location={
-                  study.is_offline ? study.study_location?.location : null
-                }
-                category={study.subject?.name}
-                difficulty={study.difficulty?.name}
-                title={study.title}
-                currentCount={study.participant_count}
-                isLiked={study.user_liked}
-                onClick={() => navigate(`/study/${study.id}`)}
-              >
-                {study.thumbnail ? (
-                  <img
-                    src={study.thumbnail.startsWith('http') ? study.thumbnail : `${MEDIA_URL}${study.thumbnail}`}
-                    alt={study.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-bg-muted" />
-                )}
-              </StudyListCard>
-            ))}
+            {studies
+              .filter((study) => study.study_status?.id)
+              .map((study) => (
+                <StudyListCard
+                  key={study.id}
+                  status={STATUS_ID_MAP[study.study_status?.id] ?? 'recruiting'}
+                  location={
+                    study.is_offline ? study.study_location?.location : null
+                  }
+                  category={study.subject?.name}
+                  difficulty={study.difficulty?.name}
+                  title={study.title}
+                  currentCount={study.participant_count}
+                  isLiked={study.user_liked}
+                  onClick={() => navigate(`/study/${study.id}`)}
+                >
+                  {study.thumbnail ? (
+                    <img
+                      src={
+                        study.thumbnail.startsWith('http')
+                          ? study.thumbnail
+                          : `${MEDIA_URL}${study.thumbnail}`
+                      }
+                      alt={study.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-bg-muted" />
+                  )}
+                </StudyListCard>
+              ))}
           </div>
 
           {totalPages > 1 && (
