@@ -12,7 +12,7 @@ const useComment = (studyPk) => {
 
   // 토큰 가져오기 (로그인 상태 관리에 따라 수정 필요)
   const getToken = () => {
-    return localStorage.getItem('acess_token');
+    return localStorage.getItem('access_token');
   };
 
   // 공통 헤더
@@ -28,7 +28,10 @@ const useComment = (studyPk) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE_URL}/study/${studyPk}/comment/`);
+      const token = getToken();
+      const res = await fetch(`${API_BASE_URL}/study/${studyPk}/comment/`, {
+        headers: token ? { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } : {},
+      });
       if (!res.ok) throw new Error('댓글을 불러올 수 없습니다.');
       const data = await res.json();
       setComments(data);

@@ -1,9 +1,16 @@
+import { MEDIA_URL } from '../../../constants/api';
 import { useState, useEffect } from 'react';
 import CommentInput from './CommentInput';
 import CommentItem from './CommentItem';
 import ReplyItem from './ReplyItem';
 import ReplyInput from './ReplyInput';
 import useComment from '../../hooks/useComment';
+
+const resolveProfileImage = (img) => {
+  if (!img) return '';
+  if (img.startsWith('http')) return img;
+  return `${MEDIA_URL}${img}`;
+};
 
 // 날짜 포맷 함수
 const formatDate = (dateString) => {
@@ -15,6 +22,7 @@ const formatDate = (dateString) => {
 // API 응답 → 컴포넌트용 데이터 변환
 const transformComment = (comment) => {
   if (comment.user === "탈퇴한 회원입니다." || comment.is_delete) {
+    console.log('탈퇴/삭제 댓글:', comment);
     return {
       id: comment.id,
       isDeleted: true,
@@ -23,7 +31,7 @@ const transformComment = (comment) => {
       nickname: '미지의 사용자',
       profileImage: '',
       content: comment.is_delete ? '삭제된 댓글입니다' : '탈퇴한 사용자의 댓글',
-      date: formatDate(comment.created),
+      date: formatDate(comment.created || comment.created_at),
       replies: comment.recomments?.map(transformRecomment) || [],
     };
   }
@@ -33,7 +41,7 @@ const transformComment = (comment) => {
     isSecret: comment.is_secret || false,
     isMine: comment.user?.is_author || false,
     nickname: comment.user?.profile?.nickname || '익명',
-    profileImage: comment.user?.profile?.profile_img || '',
+    profileImage: resolveProfileImage(comment.user?.profile?.profile_img),
     content: comment.content,
     date: formatDate(comment.created),
     replies: comment.recomments?.map(transformRecomment) || [],
@@ -63,7 +71,7 @@ const transformRecomment = (recomment) => {
     isSecret: recomment.is_secret || false,
     isMine: recomment.user?.is_author || false,
     nickname: recomment.user?.profile?.nickname || '익명',
-    profileImage: recomment.user?.profile?.profile_img || '',
+    profileImage: resolveProfileImage(recomment.user?.profile?.profile_img),
     content: recomment.content,
     date: formatDate(recomment.created),
     mention: recomment.tagged_user?.nickname || null,
@@ -243,9 +251,9 @@ const CommentSection = ({
                 mention={reply.mention}
                 isLeader={reply.userId === leaderId}
                 isMine={reply.isMine}
-                isSecret={reply.isSecret}
+                isSecret={reply.isSecret || comment.isSecret}
                 isDeleted={reply.isDeleted}
-                canViewSecret={reply.isMine || comment.isMine || isPostOwner}
+                canViewSecret={comment.isSecret ? reply.isMine : (reply.isMine || comment.isMine || isPostOwner)}
                 isEditing={editingReply?.id === reply.id}
                 editContent={editingReply?.id === reply.id ? editingReply.content : ''}
                 onEditChange={(e) =>

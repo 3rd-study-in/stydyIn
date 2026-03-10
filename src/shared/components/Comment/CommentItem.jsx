@@ -23,6 +23,16 @@ const CommentItem = ({
   onDelete,
   onReport,
 }) => {
+
+  const renderContent = (text) => {
+  const parts = text.split(/(@\S+)/g);
+  return parts.map((part, i) =>
+    part.startsWith('@')
+      ? <span key={i} className="text-[16px] font-medium text-primary">{part}</span>
+      : <span key={i} className="text-[16px] font-normal text-text">{part}</span>
+  );
+};
+
   // 탈퇴한 사용자
   if (isDeleted) {
     return (
@@ -33,7 +43,9 @@ const CommentItem = ({
             <div className="flex flex-col gap-[2px]">
               <div className="flex items-center gap-[10px]">
                 <span className="text-[14px] font-bold text-secondary">미지의 사용자</span>
-                <span className="text-[14px] font-normal text-text-muted underline cursor-pointer" onClick={onReply}>답글달기</span>
+                <span className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center" onClick={onReply}>
+                  답글달기
+                </span>
               </div>
               <span className="text-[12px] font-normal text-secondary">{date}</span>
             </div>
@@ -77,22 +89,20 @@ const CommentItem = ({
             className="w-[40px] h-[40px] rounded-full border border-border object-cover"
           />
           <div className="flex flex-col gap-[2px]">
-            <div className="flex items-center gap-[6px]">
+            <div className="flex items-center gap-[10px]">
               <span className="text-[14px] font-bold text-text">{nickname}</span>
               {isLeader && <Crown className="w-[20px] h-[20px] text-accent" />}
               {isMine && (
-                <span className="px-[8px] py-[4px] text-[12px] font-normal text-primary border border-primary rounded-[4px]">
+                <span className="w-[50px] h-[24px] px-[8px] text-[12px] font-normal text-primary border border-primary rounded-[4px] flex items-center justify-center whitespace-nowrap shrink-0">
                   내댓글
                 </span>
               )}
-              {!isMine && (
-                <span 
-                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
-                  onClick={onReply}
-                >
-                  답글달기
-                </span>
-              )}
+              <span 
+                className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center"
+                onClick={onReply}
+              >
+                답글달기
+              </span>
             </div>
             <span className="text-[12px] font-normal text-secondary">{date}</span>
           </div>
@@ -166,7 +176,7 @@ const CommentItem = ({
           {isSecret && canViewSecret && (
             <Lock className="w-[24px] h-[24px] text-info shrink-0" />
           )}
-          <p className="text-[16px] font-normal text-text">{content}</p>
+          <p className="text-[16px] font-normal text-text">{renderContent(content)}</p>
         </div>
       )}
     </div>

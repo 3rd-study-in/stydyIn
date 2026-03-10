@@ -8,10 +8,10 @@ import DetailBarTopContainer from '../shared/components/StudyDetail/DetailBarTop
 import DetailBarTopContent from '../shared/components/StudyDetail/DetailBarTopContent';
 import StudyStateCard from '../shared/components/Cards/StudyStateCard';
 import LeaderProfile from '../shared/components/StudyDetail/LeaderProfile';
-import FlexibleButton from '../atoms/Button/FlexibleButton';
 import Modal from '../atoms/Modal/Modal';
 import Image from '../atoms/Images/Common/Image';
 import Button from '../atoms/Button/Button';
+import { CommentSection } from '../shared/components/Comment';
 
 const STATUS_NAME_MAP = {
   '모집 중': 'recruiting',
@@ -39,7 +39,6 @@ function StudyDetailPage() {
   });
   const userId = useAuthStore((s) => s.userId);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
@@ -174,33 +173,11 @@ function StudyDetailPage() {
 
           <hr className="border-border my-3xl" />
 
-          <section>
-            <h2 className="text-[30px] font-bold text-text mb-3xl">
-              그룹장에게 질문하기
-            </h2>
-            <div className="border border-border rounded-lg p-[16px] flex gap-4">
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="다른 사람의 권리를 침해하거나 명예를 훼손하는 댓글은 관련 법률에 의해 제재를 받을 수 있습니다."
-                maxLength={300}
-                className="flex-1 h-17.5 text-sm text-text placeholder:text-text-disabled outline-none resize-none"
-              />
-              <div className="flex flex-col items-end justify-between shrink-0">
-                <span className="text-sm text-text-disabled">
-                  {comment.length}/300
-                </span>
-                <FlexibleButton
-                  variant="blue"
-                  size="S"
-                  width="60px"
-                  disabled={!comment.trim()}
-                >
-                  등록
-                </FlexibleButton>
-              </div>
-            </div>
-          </section>
+          <CommentSection
+            studyPk={studyId}
+            leaderId={study.leader?.id}
+            currentUserId={userId}
+          />
         </div>
 
         {/* 사이드바 */}
