@@ -7,6 +7,7 @@ import { getStudyList } from '../features/study/api';
 import { getMyParticipatingStudies } from '../features/study/api';
 import { getProfile } from '../features/profile/api';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
+import { useLike } from '../contexts/LikeContext';
 import BannerSlider from '../shared/components/Banner/BannerSlider';
 import MainProfileCard from '../shared/components/Cards/MainProfileCard';
 import StudySideList from '../shared/components/Cards/StudySideList';
@@ -16,8 +17,8 @@ import CategoryIcon from '../shared/components/Category/MainCategoryIcon';
 import NoContents from '../shared/components/NoContents/NoContents';
 import Pagination from '../shared/components/Pagination/Pagination';
 import FlexibleButton from '../atoms/Button/FlexibleButton';
-
-const PAGE_SIZE = 6;
+import FilterDropdown from '../atoms/DropdownSelect/FilterDropdown';
+import ScrollToTopButton from '../shared/components/ScrollToTopButton';
 
 const TABS = [
   { id: 'latest', label: '최신 스터디' },
@@ -44,9 +45,11 @@ export default function HomePage() {
   const [searchParams] = useSearchParams();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const userId = useAuthStore((s) => s.userId);
+  const { likedMap, initLikes, toggleLike } = useLike();
 
   const location = useLocation();
   const activeTab = searchParams.get('tab') ?? 'latest';
+  const activeFilter = searchParams.get('filter') ?? 'latest';
   const [currentPage, setCurrentPage] = useState(1);
   const [allStudies, setAllStudies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -64,46 +67,72 @@ export default function HomePage() {
       return;
     detectRegion()
       .then((region) => setDetectedRegion(region))
-      .catch(() => {});
+      .catch(() => { });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, consent]);
 
-  // 탭 변경 또는 페이지 재진입 시 리셋 + 스터디 목록 fetch
+  // 탭 변경 또는 페이지 재진입 시 리셋 + 스터디 목록 전체 fetch
   useEffect(() => {
+    let cancelled = false;
     setCurrentPage(1);
     setAllStudies([]);
     setLoading(true);
-    const params = { page_size: 100 };
-    if (activeTab === 'local') params.is_offline = 1;
-    else if (activeTab === 'online') params.is_offline = 0;
 
-    const statusFilter = STUDY_STATUS_FILTER[activeTab];
+    const fetchAll = async () => {
+      const fullWidth = activeTab === 'local' || activeTab === 'online';
+      const params = { page_size: 100 };
+      if (activeTab === 'local') params.is_offline = 1;
+      else if (activeTab === 'online') params.is_offline = 0;
 
-    getStudyList(params)
-      .then((res) => {
-        const all = res.data.results;
-        setAllStudies(
-          statusFilter
-            ? all.filter((s) => s.study_status?.name === statusFilter)
-            : all,
-        );
-      })
-      .catch(() => setAllStudies([]))
-      .finally(() => setLoading(false));
-  }, [activeTab, location.key]);
+      const statusFilter = fullWidth
+        ? STUDY_STATUS_FILTER[activeFilter]
+        : STUDY_STATUS_FILTER[activeTab];
+
+      let all = [];
+      let page = 1;
+      let hasNext = true;
+
+      try {
+        while (hasNext) {
+          const res = await getStudyList({ ...params, page });
+          all = [...all, ...res.data.results];
+          hasNext = !!res.data.next;
+          page++;
+        }
+        if (!cancelled) {
+          const sorted = [...all].sort((a, b) => b.id - a.id);
+          const filtered = statusFilter
+            ? sorted.filter((s) => s.study_status?.name === statusFilter)
+            : sorted;
+          setAllStudies(filtered);
+          initLikes(filtered);
+        }
+      } catch {
+        if (!cancelled) setAllStudies([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchAll();
+    return () => { cancelled = true; };
+  }, [activeTab, activeFilter, location.key]);
+
+  const isFullWidth = activeTab === 'local' || activeTab === 'online';
+  const pageSize = isFullWidth ? 8 : 6;
 
   // 클라이언트 페이지네이션 (local 탭은 감지된 지역으로 필터링)
   const visibleStudies =
     activeTab === 'local' && detectedRegion
       ? allStudies.filter(
-          (s) => s.study_location?.location === detectedRegion.location,
-        )
+        (s) => s.study_location?.location === detectedRegion.location,
+      )
       : allStudies;
   const totalCount = visibleStudies.length;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
   const studies = visibleStudies.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
   );
 
   // 로그인 시 프로필 + 참여 중인 스터디 fetch
@@ -120,10 +149,17 @@ export default function HomePage() {
           : (studyData?.results ?? []);
         setParticipatingStudies(studies);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [isLoggedIn, userId]);
 
-  const isFullWidth = activeTab === 'local' || activeTab === 'online';
+  const regionOptions = [{ value: 'redetect', label: '내 지역 재인증' }];
+
+  function handleRegionSelect(value) {
+    if (value === 'redetect') {
+      setDetectedRegion(null);
+      setConsent(true);
+    }
+  }
 
   function handlePageChange(page) {
     setCurrentPage(page);
@@ -131,37 +167,51 @@ export default function HomePage() {
   }
 
   function handleTabChange(tabId) {
-    navigate(`/?tab=${tabId}`);
+    if (isFullWidth) {
+      navigate(`/?tab=${activeTab}&filter=${tabId}`);
+    } else {
+      navigate(`/?tab=${tabId}`);
+    }
   }
 
   return (
-    <div className="flex justify-center w-full py-5xl ">
-      <div className="flex gap-xl w-full max-w-max-width-lg min-w-max-width-lg ">
-        <div className="flex-1 min-w-0 flex flex-col gap-5xl">
-          {!isFullWidth && <BannerSlider />}
-          {!isFullWidth && (
-            <div className="flex justify-around w-[770px] mx-auto">
-              {CATEGORIES.map(({ id, icon, label }) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => navigate(`/search?subject=${id}`)}
-                  className="cursor-pointer hover:opacity-70 transition-opacity bg-transparent border-0 p-0"
-                >
-                  <CategoryIcon icon={icon} label={label} />
-                </button>
-              ))}
-            </div>
-          )}
-          <section>
-            <h2 className="text-2xl font-bold text-text mb-xl">
-              {activeTab === 'local'
-                ? '내 지역 스터디'
-                : activeTab === 'online'
-                  ? '온라인 스터디'
-                  : '스터디 둘러보기'}
-            </h2>
+    <>
+      <div className="flex gap-xl w-max-width-lg shrink-0 mx-auto py-5xl">
+        <div className="flex-1 flex flex-col gap-5xl">
+            {!isFullWidth && <BannerSlider />}
             {!isFullWidth && (
+              <div className="flex justify-around w-[770px] mx-auto">
+                {CATEGORIES.map(({ id, icon, label }) => (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => navigate(`/search?subject=${id}`)}
+                    className="cursor-pointer hover:opacity-70 transition-opacity bg-transparent border-0 p-0"
+                  >
+                    <CategoryIcon icon={icon} label={label} />
+                  </button>
+                ))}
+              </div>
+            )}
+            <section>
+              <div className="flex items-center justify-between mb-xl">
+                <h2 className="text-2xl font-bold text-text">
+                  {activeTab === 'local'
+                    ? '내 지역 스터디'
+                    : activeTab === 'online'
+                      ? '온라인 스터디'
+                      : '스터디 둘러보기'}
+                </h2>
+                {activeTab === 'local' && detectedRegion && (
+                  <FilterDropdown
+                    iconName="Location"
+                    label={detectedRegion.detailLocation}
+                    options={regionOptions}
+                    onChange={handleRegionSelect}
+                    width="160px"
+                  />
+                )}
+              </div>
               <div className="flex gap-xs mb-xl">
                 {TABS.map((tab) => (
                   <button
@@ -169,7 +219,7 @@ export default function HomePage() {
                     type="button"
                     onClick={() => handleTabChange(tab.id)}
                     className={
-                      activeTab === tab.id
+                      (isFullWidth ? activeFilter : activeTab) === tab.id
                         ? 'px-xl py-xs rounded-xl bg-primary text-white text-sm font-medium'
                         : 'px-xl py-xs rounded-xl border border-border text-text-muted text-sm font-medium hover:border-primary hover:text-primary transition-colors'
                     }
@@ -178,128 +228,126 @@ export default function HomePage() {
                   </button>
                 ))}
               </div>
-            )}
 
-            {activeTab === 'local' && !detectedRegion ? (
-              <div className="py-5xl flex flex-col items-center gap-xl">
-                {isDetecting ? (
-                  <span className="text-text-muted text-sm">
-                    위치 감지 중...
-                  </span>
-                ) : (
-                  <>
-                    <p className="text-xl text-text">
-                      내 지역 스터디를 확인하려면 인증이 필요해요.
-                    </p>
-                    <FlexibleButton
-                      variant="blue"
-                      size="L"
-                      onClick={() => setConsent(true)}
-                      className="w-[250px]"
-                    >
-                      내 지역 인증하기
-                    </FlexibleButton>
-                    {/* {geoError && (
+              {activeTab === 'local' && !detectedRegion ? (
+                <div className="py-5xl flex flex-col items-center gap-xl">
+                  {isDetecting ? (
+                    <span className="text-text-muted text-sm">
+                      위치 감지 중...
+                    </span>
+                  ) : (
+                    <>
+                      <p className="text-xl text-text">
+                        내 지역 스터디를 확인하려면 인증이 필요해요.
+                      </p>
+                      <FlexibleButton
+                        variant="blue"
+                        size="L"
+                        onClick={() => setConsent(true)}
+                        className="w-[250px]"
+                      >
+                        내 지역 인증하기
+                      </FlexibleButton>
+                      {/* {geoError && (
                       <p className="text-sm text-error">{geoError}</p>
                     )} */}
-                  </>
-                )}
-              </div>
-            ) : loading ? (
-              <div
-                className={`grid gap-xl ${isFullWidth ? 'grid-cols-4' : 'grid-cols-3'}`}
-              >
-                {Array.from({ length: isFullWidth ? 8 : 6 }).map((_, i) => (
-                  <StudyListCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : studies.length > 0 ? (
-              <>
+                    </>
+                  )}
+                </div>
+              ) : loading ? (
                 <div
                   className={`grid gap-xl ${isFullWidth ? 'grid-cols-4' : 'grid-cols-3'}`}
                 >
-                  {studies.map((study) => (
-                    <StudyListCard
-                      key={study.id}
-                      status={
-                        STATUS_MAP[study.study_status?.name] ?? 'recruiting'
-                      }
-                      location={
-                        study.is_offline ? study.study_location?.location : null
-                      }
-                      category={study.subject?.name}
-                      difficulty={study.difficulty?.name}
-                      title={study.title}
-                      currentCount={study.participant_count}
-                      isLiked={study.user_liked}
-                      onClick={() => navigate(`/study/${study.id}`)}
-                      onLike={() => {
-                        if (!isLoggedIn) navigate('/login');
-                      }}
-                    >
-                      {study.thumbnail ? (
-                        <img
-                          src={
-                            study.thumbnail.startsWith('http')
-                              ? study.thumbnail
-                              : `${MEDIA_URL}${study.thumbnail}`
-                          }
-                          alt={study.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            console.log('img failed:', e.currentTarget.src);
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-bg-muted" />
-                      )}
-                    </StudyListCard>
+                  {Array.from({ length: isFullWidth ? 8 : 6 }).map((_, i) => (
+                    <StudyListCardSkeleton key={i} />
                   ))}
                 </div>
-
-                {studies.length > 0 && (
-                  <div className="mt-5xl">
-                    <Pagination
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                    />
+              ) : studies.length > 0 ? (
+                <>
+                  <div
+                    className={`grid gap-xl ${isFullWidth ? 'grid-cols-4' : 'grid-cols-3'}`}
+                  >
+                    {studies.map((study) => (
+                      <StudyListCard
+                        key={study.id}
+                        status={
+                          STATUS_MAP[study.study_status?.name] ?? 'recruiting'
+                        }
+                        location={
+                          study.is_offline ? study.study_location?.location : null
+                        }
+                        category={study.subject?.name}
+                        difficulty={study.difficulty?.name}
+                        title={study.title}
+                        currentCount={study.participant_count}
+                        isLiked={likedMap[study.id] ?? !!study.user_liked}
+                        onClick={() => navigate(`/study/${study.id}`)}
+                        onLike={() => toggleLike(study.id, isLoggedIn, navigate)}
+                      >
+                        {study.thumbnail ? (
+                          <img
+                            src={
+                              study.thumbnail.startsWith('http')
+                                ? study.thumbnail
+                                : `${MEDIA_URL}${study.thumbnail}`
+                            }
+                            alt={study.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              console.log('img failed:', e.currentTarget.src);
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-bg-muted" />
+                        )}
+                      </StudyListCard>
+                    ))}
                   </div>
-                )}
-              </>
-            ) : (
-              <NoContents
-                title="아직 열린 스터디가 없어요"
-                description="첫 스터디를 직접 만들어 보세요!"
-                buttonText="스터디 만들기"
-                onButtonClick={() => navigate('/study/create')}
-                className="py-5xl"
+
+                  {studies.length > 0 && (
+                    <div className="mt-5xl">
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <NoContents
+                  title="아직 열린 스터디가 없어요"
+                  description="첫 스터디를 직접 만들어 보세요!"
+                  buttonText="스터디 만들기"
+                  onButtonClick={() => navigate('/study/create')}
+                  className="py-5xl"
+                />
+              )}
+            </section>
+          </div>
+
+          {/* ────────── 사이드바 ────────── */}
+          {!isFullWidth && (
+            <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
+              <MainProfileCard
+                hasUser={isLoggedIn}
+                profileImage={(() => {
+                  const img = isLoggedIn ? profile?.profile_img : undefined;
+                  if (!img) return undefined;
+                  return img.startsWith('http') ? img : `${MEDIA_URL}${img}`;
+                })()}
+                nickname={isLoggedIn ? profile?.nickname : undefined}
+                onButtonClick={() =>
+                  navigate(isLoggedIn ? '/study/create' : '/login')
+                }
               />
-            )}
-          </section>
+
+              {isLoggedIn && <StudySideList studies={participatingStudies} />}
+            </aside>
+          )}
         </div>
-
-        {/* ────────── 사이드바 ────────── */}
-        {!isFullWidth && (
-          <aside className="w-72.5 shrink-0 flex flex-col gap-5xl">
-            <MainProfileCard
-              hasUser={isLoggedIn}
-              profileImage={(() => {
-                const img = isLoggedIn ? profile?.profile_img : undefined;
-                if (!img) return undefined;
-                return img.startsWith('http') ? img : `${MEDIA_URL}${img}`;
-              })()}
-              nickname={isLoggedIn ? profile?.nickname : undefined}
-              onButtonClick={() =>
-                navigate(isLoggedIn ? '/study/create' : '/login')
-              }
-            />
-
-            {isLoggedIn && <StudySideList studies={participatingStudies} />}
-          </aside>
-        )}
-      </div>
-    </div>
+      <ScrollToTopButton />
+    </>
   );
 }

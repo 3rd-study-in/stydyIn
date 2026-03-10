@@ -5,6 +5,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 import useAuthStore from './stores/authStore';
+import { LikeProvider } from './contexts/LikeContext';
 import GNB from './shared/components/Header/GNB';
 import GNBLogin from './shared/components/Header/GNBLogin';
 import Footer from './shared/components/Footer/Footer';
@@ -35,13 +36,13 @@ function AuthLayout() {
 // 공개 페이지 (GNB - 내부에서 로그인 여부 자동 처리)
 function GeneralLayout() {
   return (
-    <>
+    <LikeProvider>
       <GNB />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </LikeProvider>
   );
 }
 
@@ -50,13 +51,13 @@ function PrivateLayout() {
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   if (!isLoggedIn) return <Navigate to="/login" replace />;
   return (
-    <>
+    <LikeProvider>
       <GNB />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </LikeProvider>
   );
 }
 

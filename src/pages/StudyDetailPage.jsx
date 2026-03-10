@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { MEDIA_URL } from '../constants/api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLike } from '../contexts/LikeContext';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import useStudyParticipate from '../features/study/hooks/useStudyParticipate';
 import useAuthStore from '../stores/authStore';
@@ -39,8 +40,13 @@ function StudyDetailPage() {
   });
   const userId = useAuthStore((s) => s.userId);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const [isLiked, setIsLiked] = useState(false);
+  const { likedMap, initOneLike, toggleLike } = useLike();
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (study?.id != null) initOneLike(study.id, study.user_liked);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [study?.id]);
 
   const handleShare = () => {
     navigator.clipboard
@@ -49,13 +55,7 @@ function StudyDetailPage() {
       .catch(() => alert('링크 복사에 실패했습니다.'));
   };
 
-  const handleLike = () => {
-    if (!isLoggedIn) {
-      navigate('/login');
-      return;
-    }
-    setIsLiked((prev) => !prev);
-  };
+  const handleLike = () => toggleLike(study?.id, isLoggedIn, navigate);
 
   if (isLoading) {
     return (
@@ -127,7 +127,7 @@ function StudyDetailPage() {
           title={study.title}
           hashtags={hashtags}
           location={study.is_offline ? study.study_location?.location : ''}
-          isLiked={isLiked}
+          isLiked={likedMap[study.id] ?? false}
           onLike={handleLike}
           onShare={handleShare}
         />
@@ -188,7 +188,7 @@ function StudyDetailPage() {
             dDay={dDay}
             isOwner={isOwner}
             isParticipant={isParticipant}
-            isLiked={isLiked}
+            isLiked={likedMap[study.id] ?? false}
             onParticipate={handleParticipateClick}
             onChatRoom={() => setIsChatModalOpen(true)}
             onEdit={() => navigate(`/study/${studyId}/edit`)}

@@ -23,6 +23,7 @@ function FilterDropdown({
   width = '170px',
   className = '',
   disabled = false,
+  iconName = 'Filter',
 }) {
   const { isOpen, toggle, close, containerRef, triggerBorderClass } =
     useDisclosure({ disabled });
@@ -46,7 +47,7 @@ function FilterDropdown({
         aria-expanded={isOpen}
         className={`flex items-center gap-2 h-10 px-3 w-full bg-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${triggerBorderClass}`}
       >
-        <Icon name="Filter" />
+        <Icon name={iconName} />
         <span className="flex-1 text-left text-base font-medium text-text-muted">
           {label}
         </span>
