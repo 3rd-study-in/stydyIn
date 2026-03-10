@@ -5,3 +5,9 @@ export const getProfile = (userId) =>
 
 export const saveProfile = (userId, body) =>
   axiosInstance.put(`/accounts/profiles/${userId}/`, body)
+
+export const checkPhoneAvailability = (phone) =>
+  axiosInstance.get(`/accounts/phones/check/?phone=${encodeURIComponent(phone)}`)
+
+export const checkNicknameAvailability = (nickname) =>
+  axiosInstance.get(`/accounts/nicknames/check/?nickname=${encodeURIComponent(nickname)}`)

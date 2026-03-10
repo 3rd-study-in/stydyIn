@@ -11,9 +11,11 @@ import BannerSlider from '../shared/components/Banner/BannerSlider';
 import MainProfileCard from '../shared/components/Cards/MainProfileCard';
 import StudySideList from '../shared/components/Cards/StudySideList';
 import StudyListCard from '../shared/components/Cards/StudyListCard';
+import StudyListCardSkeleton from '../shared/components/Cards/StudyListCardSkeleton';
 import CategoryIcon from '../shared/components/Category/MainCategoryIcon';
 import NoContents from '../shared/components/NoContents/NoContents';
 import Pagination from '../shared/components/Pagination/Pagination';
+import FlexibleButton from '../atoms/Button/FlexibleButton';
 
 const PAGE_SIZE = 6;
 
@@ -33,7 +35,7 @@ const STUDY_STATUS_FILTER = {
 const STATUS_MAP = {
   '모집 중': 'recruiting',
   '진행 중': 'in_progress',
-  '완료': 'completed',
+  완료: 'completed',
   // 종료: 'closed',
 };
 
@@ -62,7 +64,7 @@ export default function HomePage() {
       return;
     detectRegion()
       .then((region) => setDetectedRegion(region))
-      .catch(() => { });
+      .catch(() => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, consent]);
 
@@ -94,8 +96,8 @@ export default function HomePage() {
   const visibleStudies =
     activeTab === 'local' && detectedRegion
       ? allStudies.filter(
-        (s) => s.study_location?.location === detectedRegion.location,
-      )
+          (s) => s.study_location?.location === detectedRegion.location,
+        )
       : allStudies;
   const totalCount = visibleStudies.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
@@ -118,7 +120,7 @@ export default function HomePage() {
           : (studyData?.results ?? []);
         setParticipatingStudies(studies);
       })
-      .catch(() => { });
+      .catch(() => {});
   }, [isLoggedIn, userId]);
 
   const isFullWidth = activeTab === 'local' || activeTab === 'online';
@@ -186,25 +188,30 @@ export default function HomePage() {
                   </span>
                 ) : (
                   <>
-                    <p className="text-base text-text">
+                    <p className="text-xl text-text">
                       내 지역 스터디를 확인하려면 인증이 필요해요.
                     </p>
-                    <button
-                      type="button"
+                    <FlexibleButton
+                      variant="blue"
+                      size="L"
                       onClick={() => setConsent(true)}
-                      className="px-5xl py-md bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary-dark transition-colors"
+                      className="w-[250px]"
                     >
                       내 지역 인증하기
-                    </button>
-                    {geoError && (
+                    </FlexibleButton>
+                    {/* {geoError && (
                       <p className="text-sm text-error">{geoError}</p>
-                    )}
+                    )} */}
                   </>
                 )}
               </div>
             ) : loading ? (
-              <div className="py-5xl flex justify-center">
-                <span className="text-text-muted text-sm">불러오는 중...</span>
+              <div
+                className={`grid gap-xl ${isFullWidth ? 'grid-cols-4' : 'grid-cols-3'}`}
+              >
+                {Array.from({ length: isFullWidth ? 8 : 6 }).map((_, i) => (
+                  <StudyListCardSkeleton key={i} />
+                ))}
               </div>
             ) : studies.length > 0 ? (
               <>
