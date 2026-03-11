@@ -37,7 +37,7 @@ const CommentItem = ({
   if (isDeleted) {
     const isActuallyDeleted = nickname === '삭제된 댓글';
     return (
-      <div className="w-[840px] flex flex-col gap-[16px]">
+      <div className="w-[840px] flex flex-col gap-[8px]">
         <div className="flex items-center gap-[10px]">
           <div className="w-[40px] h-[40px] rounded-full border border-border bg-bg" />
           <div className="flex flex-col gap-[2px]">
@@ -47,7 +47,10 @@ const CommentItem = ({
               </span>
               <span className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center leading-[20px]" onClick={onReply}>답글달기</span>
             </div>
-            <span className="text-[12px] font-normal text-secondary leading-[16px]">{date}</span>
+            {/* 삭제된 댓글은 날짜 미표시 */}
+            {!isActuallyDeleted && (
+              <span className="text-[12px] font-normal text-secondary leading-[16px]">{date}</span>
+            )}
           </div>
         </div>
         <p className="text-[16px] font-normal text-secondary ml-[50px] leading-[24px]">{content}</p>
@@ -58,7 +61,7 @@ const CommentItem = ({
   // 비밀댓글 (볼 수 없는 경우)
   if (isSecret && !canViewSecret) {
     return (
-      <div className="w-[840px] flex flex-col gap-[16px]">
+      <div className="w-[840px] flex flex-col gap-[8px]">
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-[10px]">
             <div className="w-[40px] h-[40px] rounded-full border border-border bg-bg" />
@@ -77,7 +80,7 @@ const CommentItem = ({
   }
 
   return (
-    <div className="w-[840px] flex flex-col gap-[16px]">
+    <div className="w-[840px] flex flex-col gap-[8px]">
       {/* 상단: 프로필 + 버튼 */}
       <div className="flex justify-between items-start">
         {/* 좌측: 프로필 */}
