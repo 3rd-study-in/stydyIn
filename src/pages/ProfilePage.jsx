@@ -341,8 +341,7 @@ function ProfileTab({
                 setIsPhoneVerified(false);
                 setPhoneError('');
               }}
-              disabled={isPhoneVerified}
-              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white disabled:bg-bg-muted disabled:text-text-muted disabled:cursor-not-allowed"
+              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white"
             />
             <button
               type="button"
