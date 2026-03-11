@@ -2,6 +2,7 @@ import { useState } from 'react';
 import TagSize from '../../../atoms/Tag/TagSize';
 import { Crown } from '../../../atoms/Icon/Common';
 import UserInfoModal from '../Modal/UserInfoModal';
+import { MainThumbnail } from '../../../atoms/Images/Common';
 
 /**
  * 상세 페이지 그룹장 소개 틀
@@ -28,13 +29,11 @@ const LeaderProfile = ({
           onClick={() => setIsModalOpen(true)}
           className="w-[130px] h-[130px] shrink-0 rounded-full overflow-hidden bg-bg-muted cursor-pointer hover:opacity-80 transition-opacity"
         >
-          {profileImage && (
-            <img
-              src={profileImage}
-              alt="그룹장 프로필"
-              className="w-full h-full object-cover"
-            />
-          )}
+          <img
+            src={profileImage || MainThumbnail}
+            alt="그룹장 프로필"
+            className="w-full h-full object-cover"
+          />
         </button>
 
         {/* 우측 콘텐츠 */}

@@ -13,6 +13,9 @@ const DetailBarTopContainer = ({ image, children }) => {
           src={image || MainThumbnail}
           alt="Study Thumbnail"
           className="h-full w-full object-cover"
+          onError={(e) => {
+            e.currentTarget.src = MainThumbnail;
+          }}
         />
       </div>
 

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, isValidElement, cloneElement } from 'react';
 import Icon from '../../../atoms/Icon/Common/Icon';
 import { TagSize } from '../../../atoms/Tag/index';
+import { MainThumbnail } from '../../../atoms/Images/Common/index';
 
 const STATUS_MAP = {
   recruiting: { label: '모집 중!', color: 'var(--color-primary)' },
@@ -18,10 +19,11 @@ const STATUS_MAP = {
  * @param {string}  [difficulty]    난이도 태그 (예: '초급')
  * @param {string}  title           스터디 제목
  * @param {number}  currentCount    현재 참가자 수
+ * @param {string}  [image]         썸네일 이미지 URL (children 없을 때 사용)
  * @param {boolean} [isLiked]       좋아요 초기값 (없으면 내부 상태)
  * @param {() => void} [onLike]     좋아요 클릭 콜백
  * @param {() => void} [onClick]    카드 클릭 콜백
- * @param {React.ReactNode} children  썸네일 슬롯
+ * @param {React.ReactNode} [children]  썸네일 슬롯 (image보다 우선)
  * @param {string}  [className]     추가 Tailwind 클래스
  */
 function StudyListCard({
@@ -34,6 +36,7 @@ function StudyListCard({
   isLiked: isLikedProp,
   onLike,
   onClick,
+  image,
   children,
   className = '',
 }) {
@@ -76,7 +79,26 @@ function StudyListCard({
 
       {/* 썸네일 */}
       <div className="absolute top-[52px] left-0 w-full h-[280px] bg-bg-muted border-y border-border overflow-hidden">
-        {children}
+        {children ? (
+          isValidElement(children) && children.type === 'img'
+            ? cloneElement(children, {
+                onError: (e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = MainThumbnail;
+                },
+              })
+            : children
+        ) : (
+          <img
+            src={image || MainThumbnail}
+            alt="스터디 썸네일"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = MainThumbnail;
+            }}
+          />
+        )}
       </div>
 
       {/* 좋아요 버튼 */}
