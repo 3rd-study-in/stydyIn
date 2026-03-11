@@ -96,7 +96,7 @@ const TagDropdown = ({ selected, onToggle, onReset, onApply }) => (
 );
 
 const SearchFilter = ({ onApply, onReset, initialSelected }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(initialSelected || {});
 
   const toggle = (category, tag) => {
