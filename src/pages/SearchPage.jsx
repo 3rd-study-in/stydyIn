@@ -28,6 +28,7 @@ export default function SearchPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterParams, setFilterParams] = useState(() => {
     try {
       const saved = sessionStorage.getItem('searchFilterParams');
@@ -98,25 +99,34 @@ export default function SearchPage() {
       ? '내 지역 스터디'
       : typeParam === 'online'
         ? '온라인 스터디'
-        : null;
+        : searchQuery
+          ? `${searchQuery} 검색결과`
+          : null;
 
   return (
-    <div className="max-w-max-width-lg mx-auto py-5xl px-xl">
-      {sectionTitle && (
-        <h1 className="text-[30px] font-bold leading-[40px] text-text mb-xl">
-          {sectionTitle}
-        </h1>
-      )}
+    <div className="max-w-max-width-lg mx-auto pt-[40px] pb-5xl px-xl">
 
       {/* 필터 */}
       <SearchFilter
         onApply={handleFilterApply}
         onReset={handleFilterReset}
         initialSelected={filterSelected}
+        onOpenChange={setIsFilterOpen}
       />
 
+      {searchQuery ? (
+        <h1 className={`text-[30px] font-bold leading-[40px] flex items-center ${isFilterOpen ? 'mt-[30px]' : 'mt-[40px]'}`}>
+          <span className="text-primary">{searchQuery}&nbsp;</span>
+          <span className="text-text">검색결과</span>
+         </h1>
+      ) : sectionTitle ? (
+        <h1 className={`text-[30px] font-bold leading-[40px] text-text ${isFilterOpen ? 'mt-[30px]' : 'mt-[40px]'}`}>
+          {sectionTitle}
+        </h1>
+      ) : null}
+
       {/* 활성 필터 chip */}
-      {(activeCategory || searchQuery) && (
+      {activeCategory && (
         <div className="flex items-center gap-xs mt-xl">
           <span className="text-sm text-text-muted">필터:</span>
           {activeCategory && (
