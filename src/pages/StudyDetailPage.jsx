@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { MEDIA_URL } from '../constants/api';
 import { useState, useEffect } from 'react';
-import { useLike } from '../contexts/LikeContext';
+import useLikeStore from '../stores/likeStore';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import useStudyParticipate from '../features/study/hooks/useStudyParticipate';
 import useAuthStore from '../stores/authStore';
@@ -40,7 +40,7 @@ function StudyDetailPage() {
   });
   const userId = useAuthStore((s) => s.userId);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const { likedMap, initOneLike, toggleLike } = useLike();
+  const { likedMap, initOneLike, toggleLike } = useLikeStore();
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   useEffect(() => {
@@ -76,9 +76,7 @@ function StudyDetailPage() {
   if (!study || !cardProps) return null;
 
   const isOwner = study.leader?.id === userId;
-  const isParticipant = (study.participants ?? []).some(
-    (p) => p.id === userId,
-  );
+  const isParticipant = (study.participants ?? []).some((p) => p.id === userId);
   const dDay = calcDDay(study.start_date);
   const hashtags = (study.search_tag ?? []).map((t) => `#${t.name}`);
   const categories = [study.subject?.name, study.difficulty?.name].filter(
@@ -107,8 +105,14 @@ function StudyDetailPage() {
           alt="준비중"
           className="w-[100px] h-[100px] rounded-full object-cover"
         />
-        <p className="text-text text-base font-medium">채팅 기능은 준비중입니다.</p>
-        <Button variant="blue" size="M" onClick={() => setIsChatModalOpen(false)}>
+        <p className="text-text text-base font-medium">
+          채팅 기능은 준비중입니다.
+        </p>
+        <Button
+          variant="blue"
+          size="M"
+          onClick={() => setIsChatModalOpen(false)}
+        >
           확인
         </Button>
       </Modal>
@@ -152,9 +156,34 @@ function StudyDetailPage() {
             <h2 className="text-[30px] font-bold text-text mb-3xl">
               스터디 일정
             </h2>
-            <p className="text-base text-text leading-relaxed whitespace-pre-wrap">
-              {study.schedule || '스터디 일정이 없습니다.'}
-            </p>
+            <dl className="flex flex-col gap-3 text-base text-text">
+              {cardProps?.selectedDays?.length > 0 && (
+                <div className="flex gap-2">
+                  <dt className="font-bold w-24 shrink-0">진행 요일</dt>
+                  <dd>{cardProps.selectedDays.join(', ')}</dd>
+                </div>
+              )}
+              {cardProps?.startDate && (
+                <div className="flex gap-2">
+                  <dt className="font-bold w-24 shrink-0">시작일</dt>
+                  <dd>{cardProps.startDate}</dd>
+                </div>
+              )}
+              {cardProps?.startTime && cardProps?.endTime && (
+                <div className="flex gap-2">
+                  <dt className="font-bold w-24 shrink-0">진행 시간</dt>
+                  <dd>
+                    {cardProps.startTime} ~ {cardProps.endTime}
+                  </dd>
+                </div>
+              )}
+              {cardProps?.duration && (
+                <div className="flex gap-2">
+                  <dt className="font-bold w-24 shrink-0">기간</dt>
+                  <dd>{cardProps.duration}</dd>
+                </div>
+              )}
+            </dl>
           </section>
 
           <hr className="border-border my-3xl" />

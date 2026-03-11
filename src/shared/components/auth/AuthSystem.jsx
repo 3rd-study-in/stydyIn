@@ -151,6 +151,7 @@ const AuthSystem = ({ initialView = 'login' }) => {
                     <div className="flex gap-2">
                       <input
                         type="text"
+                        value={verificationCode}
                         disabled={verifyStatus === 'success'}
                         className={`flex-1 h-10 px-3 border rounded-md outline-none bg-white
                           ${verifyStatus === 'fail' ? 'border-error' : verifyStatus === 'success' ? 'border-primary' : 'border-border'}
