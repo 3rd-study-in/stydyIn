@@ -253,6 +253,8 @@ const GNB = () => {
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter' && searchValue.trim()) {
       saveSearch(searchValue);
+      sessionStorage.removeItem('searchFilterParams');
+      sessionStorage.removeItem('searchFilterSelected');
       navigate(`/search?search=${encodeURIComponent(searchValue.trim())}`);
     }
   };
@@ -260,6 +262,8 @@ const GNB = () => {
   const handleSelectRecent = (term) => {
     setSearchValue(term);
     saveSearch(term);
+    sessionStorage.removeItem('searchFilterParams');
+    sessionStorage.removeItem('searchFilterSelected');
     navigate(`/search?search=${encodeURIComponent(term)}`);
   };
 
@@ -293,7 +297,6 @@ const GNB = () => {
             onKeyDown={handleSearchKeyDown}
             recentSearches={recentSearches}
             onSelectRecent={handleSelectRecent}
-            onFocus={() => navigate('/search')}
           />
         </div>
 

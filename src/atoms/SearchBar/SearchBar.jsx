@@ -8,6 +8,7 @@ const SearchBar = ({
   recentSearches = [],
   onSelectRecent,
   onFocus,
+  onKeyDown,
   ...rest
 }) => {
   const { isOpen, open, close, containerRef } = useDisclosure();
@@ -27,6 +28,10 @@ const SearchBar = ({
           placeholder={placeholder}
           className="w-full h-full pl-5 pr-12 py-3 rounded-full border-2 border-border bg-bg text-base font-regular text-text-muted placeholder:text-text-disabled focus:outline-none focus:border-primary"
           onFocus={(e) => { open(); onFocus?.(e); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') close();
+            onKeyDown?.(e);
+          }}
           {...rest}
         />
         <div className="absolute inset-y-0 right-0 flex items-center pr-4">
