@@ -166,7 +166,7 @@ const CommentItem = ({
           />
           <button
             onClick={onEditSubmit}
-            className="w-[50px] h-[50px] bg-secondary-light flex items-center justify-center shrink-0"
+            className="w-[50px] h-[50px] bg-secondary-light flex items-center justify-center shrink-0 cursor-pointer"
           >
             <Send className="w-[26px] h-[26px] text-bg" />
           </button>
