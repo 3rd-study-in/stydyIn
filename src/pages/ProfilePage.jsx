@@ -17,6 +17,7 @@ import TagInputField from '../shared/components/TagInputField/TagInputField';
 import GitHubContributions from '../shared/components/GitHub/GitHubContributions';
 
 import useNotificationStore from '../stores/notificationStore';
+import useAuthStore from '../stores/authStore';
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags';
 import useUserData from '../features/profile/hooks/useUserData';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
@@ -46,14 +47,21 @@ const STUDY_STATUS_MAP = {
 
 // ─── 내 프로필 탭 ─────────────────────────────────────────────────────────────
 
-function ProfileTab({ profile, userId, onProfileUpdated }) {
-  const [isEditing, setIsEditing] = useState(false);
+function ProfileTab({
+  profile,
+  userId,
+  onProfileUpdated,
+  isEditing,
+  onEditingChange,
+  saveRef,
+  onIsSavingChange,
+}) {
+  const email = useAuthStore((s) => s.email);
   const { form, handleField, selectedTags, toggleTag, removeTag } =
     useUserData(profile);
   const [profileImage, setProfileImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [saveError, setSaveError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef(null);
 
   // 닉네임 중복 확인
@@ -132,6 +140,26 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   // GitHub 잔디
   const [connectedGithub, setConnectedGithub] = useState('');
 
+  // isEditing 진입/이탈 시 상태 초기화
+  useEffect(() => {
+    if (isEditing) {
+      setNicknameStatus('available');
+      setNicknameTouched(false);
+      setIsPhoneVerified(true);
+      setPhoneError('');
+      setConnectedGithub(profile?.github_username ?? '');
+    } else {
+      setSaveError('');
+      setNicknameStatus('idle');
+      setNicknameTouched(false);
+      setIsPhoneVerified(false);
+      setPhoneError('');
+      setConnectedGithub('');
+      setPreviewUrl(null);
+      setProfileImage(null);
+    }
+  }, [isEditing]);
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -139,29 +167,9 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
     setPreviewUrl(URL.createObjectURL(file));
   };
 
-  const enterEditMode = () => {
-    setIsEditing(true);
-    setNicknameStatus('available'); // 현재 닉네임은 사용 가능 상태로 시작
-    setNicknameTouched(false);
-    // 전화번호가 원래 값과 동일하면 인증 완료 상태로 시작
-    setIsPhoneVerified(true);
-    setPhoneError('');
-    setConnectedGithub(profile?.github_username ?? '');
-  };
-
-  const cancelEdit = () => {
-    setIsEditing(false);
-    setSaveError('');
-    setNicknameStatus('idle');
-    setNicknameTouched(false);
-    setIsPhoneVerified(false);
-    setPhoneError('');
-    setConnectedGithub('');
-  };
-
   const handleSave = async () => {
     setSaveError('');
-    setIsSaving(true);
+    onIsSavingChange?.(true);
     try {
       let imageUrl = null;
       if (profileImage) {
@@ -183,15 +191,17 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
 
       const { data } = await saveProfile(userId, body);
       onProfileUpdated(data);
-      setIsEditing(false);
+      onEditingChange(false);
       setProfileImage(null);
       setPreviewUrl(null);
     } catch (err) {
       setSaveError(err.response?.data?.error || '저장에 실패했습니다.');
     } finally {
-      setIsSaving(false);
+      onIsSavingChange?.(false);
     }
   };
+
+  if (saveRef) saveRef.current = handleSave;
 
   // 수정 모드
   if (isEditing) {
@@ -294,7 +304,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
             이메일(ID)
           </span>
           <span className="flex-1 h-10 flex items-center text-sm text-secondary-dark">
-            {profile.email}
+            {email}
           </span>
         </div>
 
@@ -352,7 +362,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
         {/* 선호 지역 */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-text font-bold w-24 shrink-0">
-            내 지역
+            내 지역 <span className="text-error">*</span>
           </span>
           <input
             type="text"
@@ -399,7 +409,7 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
             <span className="text-sm text-text font-bold w-24 shrink-0">
               GitHub
               <br />
-              User Name
+              User Name <span className="text-error">*</span>
             </span>
             <input
               type="text"
@@ -443,21 +453,6 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
         </div>
 
         {saveError && <p className="text-sm text-error">{saveError}</p>}
-
-        {/* 버튼 */}
-        <div className="flex gap-3 justify-end">
-          <Button variant="white" size="M" onClick={cancelEdit}>
-            취소
-          </Button>
-          <Button
-            variant="blue"
-            size="M"
-            disabled={isSaving}
-            onClick={handleSave}
-          >
-            저장하기
-          </Button>
-        </div>
       </div>
     );
   }
@@ -465,12 +460,6 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
   // 뷰 모드
   return (
     <div className="flex flex-col items-center gap-[30px] p-[40px] w-full">
-      <div className="flex justify-end w-full">
-        <Button variant="white" size="S" onClick={enterEditMode}>
-          수정하기
-        </Button>
-      </div>
-
       <MypageProfileCard
         hasUser={profile.is_associate_member}
         profileImage={
@@ -485,14 +474,21 @@ function ProfileTab({ profile, userId, onProfileUpdated }) {
         {profile.introduction}
       </MypageProfileCard>
 
+      <hr className="border-border w-full" />
+
       <MypageProfileInfoBox
-        email={profile.email}
+        email={email}
         name={profile.name}
         phone={profile.phone}
         location={profile.preferred_region?.location}
         github={profile.github_username}
+        githubSlot={
+          profile.github_username ? (
+            <GitHubContributions username={profile.github_username} />
+          ) : null
+        }
         interestSlot={profile.tag?.map((t) => (
-          <TagSize key={t.id} size="M">
+          <TagSize key={t.id} size="M" variant="lightgray">
             {t.name}
           </TagSize>
         ))}
@@ -632,6 +628,9 @@ function NotificationTab() {
 function ProfilePage() {
   const { userId } = useParams();
   const [activeTab, setActiveTab] = useState('profile');
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const saveRef = useRef(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -646,27 +645,62 @@ function ProfilePage() {
 
   return (
     <main className="flex flex-row gap-[30px] w-[1190px] max-w-[1560px] mx-auto mt-[40px] pb-10">
-      <MypageSideNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <MypageSideNav
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          setIsEditing(false);
+        }}
+      />
 
-      <section className="w-[990px] border border-border rounded-xl">
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <span className="text-text-muted text-sm">불러오는 중...</span>
-          </div>
-        ) : (
-          <>
-            {activeTab === 'profile' && profile && (
-              <ProfileTab
-                profile={profile}
-                userId={userId}
-                onProfileUpdated={setProfile}
-              />
+      <div className="flex flex-col gap-5 w-[990px]">
+        <section className="border border-border rounded-xl">
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <span className="text-text-muted text-sm">불러오는 중...</span>
+            </div>
+          ) : (
+            <>
+              {activeTab === 'profile' && profile && (
+                <ProfileTab
+                  profile={profile}
+                  userId={userId}
+                  onProfileUpdated={setProfile}
+                  isEditing={isEditing}
+                  onEditingChange={setIsEditing}
+                  saveRef={saveRef}
+                  onIsSavingChange={setIsSaving}
+                />
+              )}
+              {activeTab === 'study' && <StudyTab />}
+              {activeTab === 'notification' && <NotificationTab />}
+            </>
+          )}
+        </section>
+
+        {activeTab === 'profile' && profile && !loading && (
+          <div className="flex justify-center">
+            {isEditing ? (
+              <Button
+                variant="blue"
+                size="M"
+                disabled={isSaving}
+                onClick={() => saveRef.current?.()}
+              >
+                저장하기
+              </Button>
+            ) : (
+              <Button
+                variant="white"
+                size="M"
+                onClick={() => setIsEditing(true)}
+              >
+                수정하기
+              </Button>
             )}
-            {activeTab === 'study' && <StudyTab />}
-            {activeTab === 'notification' && <NotificationTab />}
-          </>
+          </div>
         )}
-      </section>
+      </div>
     </main>
   );
 }

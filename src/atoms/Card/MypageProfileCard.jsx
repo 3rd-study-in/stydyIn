@@ -35,14 +35,14 @@ function MypageProfileCard({
                 <></>
               )}
             </div>
-            <p className="text-lg font-bold text-text text-center">{nickname}</p>
+            <p className="text-lg font-bold text-text text-center">
+              {nickname}
+            </p>
           </>
         ) : (
           <>
             {/* 플레이스홀더 */}
-            <div className="w-[130px] h-[130px] rounded-full bg-secondary-light flex items-center justify-center shrink-0">
-
-            </div>
+            <div className="w-[130px] h-[130px] rounded-full bg-secondary-light flex items-center justify-center shrink-0"></div>
             <p className="text-lg font-bold text-text-disabled text-center">
               (프로필 등록을 완료해주세요)
             </p>
@@ -63,9 +63,7 @@ function MypageProfileCard({
         </div>
       )}
     </div>
-  )
+  );
 }
 
-
-
-export default MypageProfileCard
+export default MypageProfileCard;
