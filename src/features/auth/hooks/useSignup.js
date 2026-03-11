@@ -57,6 +57,7 @@ export const useSignup = ({ onSuccess } = {}) => {
       }
 
       setStep(2);
+      setVerificationCode('123456');
     } catch (err) {
       setEmailError('서버 연결 오류가 발생했습니다.');
     } finally {
