@@ -7,7 +7,7 @@ import { getStudyList } from '../features/study/api';
 import { getMyParticipatingStudies } from '../features/study/api';
 import { getProfile } from '../features/profile/api';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
-import { useLike } from '../contexts/LikeContext';
+import useLikeStore from '../stores/likeStore';
 import BannerSlider from '../shared/components/Banner/BannerSlider';
 import MainProfileCard from '../shared/components/Cards/MainProfileCard';
 import StudySideList from '../shared/components/Cards/StudySideList';
@@ -45,7 +45,7 @@ export default function HomePage() {
   const [searchParams] = useSearchParams();
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
   const userId = useAuthStore((s) => s.userId);
-  const { likedMap, initLikes, toggleLike } = useLike();
+  const { likedMap, initLikes, toggleLike } = useLikeStore();
 
   const location = useLocation();
   const activeTab = searchParams.get('tab') ?? 'latest';
@@ -69,7 +69,7 @@ export default function HomePage() {
       .then((region) => setDetectedRegion(region))
       .catch(() => { });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, consent]);
+  }, [activeTab, consent, detectedRegion]);
 
   // 탭 변경 또는 페이지 재진입 시 리셋 + 스터디 목록 전체 fetch
   useEffect(() => {
@@ -163,7 +163,6 @@ export default function HomePage() {
 
   function handlePageChange(page) {
     setCurrentPage(page);
-    window.scrollTo(0, 0);
   }
 
   function handleTabChange(tabId) {

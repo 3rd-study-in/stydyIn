@@ -64,7 +64,7 @@ function useGeoLocation() {
                   const detailLocation =
                     area?.region_3depth_name ||
                     area?.region_2depth_name ||
-                    shortName;
+                    fullName;
                   resolve({ ...matched, detailLocation });
                 } else {
                   setGeoError('현재 위치의 지역을 찾을 수 없습니다.');

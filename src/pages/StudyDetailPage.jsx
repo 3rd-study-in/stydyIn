@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { MEDIA_URL } from '../constants/api';
 import { useState, useEffect } from 'react';
-import { useLike } from '../contexts/LikeContext';
+import useLikeStore from '../stores/likeStore';
 import useStudyDetail from '../features/study/hooks/useStudyDetail';
 import useStudyParticipate from '../features/study/hooks/useStudyParticipate';
 import useAuthStore from '../stores/authStore';
@@ -40,7 +40,7 @@ function StudyDetailPage() {
   });
   const userId = useAuthStore((s) => s.userId);
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const { likedMap, initOneLike, toggleLike } = useLike();
+  const { likedMap, initOneLike, toggleLike } = useLikeStore();
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   useEffect(() => {
