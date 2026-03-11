@@ -628,36 +628,56 @@ function StudyTab() {
 
 // ─── 알림 탭 ──────────────────────────────────────────────────────────────────
 
+const NOTIFICATION_LIMIT = 10;
+
 function NotificationTab() {
   const notifications = useNotificationStore((s) => s.notifications);
   const markAllRead = useNotificationStore((s) => s.markAllRead);
   const deleteOne = useNotificationStore((s) => s.deleteOne);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     markAllRead();
   }, [markAllRead]);
 
   const unreadCount = notifications.filter((n) => !n.checked).length;
+  const totalPages = Math.max(
+    1,
+    Math.ceil(notifications.length / NOTIFICATION_LIMIT),
+  );
+  const paged = notifications.slice(
+    (currentPage - 1) * NOTIFICATION_LIMIT,
+    currentPage * NOTIFICATION_LIMIT,
+  );
 
   return (
-    <div className="flex flex-col gap-5 p-10 w-full">
+    <div className="flex flex-col gap-5 pt-10 px-10 w-full min-h-150">
       <h2 className="text-2xl font-bold text-text font-sans">
-        확인하지 않은 알림 {unreadCount}개
+        확인하지 않은 알림 <span className="text-primary">{unreadCount}개</span>
       </h2>
-      {notifications.length === 0 ? (
-        <p className="text-base text-text-disabled mt-4">알림이 없습니다.</p>
-      ) : (
-        <ul className="flex flex-col gap-3 mt-2">
-          {notifications.map((n) => (
-            <NotificationItem
-              key={n.notification_id}
-              text={n.content}
-              time={n.created}
-              onClose={() => deleteOne(n.notification_id)}
-            />
-          ))}
-        </ul>
-      )}
+      <div className="flex-1 mt-10 justify-start">
+        {notifications.length === 0 ? (
+          <NoContents description="아직 받은 알림이 없어요." />
+        ) : (
+          <ul className="flex flex-col gap-3 mt-2">
+            {paged.map((n) => (
+              <NotificationItem
+                key={n.notification_id}
+                text={n.content}
+                time={n.created}
+                onClose={() => deleteOne(n.notification_id)}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="pb-xl">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }

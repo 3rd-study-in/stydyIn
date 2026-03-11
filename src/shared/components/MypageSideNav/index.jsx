@@ -1,9 +1,9 @@
 import SideNavButton from '../../../atoms/Button/SideNavButton';
 
 const TABS = [
-  { key: 'profile', label: '내 프로필' },
-  { key: 'study', label: '내 스터디' },
-  { key: 'notification', label: '알림' },
+  { key: 'profile',      label: '프로필', icon: 'Person'       },
+  { key: 'study',        label: '스터디', icon: 'People'       },
+  { key: 'notification', label: '알림',   icon: 'Notification' },
 ];
 
 /**
@@ -19,10 +19,11 @@ function MypageSideNav({ activeTab, onTabChange }) {
         마이페이지
       </h2>
       <div className="flex flex-col gap-[10px]">
-        {TABS.map(({ key, label }) => (
+        {TABS.map(({ key, label, icon }) => (
           <SideNavButton
             key={key}
-            variant={activeTab === key ? 'blue' : 'lightgray'}
+            variant={activeTab === key ? 'blue' : key === 'notification' ? 'white' : 'lightgray'}
+            icon={icon}
             onClick={() => onTabChange(key)}
           >
             {label}
