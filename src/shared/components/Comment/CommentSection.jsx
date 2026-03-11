@@ -122,10 +122,7 @@ const CommentSection = ({
 
   // 댓글 작성
   const handleCommentSubmit = async ({ content, isSecret }) => {
-    const result = await createComment(content, isSecret);
-    if (result) {
-      alert('댓글이 등록되었습니다.');
-    }
+    await createComment(content, isSecret);
   };
 
   // 댓글 삭제
