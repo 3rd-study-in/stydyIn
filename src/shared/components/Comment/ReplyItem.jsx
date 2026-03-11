@@ -26,6 +26,19 @@ const ReplyItem = ({
 }) => {
   // 멘션 파싱
   const renderContent = () => {
+    if (!content) return null;
+    if (mention) {
+      const mentionText = `@${mention}`;
+      const idx = content.indexOf(mentionText);
+      if (idx !== -1) {
+        return (
+          <>
+            <span className="text-[16px] font-medium text-primary">{mentionText}</span>
+            <span className="text-[16px] font-normal text-text ml-[4px]">{content.slice(idx + mentionText.length)}</span>
+          </>
+        );
+      }
+    }
     const parts = content.split(/(@\S+)/g);
     return parts.map((part, i) =>
       part.startsWith('@')
