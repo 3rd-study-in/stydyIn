@@ -79,7 +79,13 @@ function UserInfoModal({
           {/* 우상단 신고하기 링크 */}
           <button
             type="button"
-            onClick={onReport}
+            onClick={() => {
+              if (onReport) {
+                onReport();
+              } else {
+                alert(`신고 기능은 추후 구현 예정입니다. (ID: ${userId})`);
+              }
+            }}
             className="absolute right-3xl top-[34px] text-xs underline text-text-disabled hover:text-text-muted transition-colors z-10"
           >
             신고하기
