@@ -44,7 +44,7 @@ function MainProfileCard({
 
         {/* 텍스트 */}
         {hasUser ? (
-          <p className="text-lg font-bold text-secondary-dark text-center leading-6">
+          <p className="pt-xl text-lg font-bold text-secondary-dark text-center leading-6">
             {nickname}
           </p>
         ) : (
