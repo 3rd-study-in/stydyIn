@@ -154,6 +154,13 @@ export default function HomePage() {
 
   const regionOptions = [{ value: 'redetect', label: '내 지역 재인증' }];
 
+  function handleLocationAuth() {
+    setConsent(true);
+    detectRegion()
+      .then((region) => setDetectedRegion(region))
+      .catch(() => {});
+  }
+
   function handleRegionSelect(value) {
     if (value === 'redetect') {
       setDetectedRegion(null);
@@ -242,14 +249,14 @@ export default function HomePage() {
                       <FlexibleButton
                         variant="blue"
                         size="L"
-                        onClick={() => setConsent(true)}
+                        onClick={handleLocationAuth}
                         className="w-[250px]"
                       >
                         내 지역 인증하기
                       </FlexibleButton>
-                      {/* {geoError && (
-                      <p className="text-sm text-error">{geoError}</p>
-                    )} */}
+                      {geoError && (
+                        <p className="text-sm text-error">{geoError}</p>
+                      )}
                     </>
                   )}
                 </div>
