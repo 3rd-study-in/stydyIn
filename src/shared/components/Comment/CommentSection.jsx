@@ -264,6 +264,7 @@ const CommentSection = ({
                 onEdit={() => handleReplyEditStart(comment.id, reply)}
                 onDelete={() => handleRecommentDelete(comment.id, reply.id)}
                 onReport={() => handleReport(reply.id)}
+                onReply={() => handleReplyClick(comment.id, reply.userId, reply.nickname)}
               />
             ))}
 

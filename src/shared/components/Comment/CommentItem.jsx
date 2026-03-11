@@ -35,23 +35,22 @@ const CommentItem = ({
 
   // 탈퇴한 사용자
   if (isDeleted) {
+    const isActuallyDeleted = nickname === '삭제된 댓글';
     return (
       <div className="w-[840px] flex flex-col gap-[16px]">
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-[10px]">
-            <div className="w-[40px] h-[40px] rounded-full border border-border bg-bg" />
-            <div className="flex flex-col gap-[2px]">
-              <div className="flex items-center gap-[10px]">
-                <span className="text-[14px] font-bold text-secondary">미지의 사용자</span>
-                <span className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center" onClick={onReply}>
-                  답글달기
-                </span>
-              </div>
-              <span className="text-[12px] font-normal text-secondary">{date}</span>
+        <div className="flex items-center gap-[10px]">
+          <div className="w-[40px] h-[40px] rounded-full border border-border bg-bg" />
+          <div className="flex flex-col gap-[2px]">
+            <div className="flex items-center gap-[10px]">
+              <span className="text-[14px] font-bold text-secondary">
+                {isActuallyDeleted ? '삭제된 댓글' : nickname}
+              </span>
+              <span className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center" onClick={onReply}>답글달기</span>
             </div>
+            <span className="text-[12px] font-normal text-secondary">{date}</span>
           </div>
         </div>
-        <p className="text-[16px] font-normal text-secondary ml-[50px]">탈퇴한 사용자의 댓글</p>
+        <p className="text-[16px] font-normal text-secondary ml-[50px]">{content}</p>
       </div>
     );
   }
