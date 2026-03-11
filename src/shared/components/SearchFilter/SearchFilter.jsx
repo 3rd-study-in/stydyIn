@@ -95,8 +95,8 @@ const TagDropdown = ({ selected, onToggle, onReset, onApply }) => (
   </div>
 );
 
-const SearchFilter = ({ onApply, onReset, initialSelected }) => {
-  const [isOpen, setIsOpen] = useState(true);
+const SearchFilter = ({ onApply, onReset, initialSelected, onOpenChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(initialSelected || {});
 
   const toggle = (category, tag) => {
@@ -120,7 +120,7 @@ const SearchFilter = ({ onApply, onReset, initialSelected }) => {
 
   return (
     <div className="w-full max-w-(--container-max-width-lg) flex flex-col gap-[19px]">
-      <div className="self-end" onClick={() => setIsOpen((prev) => !prev)}>
+      <div className="self-end" onClick={() => { setIsOpen((prev) => { const next = !prev; onOpenChange?.(next); return next; }); }}>
         <FilterDropdown label="검색 필터" options={[]} />
       </div>
       {isOpen && (
