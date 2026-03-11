@@ -28,7 +28,7 @@ const transformComment = (comment) => {
       isDeleted: true,
       isSecret: false,
       isMine: false,
-      nickname: '미지의 사용자',
+      nickname: comment.is_delete ? '삭제된 댓글' : '미지의 사용자',
       profileImage: '',
       content: comment.is_delete ? '삭제된 댓글입니다' : '탈퇴한 사용자의 댓글',
       date: formatDate(comment.created || comment.created_at),
@@ -264,6 +264,7 @@ const CommentSection = ({
                 onEdit={() => handleReplyEditStart(comment.id, reply)}
                 onDelete={() => handleRecommentDelete(comment.id, reply.id)}
                 onReport={() => handleReport(reply.id)}
+                onReply={() => handleReplyClick(comment.id, reply.userId, reply.nickname)}
               />
             ))}
 

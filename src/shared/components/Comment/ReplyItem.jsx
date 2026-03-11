@@ -26,11 +26,24 @@ const ReplyItem = ({
 }) => {
   // 멘션 파싱
   const renderContent = () => {
+    if (!content) return null;
+    if (mention) {
+      const mentionText = `@${mention}`;
+      const idx = content.indexOf(mentionText);
+      if (idx !== -1) {
+        return (
+          <>
+            <span className="text-[16px] font-medium text-primary leading-[24px]">{mentionText}</span>
+            <span className="text-[16px] font-normal text-text ml-[4px] leading-[24px]">{content.slice(idx + mentionText.length)}</span>
+          </>
+        );
+      }
+    }
     const parts = content.split(/(@\S+)/g);
     return parts.map((part, i) =>
       part.startsWith('@')
-        ? <span key={i} className="text-[16px] font-medium text-primary">{part}</span>
-        : <span key={i} className="text-[16px] font-normal text-text">{part}</span>
+        ? <span key={i} className="text-[16px] font-medium text-primary leading-[24px]">{part}</span>
+        : <span key={i} className="text-[16px] font-normal text-text leading-[24px]">{part}</span>
     );
   };
 
@@ -62,7 +75,7 @@ const ReplyItem = ({
             )}
             <div className="flex flex-col gap-[2px]">
               <div className="flex items-center gap-[6px]">
-                <span className={`text-[14px] font-bold ${isDeleted || (isSecret && !canViewSecret) ? 'text-secondary' : 'text-text'}`}>
+                <span className={`text-[14px] font-bold leading-[20px] ${isDeleted || (isSecret && !canViewSecret) ? 'text-secondary' : 'text-text'}`}>
                   {displayNickname}
                 </span>
                 {isLeader && !isDeleted && !(isSecret && !canViewSecret) && (
@@ -75,7 +88,7 @@ const ReplyItem = ({
                 )}
                 {/* 답글달기 버튼 없음 - 최초 댓글에만 표시 */}
               </div>
-              <span className="text-[12px] font-normal text-secondary">{date}</span>
+              <span className="text-[12px] font-normal text-secondary leading-[16px]">{date}</span>
             </div>
           </div>
 
@@ -86,13 +99,13 @@ const ReplyItem = ({
                 isEditing ? (
                   <>
                     <span
-                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                       onClick={onEditCancel}
                     >
                       취소
                     </span>
                     <span
-                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                       onClick={onDelete}
                     >
                       삭제
@@ -101,13 +114,13 @@ const ReplyItem = ({
                 ) : (
                   <>
                     <span
-                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                       onClick={onEdit}
                     >
                       수정
                     </span>
                     <span
-                      className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                      className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                       onClick={onDelete}
                     >
                       삭제
@@ -116,7 +129,7 @@ const ReplyItem = ({
                 )
               ) : (
                 <span
-                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                   onClick={onReport}
                 >
                   신고
@@ -139,7 +152,7 @@ const ReplyItem = ({
             />
             <button
               onClick={onEditSubmit}
-              className="w-[50px] h-[50px] bg-secondary-light flex items-center justify-center shrink-0"
+              className="w-[50px] h-[50px] bg-secondary-light flex items-center justify-center shrink-0 cursor-pointer"
             >
               <Send className="w-[26px] h-[26px] text-bg" />
             </button>
@@ -150,11 +163,11 @@ const ReplyItem = ({
               <Lock className="w-[24px] h-[24px] text-info shrink-0" />
             )}
             {isDeleted ? (
-              <p className="text-[16px] font-normal text-secondary">탈퇴한 사용자의 댓글</p>
+              <p className="text-[16px] font-normal text-secondary leading-[24px]">탈퇴한 사용자의 댓글</p>
             ) : isSecret && !canViewSecret ? (
               <div className="flex items-center gap-[8px]">
                 <Lock className="w-[24px] h-[24px] text-info" />
-                <p className="text-[16px] font-normal text-secondary">비밀 댓글입니다.</p>
+                <p className="text-[16px] font-normal text-secondary leading-[24px]">비밀 댓글입니다.</p>
               </div>
             ) : (
               <div>{renderContent()}</div>
