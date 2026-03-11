@@ -108,11 +108,8 @@ export default function ProfileCreatePage() {
   const handleDetectRegion = async () => {
     try {
       const region = await detectRegion();
-      const matched = REGION_OPTIONS.find((o) => o.label === region.location);
-      if (matched) {
-        handleField('region')(matched.value);
-        setRegionLabel(matched.label);
-      }
+      handleField('region')(region.id);
+      setRegionLabel(region.location);
     } catch {
       // geoError는 훅 내부에서 세팅됨
     }
