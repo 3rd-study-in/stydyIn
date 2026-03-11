@@ -27,7 +27,6 @@ function MypageProfileInfoBox({
   phone,
   location,
   github,
-  children,
   interestSlot,
   githubSlot,
   className = '',
@@ -36,14 +35,14 @@ function MypageProfileInfoBox({
 
   return (
     <div
-      className={`w-full bg-white flex flex-col gap-5 font-sans ${className}`}
+      className={`w-full bg-white flex flex-col gap-3xl font-sans ${className}`}
     >
       {/* 필드 목록 */}
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1">
         {FIELDS.map(({ key, label }) => (
           <div key={key}>
             <div className="flex items-center gap-2 h-10">
-              <span className="w-24 text-sm font-bold text-text shrink-0 whitespace-pre-line leading-snug">
+              <span className="w-24 text-sm font-bold text-secondary-dark shrink-0 whitespace-pre-line leading-snug">
                 {label}
               </span>
               <span className="text-sm text-secondary-dark">
@@ -59,8 +58,10 @@ function MypageProfileInfoBox({
       </div>
 
       {/* 관심 분야 */}
-      <div className="flex flex-col gap-3">
-        <span className="text-sm font-bold text-text">관심 분야</span>
+      <div className="flex items-center gap-2">
+        <span className="w-24 text-sm font-bold text-secondary-dark shrink-0 whitespace-pre-line leading-snug">
+          관심 분야
+        </span>
         {interestSlot ? (
           <div className="flex flex-wrap gap-2">{interestSlot}</div>
         ) : (

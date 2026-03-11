@@ -5,7 +5,8 @@
       "Bash(grep -E \"\\\\.\\(jsx|js|css\\)$\")",
       "Bash(/tmp/structure.txt:*)",
       "Read(//tmp/**)",
-      "Bash(xargs grep -l \"createStudy\\\\|getStudyList\")"
+      "Bash(xargs grep -l \"createStudy\\\\|getStudyList\")",
+      "Bash(git -C /Users/jin/Desktop/stydyIn diff HEAD -- src/atoms/Tag/TagSize.jsx)"
     ]
   }
 }

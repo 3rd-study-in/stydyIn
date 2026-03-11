@@ -8,4 +8,5 @@ export const STUDY_TABS = [
   { key: 'created', label: '내가 만든 스터디' },
   { key: 'joined',  label: '참여 중인 스터디' },
   { key: 'liked',   label: '관심 스터디' },
+  { key: 'ended',   label: '종료된 스터디' },
 ]
