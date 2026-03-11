@@ -10,12 +10,12 @@ import useToggleList from '../../../shared/hooks/useToggleList'
  */
 function useUserData(profile) {
   const [form, setForm] = useState({
-    nickname:     profile.nickname,
-    name:         profile.name,
-    phone:        profile.phone,
-    github:       profile.github_username,
+    nickname:     profile.nickname          ?? '',
+    name:         profile.name              ?? '',
+    phone:        profile.phone             ?? '',
+    github:       profile.github_username   ?? '',
     region:       profile.preferred_region?.id ?? null,
-    introduction: profile.introduction,
+    introduction: profile.introduction      ?? '',
   })
 
   const {

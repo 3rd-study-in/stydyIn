@@ -22,6 +22,7 @@ import GitHubContributions from '../shared/components/GitHub/GitHubContributions
 import useNotificationStore from '../stores/notificationStore';
 import useAuthStore from '../stores/authStore';
 import { ALL_TAGS, STUDY_TABS } from '../constants/tags';
+import { REGION_OPTIONS } from '../constants/regions';
 import useUserData from '../features/profile/hooks/useUserData';
 import useGeoLocation from '../features/location/hooks/useGeoLocation';
 import {
@@ -128,10 +129,10 @@ function ProfileTab({
   const [regionLabel, setRegionLabel] = useState(
     profile?.preferred_region?.location ?? '',
   );
-  const { detectRegion, setConsent, consent, isDetecting } = useGeoLocation();
+  const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
+  const { detectRegion, setConsent, consent, isDetecting, geoError } = useGeoLocation();
 
   const handleDetectRegion = async () => {
-    setConsent(true);
     try {
       const region = await detectRegion();
       handleField('region')(region.id);
@@ -340,8 +341,7 @@ function ProfileTab({
                 setIsPhoneVerified(false);
                 setPhoneError('');
               }}
-              disabled={isPhoneVerified}
-              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white disabled:bg-bg-muted disabled:text-text-muted disabled:cursor-not-allowed"
+              className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled outline-none focus:border-2 focus:border-info bg-white"
             />
             <button
               type="button"
@@ -349,7 +349,13 @@ function ProfileTab({
               disabled={
                 !form.phone.trim() || isPhoneVerified || isPhoneChecking
               }
-              className="h-10 px-5 w-30 border border-border rounded-md text-sm text-white bg-secondary-light disabled:cursor-not-allowed shrink-0"
+              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${
+                isPhoneVerified
+                  ? 'bg-success border-success'
+                  : form.phone.trim() && !isPhoneChecking
+                    ? 'bg-primary border-primary'
+                    : 'bg-secondary-light border-border'
+              }`}
             >
               {isPhoneChecking
                 ? '확인 중...'
@@ -364,47 +370,100 @@ function ProfileTab({
         </div>
 
         {/* 선호 지역 */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-text font-bold w-24 shrink-0">
-            내 지역 <span className="text-error">*</span>
-          </span>
-          <input
-            type="text"
-            readOnly
-            value={regionLabel}
-            className="w-71 h-10 px-3 border border-border rounded-md text-sm text-text bg-bg-muted cursor-default outline-none"
-          />
-          <button
-            type="button"
-            onClick={handleDetectRegion}
-            disabled={isDetecting}
-            className="h-10 px-5 w-30 border border-border rounded-md text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-          >
-            {isDetecting ? '인증 중...' : '인증'}
-          </button>
-        </div>
-        <div className="flex items-center gap-2 ml-28">
-          <span className="text-sm text-text-muted">위치 공유</span>
-          <label className="flex items-center gap-1.5 cursor-pointer">
-            <input
-              type="radio"
-              name="locationConsent"
-              checked={consent === true}
-              onChange={() => setConsent(true)}
-              className="accent-primary"
-            />
-            <span className="text-sm text-text">동의</span>
-          </label>
-          <label className="flex items-center gap-1.5 cursor-pointer">
-            <input
-              type="radio"
-              name="locationConsent"
-              checked={consent === false}
-              onChange={() => setConsent(false)}
-              className="accent-primary"
-            />
-            <span className="text-sm text-text">미동의</span>
-          </label>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-text font-bold w-24 shrink-0">
+              내 지역 <span className="text-error">*</span>
+            </span>
+            {consent === true ? (
+              /* 동의: GPS 자동 감지 */
+              <>
+                <input
+                  type="text"
+                  readOnly
+                  value={regionLabel}
+                  placeholder="인증 버튼을 눌러 지역을 감지하세요"
+                  className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-text placeholder:text-text-disabled bg-bg-muted cursor-default outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={handleDetectRegion}
+                  disabled={isDetecting}
+                  className="h-10 px-5 w-30 border border-border rounded-md text-sm text-text bg-white hover:bg-bg-muted disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                >
+                  {isDetecting ? '감지 중...' : '인증'}
+                </button>
+              </>
+            ) : (
+              /* 미동의: 수동 드롭다운 */
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setRegionDropdownOpen((o) => !o)}
+                  className="w-70.5 h-10 px-3 border border-border rounded-md text-sm text-left bg-white outline-none focus:border-2 focus:border-info flex items-center justify-between"
+                >
+                  <span className={regionLabel ? 'text-text' : 'text-text-disabled'}>
+                    {regionLabel || '지역을 선택하세요'}
+                  </span>
+                  <Icon name="DownArrow" size={16} color="var(--color-secondary)" />
+                </button>
+                {regionDropdownOpen && (
+                  <ul className="absolute z-10 mt-1 w-70.5 bg-white border border-border rounded-md shadow-md max-h-48 overflow-y-auto">
+                    {REGION_OPTIONS.map((option) => (
+                      <li
+                        key={option.value}
+                        onClick={() => {
+                          handleField('region')(option.value);
+                          setRegionLabel(option.label);
+                          setRegionDropdownOpen(false);
+                        }}
+                        className={`px-3 py-2 text-sm cursor-pointer hover:bg-bg-muted ${
+                          form.region === option.value ? 'text-primary font-medium' : 'text-text'
+                        }`}
+                      >
+                        {option.label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-2 ml-28">
+            <span className="text-sm text-text-muted">위치 공유</span>
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input
+                type="radio"
+                name="locationConsent"
+                checked={consent === true}
+                onChange={() => {
+                  setConsent(true);
+                  setRegionDropdownOpen(false);
+                  handleField('region')(null);
+                  setRegionLabel('');
+                }}
+                className="accent-primary"
+              />
+              <span className="text-sm text-text">동의</span>
+            </label>
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input
+                type="radio"
+                name="locationConsent"
+                checked={consent === false}
+                onChange={() => {
+                  setConsent(false);
+                  handleField('region')(null);
+                  setRegionLabel('');
+                }}
+                className="accent-primary"
+              />
+              <span className="text-sm text-text">미동의</span>
+            </label>
+          </div>
+          {geoError && (
+            <p className="text-xs text-error ml-28">{geoError}</p>
+          )}
         </div>
 
         {/* GitHub */}
