@@ -28,8 +28,8 @@ const CommentItem = ({
   const parts = text.split(/(@\S+)/g);
   return parts.map((part, i) =>
     part.startsWith('@')
-      ? <span key={i} className="text-[16px] font-medium text-primary">{part}</span>
-      : <span key={i} className="text-[16px] font-normal text-text">{part}</span>
+      ? <span key={i} className="text-[16px] font-medium text-primary leading-[24px]">{part}</span>
+      : <span key={i} className="text-[16px] font-normal text-text leading-[24px]">{part}</span>
   );
 };
 
@@ -42,15 +42,15 @@ const CommentItem = ({
           <div className="w-[40px] h-[40px] rounded-full border border-border bg-bg" />
           <div className="flex flex-col gap-[2px]">
             <div className="flex items-center gap-[10px]">
-              <span className="text-[14px] font-bold text-secondary">
+              <span className="text-[14px] font-bold text-secondary leading-[20px]">
                 {isActuallyDeleted ? '삭제된 댓글' : nickname}
               </span>
-              <span className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center" onClick={onReply}>답글달기</span>
+              <span className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center leading-[20px]" onClick={onReply}>답글달기</span>
             </div>
-            <span className="text-[12px] font-normal text-secondary">{date}</span>
+            <span className="text-[12px] font-normal text-secondary leading-[16px]">{date}</span>
           </div>
         </div>
-        <p className="text-[16px] font-normal text-secondary ml-[50px]">{content}</p>
+        <p className="text-[16px] font-normal text-secondary ml-[50px] leading-[24px]">{content}</p>
       </div>
     );
   }
@@ -63,14 +63,14 @@ const CommentItem = ({
           <div className="flex items-center gap-[10px]">
             <div className="w-[40px] h-[40px] rounded-full border border-border bg-bg" />
             <div className="flex flex-col gap-[2px]">
-              <span className="text-[14px] font-bold text-secondary">익명</span>
-              <span className="text-[12px] font-normal text-secondary">{date}</span>
+              <span className="text-[14px] font-bold text-secondary leading-[20px]">익명</span>
+              <span className="text-[12px] font-normal text-secondary leading-[16px]">{date}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-[8px] ml-[50px]">
           <Lock className="w-[24px] h-[24px] text-info" />
-          <p className="text-[16px] font-normal text-secondary">비밀 댓글입니다.</p>
+          <p className="text-[16px] font-normal text-secondary leading-[24px]">비밀 댓글입니다.</p>
         </div>
       </div>
     );
@@ -89,7 +89,7 @@ const CommentItem = ({
           />
           <div className="flex flex-col gap-[2px]">
             <div className="flex items-center gap-[10px]">
-              <span className="text-[14px] font-bold text-text">{nickname}</span>
+              <span className="text-[14px] font-bold text-text leading-[20px]">{nickname}</span>
               {isLeader && <Crown className="w-[20px] h-[20px] text-accent" />}
               {isMine && (
                 <span className="w-[50px] h-[24px] px-[8px] text-[12px] font-normal text-primary border border-primary rounded-[4px] flex items-center justify-center whitespace-nowrap shrink-0">
@@ -97,13 +97,13 @@ const CommentItem = ({
                 </span>
               )}
               <span 
-                className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center"
+                className="w-[52px] h-[20px] text-[14px] font-normal text-text-muted underline cursor-pointer shrink-0 flex items-center leading-[20px]"
                 onClick={onReply}
               >
                 답글달기
               </span>
             </div>
-            <span className="text-[12px] font-normal text-secondary">{date}</span>
+            <span className="text-[12px] font-normal text-secondary leading-[16px]">{date}</span>
           </div>
         </div>
 
@@ -113,13 +113,13 @@ const CommentItem = ({
             isEditing ? (
               <>
                 <span
-                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                   onClick={onEditCancel}
                 >
                   취소
                 </span>
                 <span
-                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                   onClick={onDelete}
                 >
                   삭제
@@ -128,13 +128,13 @@ const CommentItem = ({
             ) : (
               <>
                 <span
-                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                   onClick={onEdit}
                 >
                   수정
                 </span>
                 <span
-                  className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+                  className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
                   onClick={onDelete}
                 >
                   삭제
@@ -143,7 +143,7 @@ const CommentItem = ({
             )
           ) : (
             <span
-              className="text-[14px] font-normal text-text-muted underline cursor-pointer"
+              className="text-[14px] font-normal text-text-muted underline cursor-pointer leading-[20px]"
               onClick={onReport}
             >
               신고
@@ -175,7 +175,7 @@ const CommentItem = ({
           {isSecret && canViewSecret && (
             <Lock className="w-[24px] h-[24px] text-info shrink-0" />
           )}
-          <p className="text-[16px] font-normal text-text">{renderContent(content)}</p>
+          <p className="text-[16px] font-normal text-text leading-[24px]">{renderContent(content)}</p>
         </div>
       )}
     </div>
