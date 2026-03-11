@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import StudyListSideCard from '../../../atoms/Card/StudyListSideCard';
 import StudyListMainCard from '../../../atoms/Card/StudyListMainCard';
 import { MEDIA_URL } from '../../../constants/api';
+import { MainThumbnail } from '../../../atoms/Images/Common';
 
 // API study_status.name → StudyListMainCard status prop
 const STATUS_NAME_MAP = {
@@ -56,7 +57,7 @@ function StudySideList({ studies = [], className = '' }) {
                     ? study.thumbnail.startsWith('http')
                       ? study.thumbnail
                       : `${MEDIA_URL}${study.thumbnail}`
-                    : undefined
+                    : MainThumbnail
                 }
               />
             </div>

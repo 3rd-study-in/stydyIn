@@ -11,6 +11,7 @@
  */
 
 import Icon from "../Icon/Common/Icon"
+import { MainThumbnail } from "../Images/Common"
 
 const STATUS_MAP = {
   recruiting: { label: '모집 중!', color: 'text-primary' },
@@ -44,9 +45,12 @@ function StudyListMainCard({
       <div className="flex items-start gap-[10px] px-3 pt-3 pb-3">
         {/* 썸네일 */}
         <div className="w-[66px] h-[66px] bg-bg-muted border-[0.5px] border-border rounded-lg shrink-0 overflow-hidden">
-          {thumbnailSrc && (
-            <img src={thumbnailSrc} alt="썸네일" className="w-full h-full object-cover" />
-          )}
+          <img
+            src={thumbnailSrc || MainThumbnail}
+            alt="썸네일"
+            className="w-full h-full object-cover"
+            onError={(e) => { e.currentTarget.src = MainThumbnail }}
+          />
         </div>
 
         {/* 정보 컬럼 */}
