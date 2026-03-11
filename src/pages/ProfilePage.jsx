@@ -11,7 +11,10 @@ import Icon from '../atoms/Icon/Common/Icon';
 import { TagSize } from '../atoms/Tag';
 import UserProfileLPlaceholder from '../shared/components/UserProfile/UserProfileLPlaceholder';
 import StudyListCard from '../shared/components/Cards/StudyListCard';
+import StudyListCardSkeleton from '../shared/components/Cards/StudyListCardSkeleton';
+import ProfileTabSkeleton from '../shared/components/Profile/ProfileTabSkeleton';
 import NoContents from '../shared/components/NoContents/NoContents';
+import Pagination from '../shared/components/Pagination/Pagination';
 import NotificationItem from '../atoms/NotificationItem/NotificationItem';
 import TagInputField from '../shared/components/TagInputField/TagInputField';
 import GitHubContributions from '../shared/components/GitHub/GitHubContributions';
@@ -33,6 +36,7 @@ import {
   getMyStudies,
   getMyParticipatingStudies,
   getLikedStudies,
+  getMyClosedStudies,
 } from '../features/study/api';
 
 const inputClass =
@@ -488,7 +492,7 @@ function ProfileTab({
           ) : null
         }
         interestSlot={profile.tag?.map((t) => (
-          <TagSize key={t.id} size="M" variant="lightgray">
+          <TagSize key={t.id} size="M" variant="blue">
             {t.name}
           </TagSize>
         ))}
@@ -501,11 +505,19 @@ function ProfileTab({
 
 // ─── 내 스터디 탭 ─────────────────────────────────────────────────────────────
 
+const PAGE_SIZE = 6;
+
 function StudyTab() {
   const navigate = useNavigate();
   const [activeStudyTab, setActiveStudyTab] = useState('created');
   const [studies, setStudies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeStudyTab]);
 
   useEffect(() => {
     setLoading(true);
@@ -514,17 +526,31 @@ function StudyTab() {
         ? getMyStudies
         : activeStudyTab === 'joined'
           ? getMyParticipatingStudies
-          : getLikedStudies;
+          : activeStudyTab === 'ended'
+            ? getMyClosedStudies
+            : getLikedStudies;
 
-    fetcher()
-      .then((res) => setStudies(Array.isArray(res.data) ? res.data : []))
-      .catch(() => setStudies([]))
+    fetcher({ page: currentPage, limit: PAGE_SIZE })
+      .then((res) => {
+        const data = res.data;
+        if (data && typeof data === 'object' && 'results' in data) {
+          setStudies(data.results);
+          setTotalPages(Math.max(1, Math.ceil(data.count / PAGE_SIZE)));
+        } else {
+          setStudies(Array.isArray(data) ? data : []);
+          setTotalPages(1);
+        }
+      })
+      .catch(() => {
+        setStudies([]);
+        setTotalPages(1);
+      })
       .finally(() => setLoading(false));
-  }, [activeStudyTab]);
+  }, [activeStudyTab, currentPage]);
 
   return (
-    <div className="flex flex-col px-[55px] w-full">
-      <div className="flex gap-[14px] my-[30px]">
+    <div className="flex flex-col px-13.75 w-full">
+      <div className="flex justify-center gap-[14px] my-3xl">
         {STUDY_TABS.map(({ key, label }) => (
           <TagSize
             key={key}
@@ -538,8 +564,10 @@ function StudyTab() {
       </div>
 
       {loading ? (
-        <div className="py-5xl flex justify-center">
-          <span className="text-text-muted text-sm">불러오는 중...</span>
+        <div className="flex flex-wrap justify-between gap-y-3xl">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <StudyListCardSkeleton key={i} />
+          ))}
         </div>
       ) : studies.length === 0 ? (
         <NoContents
@@ -547,9 +575,10 @@ function StudyTab() {
           description="아직 등록된 스터디가 없어요."
           buttonText="스터디 만들기"
           onButtonClick={() => navigate('/study/create')}
+          className="mt-76.75 mb-76.75"
         />
       ) : (
-        <div className="flex flex-wrap justify-between gap-y-[30px]">
+        <div className="flex flex-wrap pb-[22px] justify-between gap-y-3xl">
           {studies.map((study) => (
             <StudyListCard
               key={study.id}
@@ -583,6 +612,16 @@ function StudyTab() {
           ))}
         </div>
       )}
+
+      {!loading && (
+        <div className="pb-xl">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -601,7 +640,7 @@ function NotificationTab() {
   const unreadCount = notifications.filter((n) => !n.checked).length;
 
   return (
-    <div className="flex flex-col gap-5 p-[40px] w-full">
+    <div className="flex flex-col gap-5 p-10 w-full">
       <h2 className="text-2xl font-bold text-text font-sans">
         확인하지 않은 알림 {unreadCount}개
       </h2>
@@ -644,7 +683,7 @@ function ProfilePage() {
   }, [userId]);
 
   return (
-    <main className="flex flex-row gap-[30px] w-[1190px] max-w-[1560px] mx-auto mt-[40px] pb-10">
+    <main className="flex flex-row gap-3xl w-max-width-lg max-w-390 mx-auto mt-10 pb-10">
       <MypageSideNav
         activeTab={activeTab}
         onTabChange={(tab) => {
@@ -653,12 +692,16 @@ function ProfilePage() {
         }}
       />
 
-      <div className="flex flex-col gap-5 w-[990px]">
+      <div className="flex flex-col gap-5 w-247.5">
         <section className="border border-border rounded-xl">
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <span className="text-text-muted text-sm">불러오는 중...</span>
-            </div>
+            activeTab === 'profile' ? (
+              <ProfileTabSkeleton />
+            ) : (
+              <div className="flex justify-center items-center h-64">
+                <span className="text-text-muted text-sm">불러오는 중...</span>
+              </div>
+            )
           ) : (
             <>
               {activeTab === 'profile' && profile && (
@@ -679,11 +722,11 @@ function ProfilePage() {
         </section>
 
         {activeTab === 'profile' && profile && !loading && (
-          <div className="flex justify-center">
+          <div className="relative flex justify-center items-center">
             {isEditing ? (
               <Button
                 variant="blue"
-                size="M"
+                size="L"
                 disabled={isSaving}
                 onClick={() => saveRef.current?.()}
               >
@@ -692,11 +735,16 @@ function ProfilePage() {
             ) : (
               <Button
                 variant="white"
-                size="M"
+                size="L"
                 onClick={() => setIsEditing(true)}
               >
                 수정하기
               </Button>
+            )}
+            {isEditing && (
+              <button className="absolute right-0 text-sm text-[#959595] underline cursor-pointer">
+                위니브월드 탈퇴하기
+              </button>
             )}
           </div>
         )}

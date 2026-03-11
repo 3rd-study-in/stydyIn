@@ -24,8 +24,8 @@ export const joinStudy = (studyPk) =>
 export const leaveStudy = (studyPk) =>
   axiosInstance.delete(`/study/${studyPk}/participate/`)
 
-export const getLikedStudies = () =>
-  axiosInstance.get('/study/my-like-study/')
+export const getLikedStudies = (params = {}) =>
+  axiosInstance.get('/study/my-like-study/', { params })
 
 export const likeStudy = (studyPk) =>
   axiosInstance.post(`/study/${studyPk}/like/`)
@@ -42,14 +42,14 @@ export const getDifficulties = () =>
 export const getSearchTags = () =>
   axiosInstance.get('/study/searchtag/')
 
-export const getMyStudies = () =>
-  axiosInstance.get('/study/my-study/')
+export const getMyStudies = (params = {}) =>
+  axiosInstance.get('/study/my-study/', { params })
 
-export const getMyParticipatingStudies = () =>
-  axiosInstance.get('/study/my-participating-study/')
+export const getMyParticipatingStudies = (params = {}) =>
+  axiosInstance.get('/study/my-participating-study/', { params })
 
-export const getMyClosedStudies = () =>
-  axiosInstance.get('/study/my-closed-study/')
+export const getMyClosedStudies = (params = {}) =>
+  axiosInstance.get('/study/my-closed-study/', { params })
 
 export const getStudyListPaged = (params = {}) =>
   axiosInstance.get('/study/list/', { params })
