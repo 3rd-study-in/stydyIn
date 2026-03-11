@@ -134,6 +134,16 @@ Container - 너비 설정
   /* 최대 너비 */
   --container-max-width-lg: 1190px;
 }
+html,
+body {
+  -ms-overflow-style: none; /* For Internet Explorer and older Edge */
+  scrollbar-width: none; /* For Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar visually */
+}
 
 header {
   transition: all 0.2s ease-in-out;
@@ -152,12 +162,7 @@ header {
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    #e8eaf0 25%,
-    #f3f5fa 50%,
-    #e8eaf0 75%
-  );
+  background: linear-gradient(90deg, #e8eaf0 25%, #f3f5fa 50%, #e8eaf0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
   border-radius: 4px;
