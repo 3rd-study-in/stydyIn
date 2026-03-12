@@ -104,7 +104,7 @@ export default function SearchPage() {
           : null;
 
   return (
-    <div className="max-w-max-width-lg mx-auto pt-[40px] pb-5xl px-xl">
+    <div className="w-max-width-lg mx-auto pt-[40px] pb-5xl px-xl">
 
       {/* 필터 */}
       <SearchFilter

@@ -67,10 +67,10 @@ function StudyForm({ studyId, initialData }) {
   useEffect(() => {
     getSubjects()
       .then((r) => setSubjects(r.data))
-      .catch(() => {});
+      .catch(() => { });
     getDifficulties()
       .then((r) => setDifficulties(r.data))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const handleThumbnailChange = async (e) => {

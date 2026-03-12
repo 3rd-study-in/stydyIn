@@ -10,6 +10,7 @@ const AuthSystem = ({ initialView = 'login' }) => {
   const [view, setView] = useState(initialView); // login | signup | complete
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const [comingSoonOpen, setComingSoonOpen] = useState(false);
 
   const {
     email: loginEmail,
@@ -115,13 +116,12 @@ const AuthSystem = ({ initialView = 'login' }) => {
                       isEmailAuthLoading
                     }
                     className={`shrink-0 transition-colors
-                        ${
-                          signupEmailError ||
-                          !signupEmail.includes('@') ||
-                          isEmailAuthLoading
-                            ? 'bg-secondary-light cursor-not-allowed opacity-70'
-                            : 'cursor-pointer hover:bg-primary-dark'
-                        }`}
+                        ${signupEmailError ||
+                        !signupEmail.includes('@') ||
+                        isEmailAuthLoading
+                        ? 'bg-secondary-light cursor-not-allowed opacity-70'
+                        : 'cursor-pointer hover:bg-primary-dark'
+                      }`}
                   >
                     {isEmailAuthLoading ? '인증' : '인증'}
                   </FlexibleButton>
@@ -145,7 +145,7 @@ const AuthSystem = ({ initialView = 'login' }) => {
                         이메일로 전송된
                         <br />
                         <span className="font-bold text-base">인증코드</span>를
-                        입력해 주세요 :)
+                        입력해 주세요 :&#41;
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -166,11 +166,10 @@ const AuthSystem = ({ initialView = 'login' }) => {
                         disabled={
                           verificationCode.length === 0 || isVerifyLoading
                         }
-                        className={`shrink-0 transition-colors ${
-                          verificationCode.length === 0 || isVerifyLoading
-                            ? 'cursor-not-allowed opacity-70'
-                            : 'cursor-pointer'
-                        }`}
+                        className={`shrink-0 transition-colors ${verificationCode.length === 0 || isVerifyLoading
+                          ? 'cursor-not-allowed opacity-70'
+                          : 'cursor-pointer'
+                          }`}
                       >
                         {isVerifyLoading ? '확인' : '확인'}
                       </FlexibleButton>
@@ -184,7 +183,7 @@ const AuthSystem = ({ initialView = 'login' }) => {
                           color="var(--color-primary)"
                           size={16}
                         />
-                        <span>이메일 인증이 완료되었어요 :)</span>
+                        <span>이메일 인증이 완료되었어요 :&#41;</span>
                       </div>
                     )}
 
@@ -239,7 +238,7 @@ const AuthSystem = ({ initialView = 'login' }) => {
                           <Icon name="X" size={20} color="white" />
                         </button>
                         <p className="text-base font-bold pb-sm">
-                          이메일이 수신되지 않나요? : (
+                          이메일이 수신되지 않나요? : &#40;
                         </p>
                         <ul className="flex flex-col text-xm leading-relaxed">
                           <li>
@@ -300,11 +299,11 @@ const AuthSystem = ({ initialView = 'login' }) => {
               <div className="text-sm leading-relaxed mt-xl">
                 <p className="font-bold">본인은 만 14세 이상이며, 스터디인의</p>
                 <p>
-                  <span className="text-primary underline cursor-pointer">
+                  <span className="text-primary underline cursor-pointer" onClick={() => setComingSoonOpen(true)}>
                     이용 약관
                   </span>
                   ,{' '}
-                  <span className="text-primary underline cursor-pointer">
+                  <span className="text-primary underline cursor-pointer" onClick={() => setComingSoonOpen(true)}>
                     개인정보취급방침
                   </span>
                   을 확인하였습니다.
@@ -420,7 +419,7 @@ const AuthSystem = ({ initialView = 'login' }) => {
           <p className="text-base text-text leading-relaxed">
             가입 시 등록한 이메일을 입력해 주세요.
             <br />
-            비밀번호 재설정 링크를 이메일로 보내드릴게요 :)
+            비밀번호 재설정 링크를 이메일로 보내드릴게요 :&#41;
           </p>
           <input
             type="email"
@@ -438,6 +437,24 @@ const AuthSystem = ({ initialView = 'login' }) => {
         >
           이메일 보내기
         </button>
+      </Modal>
+
+      {/* 기능 구현 중 모달 */}
+      <Modal isOpen={comingSoonOpen} onClose={() => setComingSoonOpen(false)}>
+        <div className="w-80 bg-white rounded-[10px] shadow-lg overflow-hidden">
+          <div className="py-8 px-6 text-center text-base text-text">
+            기능 구현 중입니다.
+          </div>
+          <div className="border-t border-border">
+            <button
+              type="button"
+              onClick={() => setComingSoonOpen(false)}
+              className="w-full py-3 text-base text-text-muted hover:bg-bg-muted transition-colors"
+            >
+              확인
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

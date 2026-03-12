@@ -255,15 +255,14 @@ function ProfileTab({
               onChange={(e) => handleField('nickname')(e.target.value)}
               onBlur={() => setNicknameTouched(true)}
               placeholder="별명을 입력해 주세요."
-              className={`w-full border-b-2 outline-none text-lg text-text text-center pb-1 placeholder:text-secondary bg-transparent ${
-                nicknameTouched && !form.nickname.trim()
+              className={`w-full border-b-2 outline-none text-lg text-text text-center pb-1 placeholder:text-secondary bg-transparent ${nicknameTouched && !form.nickname.trim()
                   ? 'border-error'
                   : nicknameStatus === 'taken'
                     ? 'border-error'
                     : nicknameStatus === 'available'
                       ? 'border-primary'
                       : 'border-border focus:border-info'
-              }`}
+                }`}
             />
             <span className="absolute right-0 pb-1 bottom-1.5">
               <Icon
@@ -349,13 +348,12 @@ function ProfileTab({
               disabled={
                 !form.phone.trim() || isPhoneVerified || isPhoneChecking
               }
-              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${
-                isPhoneVerified
+              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${isPhoneVerified
                   ? 'bg-success border-success'
                   : form.phone.trim() && !isPhoneChecking
                     ? 'bg-primary border-primary'
                     : 'bg-secondary-light border-border'
-              }`}
+                }`}
             >
               {isPhoneChecking
                 ? '확인 중...'
@@ -417,9 +415,8 @@ function ProfileTab({
                           setRegionLabel(option.label);
                           setRegionDropdownOpen(false);
                         }}
-                        className={`px-3 py-2 text-sm cursor-pointer hover:bg-bg-muted ${
-                          form.region === option.value ? 'text-primary font-medium' : 'text-text'
-                        }`}
+                        className={`px-3 py-2 text-sm cursor-pointer hover:bg-bg-muted ${form.region === option.value ? 'text-primary font-medium' : 'text-text'
+                          }`}
                       >
                         {option.label}
                       </li>
@@ -488,11 +485,10 @@ function ProfileTab({
               type="button"
               onClick={() => setConnectedGithub(form.github.trim())}
               disabled={!form.github.trim()}
-              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${
-                form.github.trim()
+              className={`h-10 px-5 w-30 border rounded-md text-sm text-white shrink-0 disabled:cursor-not-allowed ${form.github.trim()
                   ? 'bg-primary border-primary'
                   : 'bg-secondary-light border-border'
-              }`}
+                }`}
             >
               잔디 연동
             </button>

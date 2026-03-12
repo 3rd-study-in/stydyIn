@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Icon from '../../../atoms/Icon/Common/Icon';
+import Modal from '../../../atoms/Modal/Modal';
 
-const FooterSection = ({ title, links }) => (
+const FooterSection = ({ title, links, onComingSoon }) => (
   <nav aria-labelledby={`footer-${title}`} className="flex flex-col gap-4">
     {/* md 이상에서 노출, text-lg(16px) 적용 */}
     <h3
@@ -22,6 +23,7 @@ const FooterSection = ({ title, links }) => (
             /* text-sm(12px), text-base(14px), gap-xxxs(4px), mb-xs(8px) */
             target={link.isExternal ? '_blank' : undefined}
             rel={link.isExternal ? 'noopener noreferrer' : undefined}
+            onClick={link.url === '#' ? (e) => { e.preventDefault(); onComingSoon?.(); } : undefined}
           >
             {link.label}
             {link.isExternal && (
@@ -43,6 +45,8 @@ const FooterSection = ({ title, links }) => (
 );
 
 const Footer = ({ className }) => {
+  const [comingSoonOpen, setComingSoonOpen] = useState(false);
+
   const footerData = {
     weniv: [
       { label: '회사 소개', url: '#', isExternal: true },
@@ -57,6 +61,7 @@ const Footer = ({ className }) => {
   };
 
   return (
+    <>
     <footer
       className={twMerge(
         'w-full bg-bg border-t border-border pt-4xl pb-4xl px-xxxs md:pt-5xl md:pb-5xl',
@@ -68,9 +73,9 @@ const Footer = ({ className }) => {
         {/* 1. 메뉴 영역 */}
         <div className="grid grid-cols-2 gap-x-xl gap-y-xxs mb-xl md:flex md:gap-5xl md:mb-5xl">
           {/* gap-x-xl(20px), gap-y-xxs(6px), md:gap-1xl(24px) */}
-          <FooterSection title="위니브" links={footerData.weniv} />
-          <FooterSection title="정책" links={footerData.policy} />
-          <FooterSection title="위니브월드" links={footerData.world} />
+          <FooterSection title="위니브" links={footerData.weniv} onComingSoon={() => setComingSoonOpen(true)} />
+          <FooterSection title="정책" links={footerData.policy} onComingSoon={() => setComingSoonOpen(true)} />
+          <FooterSection title="위니브월드" links={footerData.world} onComingSoon={() => setComingSoonOpen(true)} />
         </div>
 
         {/* 2. 소셜 미디어 */}
@@ -83,6 +88,7 @@ const Footer = ({ className }) => {
               <li key={i}>
                 <a
                   href="#"
+                  onClick={(e) => { e.preventDefault(); setComingSoonOpen(true); }}
                   className="block w-4xl h-4xl md:w-4xl md:h-4xl border border-border rounded-md hover:bg-bg-muted transition-colors"
                   /* w-4xl(32px), rounded-md(8px) */
                 />
@@ -113,6 +119,25 @@ const Footer = ({ className }) => {
         </div>
       </div>
     </footer>
+
+      {/* 기능 구현 중 모달 */}
+      <Modal isOpen={comingSoonOpen} onClose={() => setComingSoonOpen(false)}>
+        <div className="w-80 bg-white rounded-[10px] shadow-lg overflow-hidden">
+          <div className="py-8 px-6 text-center text-base text-text">
+            기능 구현 중입니다.
+          </div>
+          <div className="border-t border-border">
+            <button
+              type="button"
+              onClick={() => setComingSoonOpen(false)}
+              className="w-full py-3 text-base text-text-muted hover:bg-bg-muted transition-colors"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
 
