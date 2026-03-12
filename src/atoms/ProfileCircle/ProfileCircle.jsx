@@ -1,4 +1,5 @@
 import React from 'react';
+import defaultImg from '../../asset/images/UserProfileDefault.png';
 
 const ProfileCircle = ({ src, isLoggedIn, size = 40 }) => {
   // 1. 로그인 상태이고 + src 문자열이 실제로 존재할 때만 true
@@ -20,8 +21,15 @@ const ProfileCircle = ({ src, isLoggedIn, size = 40 }) => {
           className="h-full w-full object-cover"
           // 이미지 로드 실패 시 다시 한 번 엑박을 방지하는 안전장치
           onError={(e) => {
-            e.target.style.display = 'none';
+            e.target.src = defaultImg;
           }}
+        />
+      ) : isLoggedIn ? (
+        // 로그인했지만 프로필 이미지 없으면 기본 이미지
+        <img
+          src={defaultImg}
+          alt="기본 프로필"
+          className="h-full w-full object-cover"
         />
       ) : (
         // 2. 로그인 전이거나 이미지가 없으면 아예 빈 div만 렌더링

@@ -1,4 +1,5 @@
 import { MEDIA_URL } from '../../../constants/api';
+import defaultImg from '../../../asset/images/UserProfileDefault.png';
 import { useState, useEffect } from 'react';
 import CommentInput from './CommentInput';
 import CommentItem from './CommentItem';
@@ -7,7 +8,7 @@ import ReplyInput from './ReplyInput';
 import useComment from '../../hooks/useComment';
 
 const resolveProfileImage = (img) => {
-  if (!img) return '';
+  if (!img) return defaultImg;
   if (img.startsWith('http')) return img;
   return `${MEDIA_URL}${img}`;
 };
