@@ -59,7 +59,7 @@ const ReplyItem = ({
       <CommentArrow className="w-[22px] h-[26px] text-border shrink-0" />
 
       {/* 대댓글 내용 */}
-      <div className="w-[790px] flex flex-col gap-[16px]">
+      <div className="w-[790px] flex flex-col gap-[8px]">
         {/* 상단: 프로필 + 버튼 */}
         <div className="flex justify-between items-start">
           {/* 좌측: 프로필 */}

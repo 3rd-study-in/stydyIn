@@ -1,4 +1,5 @@
 import { MEDIA_URL } from '../../../constants/api';
+import defaultImg from '../../../asset/images/UserProfileDefault.png';
 import { useState, useEffect } from 'react';
 import CommentInput from './CommentInput';
 import CommentItem from './CommentItem';
@@ -7,7 +8,7 @@ import ReplyInput from './ReplyInput';
 import useComment from '../../hooks/useComment';
 
 const resolveProfileImage = (img) => {
-  if (!img) return '';
+  if (!img) return defaultImg;
   if (img.startsWith('http')) return img;
   return `${MEDIA_URL}${img}`;
 };
@@ -122,10 +123,7 @@ const CommentSection = ({
 
   // 댓글 작성
   const handleCommentSubmit = async ({ content, isSecret }) => {
-    const result = await createComment(content, isSecret);
-    if (result) {
-      alert('댓글이 등록되었습니다.');
-    }
+    await createComment(content, isSecret);
   };
 
   // 댓글 삭제
