@@ -1,5 +1,6 @@
 import FlexibleButton from '../../../atoms/Button/FlexibleButton';
 import defaultProfile from '../../../asset/images/main-profile.png';
+import defaultLoginProfile from '../../../asset/images/UserProfileDefault.png';
 
 /**
  * 메인 피드 우측 프로필 카드
@@ -27,9 +28,9 @@ function MainProfileCard({
       <div className="flex flex-col items-center  pt-4xl">
         {/* 아바타 영역 */}
         <div className="w-[100px] h-[100px] rounded-full overflow-hidden border border-border bg-secondary-light flex items-center justify-center shrink-0">
-          {hasUser && profileImage ? (
+          {hasUser ? (
             <img
-              src={profileImage}
+              src={profileImage || defaultLoginProfile}
               alt={nickname ?? '프로필'}
               className="w-full h-full object-cover"
             />
