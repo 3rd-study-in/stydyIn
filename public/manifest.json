@@ -1,0 +1,9 @@
+{
+  "name": "스터디인",
+  "short_name": "스터디인",
+  "description": "함께 성장하는 스터디 매칭 플랫폼",
+  "start_url": "/",
+  "display": "browser",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}
