@@ -768,7 +768,8 @@ graph TB
 - Button / SearchBar / ProfileCircle 컴포넌트 제작
 - Footer / 헤더 모달 분리 / 404 페이지 구현
 - 검색 필터 및 드롭다운 컴포넌트 구현
-- 헤더 미디어쿼리 반응형 처리 / 최신 검색어 노출 기능 추가
+- 최신 검색어 노출 기능 추가
+- User Profile 모달 추가
 
 **snow7942** - 스터디 상세 및 댓글 기능 개발
 
@@ -815,22 +816,17 @@ os별 레이아웃 픽셀 오차 발생
 
 **해결**
 
-우선 어디가 원인인지 주요 원인들을 gemini로 리스트를 뽑은후 직접 화면 공유를 통해 비교하면서 원인을 찾게되었다.
-스크롤바의 공간 차지 방식이 원인임을 알게 되고 이로 인해 브라우저의 실제 렌더링 영역(Viewport)이 스크롤바 너비만큼 줄어듭니다.
+OS별 스크롤바 점유 방식의 차이로 인해 레이아웃이 어긋나는 현상을 발견했습니다. Gemini를 활용해 발생 가능한 원인 리스트를 도출한 후, 팀원들과 실시간 화면 공유를 통해 Windows(LG 그램)와 macOS(맥북 에어) 환경의 렌더링 차이를 정밀 비교했습니다.
 
-Windows (LG 그램): 기본적으로 스크롤바가 물리적인 너비(약 15~17px)를 차지.
-macOS (맥북 에어): 기본적으로 스크롤바가 화면 위에 떠 있는 형태(Overlay)이거나 스크롤할 때만 나타납니다. 따라서 레이아웃 너비에 영향을 주지 않습니다.
-라는 정보를 알게되고
-거기다 UX적으로도 사용자가 스크롤이 가능할수있는 페이지라고 판단할수있도록 콘텐츠가 잘린채로 표시되는경우가 대부분이기 때문에 스크롤을 css적으로 없애기위해
-전역 CSS 파일의 최상단에
-html, body {
--ms-overflow-style: none; /_ For Internet Explorer and older Edge _/
-scrollbar-width: none; /_ For Firefox _/
-}
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-display: none; /_ Hides the scrollbar visually _/
-}
+분석 결과, Windows 환경에서는 스크롤바가 물리적 너비(약 15~17px)를 차지하여 뷰포트 영역이 줄어드는 반면, macOS는 오버레이 방식을 사용하여 레이아웃에 영향을 주지 않는다는 점을 파악했습니다. 이를 해결하기 위해 전역 CSS 파일의 최상단에 <br>
+html, body { <br>
+-ms-overflow-style: none; /_ For Internet Explorer and older Edge _/<br>
+scrollbar-width: none; /_ For Firefox _/<br>
+}<br>
+html::-webkit-scrollbar,<br>
+body::-webkit-scrollbar {<br>
+display: none; /_ Hides the scrollbar visually _/<br>
+}<br>
 를 추가하여 해결하였습니다.
 
 ---
