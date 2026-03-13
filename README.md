@@ -65,14 +65,14 @@ StudyIn은 프로그래밍 스터디를 직접 기획하고 운영하기 어려�
 - Deployment: Vercel
 - Design: Figma
 
-## 인증 방식
+### 2.2 인증 방식
 
 - JWT 기반 인증
 - `access_token`: 1시간 유효
 - `refresh_token`: 7시간 유효
 - 이메일 인증 코드는 `123456` 고정 (실제 발송 없음)
 
-### 2.2 배포 URL
+### 2.3 배포 URL
 
 - https://studyin-steel.vercel.app
 - 테스트 계정
@@ -81,7 +81,7 @@ StudyIn은 프로그래밍 스터디를 직접 기획하고 운영하기 어려�
   pw : test1234!
   ```
 
-### 2.3 페이지 라우팅 구조
+### 2.4 페이지 라우팅 구조
 
 > `AuthLayout`(GNBLogin) / `GeneralLayout`(GNB 공개) / `PrivateLayout`(GNB 인증 필요) 세 가지 레이아웃으로 분리
 
@@ -120,7 +120,7 @@ StudyIn은 프로그래밍 스터디를 직접 기획하고 운영하기 어려�
 | 비밀번호 재설정 | `/password-reset`      |     로그인     | 비밀번호 변경            |
 | 404             | `*`                    |      전체      | 페이지 없음              |
 
-### 2.4 API 엔드포인트
+### 2.5 API 엔드포인트
 
 > Base URL: `https://api.wenivops.co.kr/services/studyin`  
 > 미인증 요청 시 `401 Unauthorized` 반환
@@ -183,7 +183,7 @@ StudyIn은 프로그래밍 스터디를 직접 기획하고 운영하기 어려�
 | `notifications/`               | GET    | 알림 목록 조회 |   ✅   |        |
 | `notifications/<int:pk>/read/` | PATCH  | 알림 읽음 처리 |   ✅   |        |
 
-### 2.5 API 응답 데이터 타입
+### 2.6 API 응답 데이터 타입
 
 #### 로그인 (POST /accounts/login)
 
@@ -295,7 +295,7 @@ mindmap
       알림 수신
 ```
 
-## 회원 등급
+### 3.1.1 회원 등급
 
 | 등급   | 조건             | 가능한 기능                       |
 | ------ | ---------------- | --------------------------------- |
@@ -529,9 +529,126 @@ src/
 
 |                                   내 지역 필터                                    |                                                                           온라인 필터                                                                           |
 | :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="" width="370" height="500" style="object-fit:cover" alt="내 지역 필터"> | <img src="https://github.com/user-attachments/assets/77d8e974-b50a-4f2b-8ca1-208d2b10d5fc" width="370" height="500" style="object-fit:cover" alt="온라인 필터"> |
+| <img src="<img width="1323" height="708" alt="Image" src="https://github.com/user-attachments/assets/449be2d4-bbae-4bab-808c-3714da1e1e3d" />" width="370" height="500" style="object-fit:cover" alt="내 지역 필터"> | <img src="https://github.com/user-attachments/assets/77d8e974-b50a-4f2b-8ca1-208d2b10d5fc" width="370" height="500" style="object-fit:cover" alt="온라인 필터"> |
 
 ---
+
+### 6.3 와이어프레임
+
+#### 디자인 시스템
+
+| 로고 / 색상 / 폰트 / 그리드 |
+| :---: |
+| <img src="<img width="1568" height="390" alt="Image" src="https://github.com/user-attachments/assets/ba112447-7358-44ce-8230-ce4d8530cf74" />" width="740" alt="로고 / 색상 / 폰트 / 그리드"> |
+
+| 아이콘 컴포넌트 |
+| :---: |
+| <img src="<img width="1568" height="649" alt="Image" src="https://github.com/user-attachments/assets/09420574-3271-417d-933a-fb9760754e87" />" width="740" alt="아이콘 컴포넌트"> |
+
+| 메타 이미지 / 파비콘 | 메인 배너 |
+| :---: | :---: |
+| <img src="<img width="821" height="787" alt="Image" src="https://github.com/user-attachments/assets/d6da6de5-7791-46b8-9a50-650b14d0d4d3" />" width="370" alt="메타 이미지 / 파비콘"> | <img src="<img width="572" height="785" alt="Image" src="https://github.com/user-attachments/assets/008b77b1-89d0-4639-9719-a987e4ad6dda" />" width="370" alt="메인 배너"> |
+
+---
+
+#### 웹 컴포넌트
+
+| 웹 컴포넌트 (상단) |
+| :---: |
+| <img src="<img width="1250" height="774" alt="Image" src="https://github.com/user-attachments/assets/cb832a97-1c47-4724-9dd9-55b8c9806df2" />" width="740" alt="웹 컴포넌트 (상단)"> |
+
+| 웹 컴포넌트 (하단) |
+| :---: |
+| <img src="<img width="1227" height="607" alt="Image" src="https://github.com/user-attachments/assets/4451c545-52bc-47d4-9a59-9464a54ae43e" />" width="740" alt="웹 컴포넌트 (하단)"> |
+
+---
+
+#### 로그인 / 회원가입
+
+| 로그인 | 회원가입 |
+| :---: | :---: |
+| <img src="<img width="1165" height="676" alt="Image" src="https://github.com/user-attachments/assets/55ffef49-c8a5-4748-ad9f-564330e66ff7" />" width="370" alt="로그인"> | <img src="<img width="1160" height="687" alt="Image" src="https://github.com/user-attachments/assets/c3533810-eca8-4166-a254-3c39030f132b" />" width="370" alt="회원가인"> |
+
+| 인증번호 입력 | 회원가입 완료 |
+| :---: | :---: |
+| <img src="<img width="1211" height="707" alt="Image" src="https://github.com/user-attachments/assets/09569239-a4d4-4de2-a24f-07e7cd7f523e" />" width="370" alt="인증번호 입력"> | <img src="<img width="1125" height="663" alt="Image" src="https://github.com/user-attachments/assets/5077618b-70e6-474d-9508-4a56ca9f48b2" />" width="370" alt="회원가입 완료"> |
+
+| 비밀번호 재설정 | 최초 프로필 생성 |
+| :---: | :---: |
+| <img src="<img width="1160" height="677" alt="Image" src="https://github.com/user-attachments/assets/4f5c23f8-e49d-40fb-8e97-b90e46d67e6f" />" width="370" alt="비밀번호 재설정"> | <img src="<img width="838" height="777" alt="Image" src="https://github.com/user-attachments/assets/cb584858-e139-41e4-b76f-f976c1fb833f" />" width="370" alt="최초 프로필 생성"> |
+
+---
+
+#### 메인페이지
+
+| 메인 - 로그인 전 | 메인 - 로그인 후 |
+| :---: | :---: |
+| <img src="<img width="1266" height="385" alt="Image" src="https://github.com/user-attachments/assets/4ca2d412-1694-41b8-bfc2-14a66ab53e24" />" width="370" alt="메인 - 로그인 전"> | <img src="<img width="657" height="792" alt="Image" src="https://github.com/user-attachments/assets/5906b9eb-f0a5-47aa-b987-80c64d89f8c4" />" width="370" alt="메인 - 로그일 후"> |
+
+| 메인 - 스터디 없음 | |
+| :---: | :---: |
+| <img src="<img width="1198" height="697" alt="Image" src="https://github.com/user-attachments/assets/eeb48199-9912-400e-a452-e9a372245cb5" />" width="370" alt="메인 - 스터디 없음"> | |
+
+---
+
+#### 내 지역 / 온라인
+
+| 내 지역 - 인증 전 | 내 지역 - 스터디 있음 |
+| :---: | :---: |
+| <img src="<img width="1231" height="717" alt="Image" src="https://github.com/user-attachments/assets/fd54054b-3ee1-464d-a08a-7f85e41bef2d" />" width="370" alt="내 지역 - 인증 전"> | <img src="<img width="1232" height="718" alt="Image" src="https://github.com/user-attachments/assets/a23c8063-1328-4f34-a9e1-529ef5568f03" />" width="370" alt="내 지역 - 스터디 있음"> |
+
+| 내 지역 - 스터디 없음 | 온라인 + 알림 |
+| :---: | :---: |
+| <img src="<img width="1232" height="712" alt="Image" src="https://github.com/user-attachments/assets/cb3f66ff-0d04-4ad5-8bc9-e47301b87bfe" />" width="370" alt="내 지역 - 스터디 없음"> | <img src="<img width="930" height="790" alt="Image" src="https://github.com/user-attachments/assets/f85220ef-e004-42c2-956c-a644ffdce886" />" width="370" alt="온라인 + 알림"> |
+
+---
+
+#### 검색
+
+| 검색 결과 | 검색 결과 없음 |
+| :---: | :---: |
+| <img src="<img width="1075" height="770" alt="Image" src="https://github.com/user-attachments/assets/e2c3c795-1654-4965-9015-3ee3f01447a2" />" width="370" alt="검색 결과"> | <img src="<img width="1078" height="637" alt="Image" src="https://github.com/user-attachments/assets/fcf6d0e2-6907-4921-9f80-8d4a9f367b06" />" width="370" alt="검색 결과 없음"> |
+
+---
+
+#### 스터디 상세
+
+| 스터디 상세 | 스터디 일정 카드 상태 |
+| :---: | :---: |
+| <img src="<img width="682" height="785" alt="Image" src="https://github.com/user-attachments/assets/e0a718c2-cbaf-49b3-b5bd-ef2d58c68c64" />" width="370" alt="스터디 상세"> | <img src="<img width="1100" height="778" alt="Image" src="https://github.com/user-attachments/assets/b93696e9-ea4b-493f-bce9-fb51f4c785b6" />" width="370" alt="스터디 일정 카드 상태"> |
+
+---
+
+#### 스터디 만들기
+
+| 스터디 만들기 |
+| :---: |
+| <img src="<img width="636" height="792" alt="Image" src="https://github.com/user-attachments/assets/756a1c24-c0df-4895-8b44-5fa1665d6c47" />" width="370" alt="스터디 만들기"> |
+
+---
+
+#### 마이페이지
+
+| 준회원 (프로필 미설정) | 프로필 조회 |
+| :---: | :---: |
+| <img src="<img width="1105" height="751" alt="Image" src="https://github.com/user-attachments/assets/1ed6132f-e954-4971-858f-87d247e11dd4" />" width="370" alt="준회원 (프로필 미설정)"> | <img src="<img width="960" height="648" alt="Image" src="https://github.com/user-attachments/assets/9d092cd1-d1f9-4226-afa1-2db67f34f886" />" width="370 alt="프로필 조회"> |
+
+| 프로필 수정 | 스터디 탭 |
+| :---: | :---: |
+| <img src="<img width="998" height="776" alt="Image" src="https://github.com/user-attachments/assets/6b0e639e-2ee7-416d-82e0-589dda01c5bc" />" width="370" alt="프로필 수정"> | <img src="<img width="995" height="788" alt="Image" src="https://github.com/user-attachments/assets/b5cc538b-c576-4141-a681-4e1639c9f8ff" />" width="370" alt="스터디 탭"> |
+
+| 스터디 없음 | 알림 탭 |
+| :---: | :---: |
+| <img src="<img width="1112" height="687" alt="Image" src="https://github.com/user-attachments/assets/41804dbb-ca7c-49ba-9732-8270d726aab3" />" width="370" alt="스터디 없음"> | <img src="<img width="992" height="613" alt="Image" src="https://github.com/user-attachments/assets/6504eaa8-9130-43fe-b091-1c28abee68d1" />" width="370" alt="알림 탭"> |
+
+---
+
+#### 404
+
+| 404 페이지 |
+| :---: |
+| <img src="<img width="1280" height="737" alt="Image" src="https://github.com/user-attachments/assets/ef04d34d-9920-41b4-b0bf-40f2add7b1b9" />" width="740" alt="404 페이지"> |
+
 
 ## 7. 아키텍처
 
@@ -726,11 +843,13 @@ display: none; /_ Hides the scrollbar visually _/
 
 **문제**
 
-<!-- TODO: 작성 -->
+1. 대댓글에서 답글달기 클릭 시 존재하지 않는 comment_id로 요청을 보내 "Comment를 찾을 수 없습니다" 404 오류 발생하였습니다. API 구조상 대대댓글이 없기 때문에 대댓글의 답글도 최상위 댓글 id로 요청해야 했으나 이를 인지하지 못해 발생한 문제였습니다.
+2. 비밀댓글에 달린 대댓글의 공개 여부 조건이 복잡하여 누가 볼 수 있는지 기준이 불명확했습니다. 부모 댓글이 비밀이면 대댓글도 비밀로 처리해야 하는데 단순 isMine 체크로는 부족했습니다.
 
 **해결**
 
-<!-- TODO: 작성 -->
+1. ReplyItem에 onReply prop을 추가하고 CommentSection에서 항상 최상위 comment.id를 전달하도록 수정, 멘션은 대댓글 작성자 닉네임으로 유지하였습니다. 또한, API 구조 파악 후 프론트에서 id를 올바르게 매핑하여 해결했습니다.
+2.  canViewSecret 조건을 부모 댓글 비밀 여부에 따라 분기 처리하여 부모 댓글이 비밀인 경우 대댓글 작성자만, 일반 댓글인 경우 대댓글 작성자/부모 댓글 작성자/그룹장 모두 볼 수 있도록 세분화하였습니다. 또한, 그룹장/댓글 작성자/대댓글 작성자 세 케이스를 모두 고려하여 조건 설계했습니다.
 
 ---
 
