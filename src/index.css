@@ -134,6 +134,10 @@ Container - 너비 설정
   /* 최대 너비 */
   --container-max-width-lg: 1190px;
 }
+html {
+  overflow-x: auto;
+}
+
 html,
 body {
   -ms-overflow-style: none; /* For Internet Explorer and older Edge */
@@ -145,8 +149,12 @@ body::-webkit-scrollbar {
   display: none; /* Hides the scrollbar visually */
 }
 
+body {
+  min-width: 1190px;
+}
+
 header {
-  transition: all 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 /* ================================
