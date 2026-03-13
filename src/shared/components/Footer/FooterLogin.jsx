@@ -11,7 +11,7 @@ const FooterLogin = () => {
 
   return (
     // py-5xl(48px), text-text-disabled(비활성/힌트 색상) 적용
-    <footer className="py-5xl px-xxxs text-center text-text-disabled text-xs sm:text-sm">
+    <footer className="py-5xl px-xxxs text-center text-text-disabled text-sm">
       {/* 1. 상단 링크 영역 */}
       <div className="flex justify-center items-center gap-md mb-4">
         {/* gap-md(12px), mb-xs(8px) */}

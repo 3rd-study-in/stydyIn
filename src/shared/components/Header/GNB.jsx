@@ -18,7 +18,7 @@ import { MEDIA_URL } from '../../../constants/api';
 
 const GNBWrapper = ({ children }) => (
   <header className="relative flex justify-center w-full h-[80px] bg-bg border-b border-border">
-    <div className="flex items-center justify-between w-full max-w-(--container-max-width-lg) px-4 xl:px-0">
+    <div className="flex items-center justify-between w-[1190px]">
       {children}
     </div>
   </header>
@@ -231,13 +231,6 @@ const GNB = () => {
     }
   });
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn);
-  const hasUnread = useNotificationStore((s) => s.hasUnread);
-  const {
-    isOpen: isMobileNoticeOpen,
-    toggle: toggleMobileNotice,
-    close: closeMobileNotice,
-    containerRef: mobileNoticeRef,
-  } = useDisclosure();
 
   const saveSearch = (term) => {
     const trimmed = term.trim();
@@ -269,28 +262,15 @@ const GNB = () => {
 
   return (
     <GNBWrapper>
-      {/* 데스크탑: 로고 + 네비 */}
-      <div className="hidden md:flex items-center gap-x-14 h-full">
+      {/* 로고 + 네비 */}
+      <div className="flex items-center gap-x-14 h-full">
         <Logo />
         <NavLinks />
       </div>
 
-      {/* 모바일: 햄버거 (왼쪽) */}
-      <button className="flex md:hidden items-center p-1 cursor-pointer">
-        <Icon name="Hamburger" size={24} />
-      </button>
-
-      {/* 모바일: 로고 (가운데 절대 위치) */}
-      <div className="md:hidden absolute left-1/2 -translate-x-1/2 pointer-events-none">
-        <a href="/" className="pointer-events-auto">
-          <Icon name="SymbolLogo" size={110} />
-        </a>
-      </div>
-
       {/* 오른쪽 영역 */}
       <div className="flex items-center gap-x-4xl">
-        {/* SearchBar: 모바일 숨김, 900px 이하에서 축소 */}
-        <div className="hidden md:flex w-[400px] max-[900px]:w-[200px] transition-[width] duration-200">
+        <div className="flex w-[400px]">
           <SearchBar
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
@@ -300,35 +280,8 @@ const GNB = () => {
           />
         </div>
 
-        {/* 데스크탑 액션 */}
-        <div className="hidden md:flex">
+        <div className="flex">
           {isLoggedIn ? <LoggedInActions /> : <LoggedOutButtons />}
-        </div>
-
-        {/* 모바일 액션: 알림 아이콘 */}
-        <div className="flex md:hidden">
-          {isLoggedIn ? (
-            <div ref={mobileNoticeRef} className="relative cursor-pointer">
-              <div onClick={toggleMobileNotice}>
-                <Badge show={hasUnread}>
-                  <Icon name="Notification" size={30} />
-                </Badge>
-              </div>
-              {isMobileNoticeOpen && (
-                <div className="absolute top-full right-0 mt-xs z-50">
-                  <MainNoticeCard onMoreClick={closeMobileNotice} />
-                </div>
-              )}
-            </div>
-          ) : (
-            <FlexibleButton
-              variant="blue"
-              size="S"
-              onClick={() => navigate('/login')}
-            >
-              시작하기
-            </FlexibleButton>
-          )}
         </div>
       </div>
 
