@@ -705,7 +705,7 @@ display: none; /_ Hides the scrollbar visually _/
 
 **문제**
 
-스터디 생성시, 사용자 프로필 작성시 설정한 이미지 데이터가 없을 시 엑박(Broken Image) 현상 발생.
+스터디 생성시, 사용자 프로필 작성시 설정한 이미지 데이터가 없을 시 엑박(Broken Image) 현상 발생
 
 **해결**
 
