@@ -30,10 +30,10 @@ StudyIn은 프로그래밍 스터디를 직접 기획하고 운영하기 어려�
     <th>조서연</th>
   </tr>
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/7167a022-a6b9-457a-a474-a8271ee4ec0d" width="150" height="150" style="object-fit:cover"></td>
-    <td><img src="https://github.com/user-attachments/assets/061ae641-5ebe-44e6-86b2-9a5d9ce70162" width="150" height="150" style="object-fit:cover"></td>
-    <td><img src="https://github.com/user-attachments/assets/d789778e-2b05-466c-a6bd-79eba0d3d977" width="150" height="150" style="object-fit:cover"></td>
-    <td><img src="https://github.com/user-attachments/assets/952a2565-3bbf-441e-8ccd-83c2b2de1732" width="150" height="150" style="object-fit:cover"></td>
+    <td><img src="https://github.com/user-attachments/assets/7167a022-a6b9-457a-a474-a8271ee4ec0d" width="150"></td>
+    <td><img src="https://github.com/user-attachments/assets/061ae641-5ebe-44e6-86b2-9a5d9ce70162" width="150"></td>
+    <td><img src="https://github.com/user-attachments/assets/d789778e-2b05-466c-a6bd-79eba0d3d977" width="150"></td>
+    <td><img src="https://github.com/user-attachments/assets/952a2565-3bbf-441e-8ccd-83c2b2de1732" width="150"></td>
   </tr>
   <tr>
     <td>프로젝트 기반 설정 및 주요 페이지 구현</td>
@@ -481,7 +481,7 @@ src/
 
 |                                                                     메인페이지 - 로그인 전                                                                     |                                                                           메인페이지 - 로그인 후                                                                           |
 | :------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/647e0df9-5b7d-47b4-84fd-f755b357fc8f" width="350" height="450" style="object-fit:cover" alt="메인페이지"> | <img src="https://github.com/user-attachments/assets/80d33f4c-4ce9-401d-a722-fb19142c7d85" width="350" height="450" style="object-fit:cover" alt="메인페이지 스터디 목록"> |
+| <img src="https://github.com/user-attachments/assets/647e0df9-5b7d-47b4-84fd-f755b357fc8f" width="370" height="500" style="object-fit:cover" alt="메인페이지"> | <img src="https://github.com/user-attachments/assets/80d33f4c-4ce9-401d-a722-fb19142c7d85" width="370" height="500" style="object-fit:cover" alt="메인페이지 스터디 목록"> |
 
 ---
 
@@ -489,7 +489,7 @@ src/
 
 |                                                                           로그인                                                                           |                                                                           회원가입                                                                           |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/f548b5be-ba60-4919-8e34-883c12204e6b" width="350" height="450" style="object-fit:cover" alt="로그인"> | <img src="https://github.com/user-attachments/assets/5fe0df77-a96b-4683-b02d-228e641bd3b1" width="350" height="450" style="object-fit:cover" alt="회원가입"> |
+| <img src="https://github.com/user-attachments/assets/f548b5be-ba60-4919-8e34-883c12204e6b" width="370" height="500" style="object-fit:cover" alt="로그인"> | <img src="https://github.com/user-attachments/assets/5fe0df77-a96b-4683-b02d-228e641bd3b1" width="370" height="500" style="object-fit:cover" alt="회원가입"> |
 
 ---
 
@@ -497,7 +497,7 @@ src/
 
 |                                                                           프로필 설정                                                                           |                                                                           내 프로필                                                                           |
 | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/89cc794d-0603-4772-87ef-342f1e6b031d" width="350" height="450" style="object-fit:cover" alt="프로필 설정"> | <img src="https://github.com/user-attachments/assets/81a5c613-f7b7-41a1-b506-55759e61a9bd" width="350" height="450" style="object-fit:cover" alt="내 프로필"> |
+| <img src="https://github.com/user-attachments/assets/89cc794d-0603-4772-87ef-342f1e6b031d" width="370" height="500" style="object-fit:cover" alt="프로필 설정"> | <img src="https://github.com/user-attachments/assets/81a5c613-f7b7-41a1-b506-55759e61a9bd" width="370" height="500" style="object-fit:cover" alt="내 프로필"> |
 
 ---
 
@@ -505,7 +505,7 @@ src/
 
 |                                                                           스터디 만들기                                                                           |                                                                              AI 기능                                                                               |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/6425deb1-d864-44f8-94f6-79fd6a4c0d74" width="350" height="450" style="object-fit:cover" alt="스터디 만들기"> | <img src="https://github.com/user-attachments/assets/730ce573-9b50-498d-ba1f-86bd2d23f864" width="350" height="450" style="object-fit:cover" alt="스터디 AI 생성"> |
+| <img src="https://github.com/user-attachments/assets/6425deb1-d864-44f8-94f6-79fd6a4c0d74" width="370" height="500" style="object-fit:cover" alt="스터디 만들기"> | <img src="https://github.com/user-attachments/assets/730ce573-9b50-498d-ba1f-86bd2d23f864" width="370" height="500" style="object-fit:cover" alt="스터디 AI 생성"> |
 
 ---
 
@@ -513,7 +513,7 @@ src/
 
 |                                                                          스터디 상세 (상단)                                                                          |                                                                      스터디 상세 (하단 - 댓글)                                                                       |
 | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/695001e2-a37d-48f7-a63f-1c7a27869fa0" width="350" height="450" style="object-fit:cover" alt="스터디 상세 상단"> | <img src="https://github.com/user-attachments/assets/9f4e2a89-6013-4d87-b1e6-4e19a9806a64" width="350" height="450" style="object-fit:cover" alt="스터디 상세 댓글"> |
+| <img src="https://github.com/user-attachments/assets/695001e2-a37d-48f7-a63f-1c7a27869fa0" width="370" height="500" style="object-fit:cover" alt="스터디 상세 상단"> | <img src="https://github.com/user-attachments/assets/9f4e2a89-6013-4d87-b1e6-4e19a9806a64" width="370" height="500" style="object-fit:cover" alt="스터디 상세 댓글"> |
 
 ---
 
@@ -521,7 +521,7 @@ src/
 
 |                                                                           검색 화면                                                                           |                                                                           검색 결과 없음                                                                           |
 | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/user-attachments/assets/f32c6e90-0dfa-4148-8a71-8b244a130ba5" width="350" height="450" style="object-fit:cover" alt="검색 화면"> | <img src="https://github.com/user-attachments/assets/970c7050-92db-48a3-be9e-4b5531b3d6e3" width="350" height="450" style="object-fit:cover" alt="검색 결과 없음"> |
+| <img src="https://github.com/user-attachments/assets/f32c6e90-0dfa-4148-8a71-8b244a130ba5" width="370" height="500" style="object-fit:cover" alt="검색 화면"> | <img src="https://github.com/user-attachments/assets/970c7050-92db-48a3-be9e-4b5531b3d6e3" width="370" height="500" style="object-fit:cover" alt="검색 결과 없음"> |
 
 ---
 
@@ -529,7 +529,7 @@ src/
 
 |                                   내 지역 필터                                    |                                                                           온라인 필터                                                                           |
 | :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="" width="350" height="450" style="object-fit:cover" alt="내 지역 필터"> | <img src="https://github.com/user-attachments/assets/77d8e974-b50a-4f2b-8ca1-208d2b10d5fc" width="350" height="450" style="object-fit:cover" alt="온라인 필터"> |
+| <img src="" width="370" height="500" style="object-fit:cover" alt="내 지역 필터"> | <img src="https://github.com/user-attachments/assets/77d8e974-b50a-4f2b-8ca1-208d2b10d5fc" width="370" height="500" style="object-fit:cover" alt="온라인 필터"> |
 
 ---
 
